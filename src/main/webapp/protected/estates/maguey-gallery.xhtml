@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:jsf="http://xmlns.jcp.org/jsf"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{photoMagueyBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+
+	<ui:param name="viewname" value="MAGUEYES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{photoMagueyBean.photos == null}" />
+		<h:panelGroup layout="block"
+			rendered="#{photoMagueyBean.photos != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-3">
+								<p:toolbarGroup>
+									<p:commandButton value="Regresar"
+										icon="fas fa-arrow-circle-left"
+										action="/protected/estates/magueyes.xhtml?faces-redirect=true"
+										process="@this"
+										styleClass="ui-button-raised ui-button-secondary" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:panel
+								header="GALERÍA DEL MAGUEY: #{photoMagueyBean.maguey.name}"
+								rendered="#{not empty photoMagueyBean.maguey}">
+								<p:fileUpload
+									listener="#{photoMagueyBean.handleFileUpload}"
+									mode="advanced" dragDropSupport="true"
+									update=":form:messages, :form:availablePhotos, @this"
+									styleClass="mb-3" sizeLimit="2000000" fileLimit="1"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+									accept=".gif,.jpg,.jpeg,.png"
+									onupload="return confirm('¿Estás seguro?')"
+									invalidSizeMessage="Tamaño máximo 2MB"
+									invalidFileMessage="Sólo es permitido el formato gif | jpg | jpeg | png"
+									process="@this" label="Elegir imagen"
+									uploadLabel="Subir imagen" cancelLabel="Cancelar" />
+
+								<p:dataView id="availablePhotos" var="photo"
+									value="#{photoMagueyBean.photos}" rows="9" layout="grid"
+									gridIcon="pi pi-th-large">
+									<p:dataViewGridItem>
+										<p:panel id="pnl" style="text-align:center">
+											<h:panelGrid columns="1" style="width:100%">
+												<p:graphicImage
+													value="#{photoMagueyBean.getPhotoPath(photo.name)}"
+													height="200" width="200" styleClass="shadow-3" />
+											</h:panelGrid>
+											<div class="p-mt-3 flex flex-wrap justify-content-center ">
+												<p:linkButton icon="pi pi-eye" id="viewButton"
+													styleClass="rounded-button ui-button-raised ui-button-help mr-2"
+													href="#{photoMagueyBean.getPhotoPath(photo.name)}"
+													target="_blank" />
+												<p:tooltip for="viewButton" value="Ver imagen"
+													position="bottom" />
+												<p:commandButton icon="pi pi-trash" process="@this"
+													id="deleteButton"
+													styleClass="ui-button-raised ui-button-danger rounded-button"
+													onclick="PF('deletePhotoMagueyDialog').show();">
+													<f:setPropertyActionListener value="#{photo}"
+														target="#{photoMagueyBean.photoMaguey}" />
+												</p:commandButton>
+												<p:tooltip for="deleteButton" value="Eliminar imagen"
+													position="bottom" />
+											</div>
+										</p:panel>
+
+
+									</p:dataViewGridItem>
+								</p:dataView>
+							</p:panel>
+
+							<p:confirmDialog widgetVar="deletePhotoMagueyDialog"
+								showEffect="fade" width="300" message="¿Estás seguro de eliminar esta foto?"
+								header="Confirmar" severity="warn">
+
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{photoMagueyBean.delete()}"
+									process="@this" update="messages, availablePhotos"
+									oncomplete="PF('deletePhotoMagueyDialog').hide()"
+									styleClass="ui-button-raised" />
+
+								<p:commandButton value="No" type="button"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times"
+									onclick="PF('deletePhotoMagueyDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

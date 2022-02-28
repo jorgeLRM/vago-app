@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{tailBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="COLAS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR COLAS</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nueva cola" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/production/new-tail.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-tails" widgetVar="dtTails" var="tail"
+								value="#{tailBean.tails}" reflow="true" rowKey="#{tail.id}"
+								styleClass="products-table" paginator="true" rows="10"
+								paginatorPosition="bottom" showGridlines="true" size="small"
+								style="text-align:center">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> </span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtTails').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" width="1"
+									style="text-align:center" sortBy="#{tail.id}">
+									<h:outputText value="#{tail.id}" />
+								</p:column>
+
+								<p:column headerText="Producción" style="text-align:center"
+									width="2" filterBy="#{tail.standardProduction.lot}">
+									<h:outputText value="#{tail.standardProduction.lot}" />
+								</p:column>
+
+								<p:column headerText="Inicio de maduración"
+									style="text-align:center" width="2">
+									<h:outputText value="#{tail.startRipening}" />
+								</p:column>
+
+								<p:column headerText="Fin de maduración"
+									style="text-align:center" width="2">
+									<h:outputText value="#{tail.endRipening}" />
+								</p:column>
+
+								<p:column headerText="Acciones" width="1"
+									style="text-align:center">
+									<p:linkButton id="viewTailButton" icon="pi pi-eye"
+										outcome="/protected/production/view-tail.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+										<f:param name="id" value="#{tail.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewTailButton" value="Ver registro"
+										position="bottom" />
+
+									<p:commandButton id="deleteTailButton"
+										class="ui-button-danger rounded-button ui-button-raised"
+										oncomplete="PF('deleteTailDialog').show();"
+										process="@this" icon="pi pi-trash">
+										<f:setPropertyActionListener value="#{tail}"
+											target="#{tailBean.tail}" />
+									</p:commandButton>
+									<p:tooltip for="deleteTailButton" value="Eliminar registro"
+										position="bottom" />
+								</p:column>
+							</p:dataTable>
+
+							<p:confirmDialog widgetVar="deleteTailDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{tailBean.delete()}" process="@this"
+									oncomplete="PF('deleteTailDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteTailDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

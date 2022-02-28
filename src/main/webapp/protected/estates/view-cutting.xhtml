@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{cuttingBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="CORTES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{cuttingBean.cutting == null}" />
+		<h:panelGroup layout="block"
+			rendered="#{cuttingBean.cutting != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<p:panel header="Detalles del corte">
+							<p:outputPanel id="cuttingDetail" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty cuttingBean.cutting}">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent;">
+
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="Lote:" />
+										<h:outputText value="#{cuttingBean.cutting.lot}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Fecha de corte:" />
+										<h:outputText value="#{cuttingBean.cutting.cutoffDate}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Link de guía:" />
+										<h:outputLink
+											value="#{cuttingBean.getCuttingsPath(cuttingBean.cutting.guideLink)}"
+											target="_blank">
+											#{cuttingBean.cutting.guideLink}
+										</h:outputLink>
+
+										<p:outputLabel value="Palenque:" />
+										<h:outputText
+											value="#{cuttingBean.cutting.lotDetail.palenque.name}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Predio:" />
+										<h:outputText
+											value="#{cuttingBean.cutting.cuttingDetails.get(0).plantation.estate.name}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Número de guía:" />
+										<h:outputText value="#{cuttingBean.cutting.guideNumber}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Estatus:" />
+										<h:outputText
+											value="#{cuttingBean.cutting.status == 'ACTIVE' ? 'Aceptado' : 'Cancelado'}"
+											styleClass="#{cuttingBean.cutting.status == 'ACTIVE' ? 'text-green' : 'text-red'}" />
+
+										<p:row styleClass="my-heading-row">
+											Detalle de corte
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable var="cd" reflow="true" showGridlines="true"
+										value="#{cuttingBean.cutting.cuttingDetails}">
+										<p:column headerText="Maguey">
+											<h:outputText value="#{cd.plantation.maguey.name}" />
+										</p:column>
+
+										<p:column headerText="Edad">
+											<h:outputText
+												value="#{cuttingBean.getYears(cd.plantation.plantingDate)}" />
+										</p:column>
+
+										<p:column headerText="Cantidad">
+											<h:outputText value="#{cd.numberPinneapples}" />
+										</p:column>
+
+										<p:column headerText="Peso (Kg)">
+											<h:outputText value="#{cd.weight}" />
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+												<p:column colspan="2" style="text-align:right"
+													footerText="Total:" />
+												<p:column>
+													<f:facet name="footer">
+														<h:outputText
+															value="#{cuttingBean.getQuantityTotal(cuttingBean.cutting.cuttingDetails)}" />
+													</f:facet>
+												</p:column>
+												<p:column>
+													<f:facet name="footer">
+														<h:outputText
+															value="#{cuttingBean.getWeightTotal(cuttingBean.cutting.cuttingDetails)}" />
+													</f:facet>
+												</p:column>
+											</p:row>
+										</p:columnGroup>
+									</p:dataTable>
+
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton value="Regresar" icon="fas fa-arrow-circle-left"
+								action="/protected/estates/cuttings.xhtml?faces-redirect=true"
+								process="@this"
+								styleClass="ui-button-raised ui-button-secondary  w-full md:w-auto mt-3 md:mt-0" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

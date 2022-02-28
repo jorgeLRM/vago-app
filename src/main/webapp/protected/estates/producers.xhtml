@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{producerBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="PRODUCTORES" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR PRODUCTORES</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo productor" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/estates/new-producer.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-producers" widgetVar="dtProducers" var="producer"
+								value="#{producerBean.producers}" reflow="true"
+								styleClass="products-table" paginator="true" rows="10"
+								paginatorPosition="bottom" showGridlines="true" size="small"
+								style="text-align:center">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> <p:selectOneMenu
+												id="changeFilter" value="#{producerBean.status}"
+												styleClass="w-full md:w-auto"
+												converter="omnifaces.GenericEnumConverter">
+												<p:ajax listener="#{producerBean.refreshTable()}"
+													update="dt-producers" />
+												<f:selectItem itemLabel="TODOS" itemValue="#{null}"
+													styleClass="product-badge status-lowstock" />
+												<f:selectItems value="#{producerBean.entityStatus}"
+													var="status" itemLabel="#{status.text.toUpperCase()}"
+													itemValue="#{status}"
+													styleClass="product-badge status-#{status.badge}" />
+											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />
+										</span> <span class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtProducers').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{producer.id}" width="1"
+									style="text-align:center">
+									<h:outputText value="#{producer.id}" />
+								</p:column>
+								<p:column headerText="Nombre" filterBy="#{producer.name}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{producer.name}" />
+								</p:column>
+								<p:column headerText="Abreviación" filterBy="#{producer.abbreviation}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{producer.abbreviation}" />
+								</p:column>
+								<p:column headerText="Estado" width="1"
+									style="text-align:center">
+									<h:outputText
+										styleClass="product-badge status-#{producer.status.badge}"
+										value="#{producer.status.text}" />
+								</p:column>
+								<p:column headerText="Acciones" width="1"
+									style="text-align:center">
+									<p:commandButton id="disableButton" icon="fas fa-toggle-off"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-secondary"
+										oncomplete="PF('inactiveProducerDialog').show()" process="@this"
+										rendered="#{producer.status == 'ACTIVE'}">
+										<f:setPropertyActionListener value="#{producer}"
+											target="#{producerBean.producer}" />
+									</p:commandButton>
+									<p:tooltip for="disableButton" value="Deshabilitar registro"
+										position="bottom" />
+
+									<p:commandButton id="enableButton" icon="fas fa-toggle-on"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-success"
+										oncomplete="PF('activeProducerDialog').show()" process="@this"
+										rendered="#{producer.status == 'INACTIVE'}">
+										<f:setPropertyActionListener value="#{producer}"
+											target="#{producerBean.producer}" />
+									</p:commandButton>
+									<p:tooltip for="enableButton" value="Habilitar registro"
+										position="bottom" />
+
+									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
+										outcome="/protected/estates/edit-producer.xhtml?faces-redirect=true"
+										rendered="#{producer.status == 'ACTIVE'}">
+										<f:param name="id" value="#{producer.id}" />
+									</p:linkButton>
+									<p:tooltip for="editButton" value="Editar registro"
+										position="bottom" />
+
+									<p:commandButton id="deleteButton" icon="pi pi-trash"
+										process="@this" rendered="#{producer.status == 'ACTIVE'}"
+										styleClass="ui-button-raised ui-button-danger rounded-button"
+										oncomplete="PF('deleteProducerDialog').show()">
+										<f:setPropertyActionListener value="#{producer}"
+											target="#{producerBean.producer}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="Eliminar registro"
+										position="bottom" />
+								</p:column>
+							</p:dataTable>
+
+							<p:confirmDialog widgetVar="deleteProducerDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{producerBean.delete()}" process="@this"
+									oncomplete="PF('deleteProducerDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteProducerDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="activeProducerDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de habilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{producerBean.enabledDisabledProducer()}"
+									process="@this" oncomplete="PF('activeProducerDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('activeProducerDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="inactiveProducerDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de deshabilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{producerBean.enabledDisabledProducer()}"
+									process="@this" oncomplete="PF('inactiveProducerDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('inactiveProducerDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

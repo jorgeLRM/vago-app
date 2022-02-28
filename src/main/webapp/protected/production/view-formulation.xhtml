@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{formulationBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="FORMULACIONES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{formulationBean.formulation == null}" />
+		<h:panelGroup layout="block"
+			rendered="#{formulationBean.formulation != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<p:panel header="Detalles de la formulación">
+							<p:outputPanel id="formulationDetail" class="ui-fluid">
+
+								<div class="grid">
+									<div class="col-12 lg:col-4">
+										<div class="card">
+											<h4>General</h4>
+											<div class="widget-timeline">
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #64B5F6"> <i
+														class="timeline-icon far fa-lightbulb"></i>
+													</span>
+													<div class="timeline-event-title">Lote</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.production.lot}</strong>
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #7986CB"> <i
+														class="timeline-icon pi pi-map-marker"></i>
+													</span>
+													<div class="timeline-event-title">Tina</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.tub.numberTub}</strong>
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #4DB6AC"> <i
+														class="timeline-icon fas fa-atom"></i>
+													</span>
+													<div class="timeline-event-title">Fecha de
+														formulacion</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.formulationDate}</strong>
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #4DD0E1"> <i
+														class="timeline-icon fas fa-bath"></i>
+													</span>
+													<div class="timeline-event-title">Fecha de
+														destilación</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.destilationDate}</strong>.
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #7986CB"> <i
+														class="timeline-icon pi pi-calendar"></i>
+													</span>
+													<div class="timeline-event-title">Fecha de molienda</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.gridingDate}</strong>
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #64B5F6"> <i
+														class="timeline-icon pi pi-comment"></i>
+													</span>
+													<div class="timeline-event-title">Palenque</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.production.lotDetail.palenque.name}</strong>
+													</div>
+												</div>
+												<div class="timeline-event">
+													<span class="timeline-event-icon"
+														style="background-color: #64B5F6"> <i
+														class="timeline-icon fas fa-calendar-day"></i>
+													</span>
+													<div class="timeline-event-title">Dias de
+														fermentación</div>
+													<div class="timeline-event-detail">
+														<strong>#{formulationBean.formulation.fermentationDays}
+															días</strong>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-12 lg:col-8">
+										<div class="card">
+											<h4>Detalles específicos</h4>
+
+											<ul class="widget-image-list">
+												<li><span>Atributo</span> <span>Valor</span></li>
+												<li><span> <i class="pi pi-star-o" /> <span>Volumen
+															de la tina</span>
+												</span> <span class="listitem-value"> <h:outputText
+															value="#{formulationBean.formulation.tub.volume}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+												</span></li>
+												<li><span> <i class="pi pi-star-o" /> <span>Factor</span>
+												</span> <span class="listitem-value"><h:outputText
+															value="#{formulationBean.formulation.tub.factor}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText></span></li>
+												<li><span> <i class="pi pi-percentage" /> <span>Primer
+															vacío</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.firstVacuum}
+														cm</span></li>
+												<li><span> <i class="pi pi-tag" /> <span>Volumen
+															de jugo con bagazo</span>
+												</span> <span class="listitem-value"><h:outputText
+															value="#{formulationBean.formulation.volumeJuiceBagasse}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText></span></li>
+												<li><span> <i class="fas fa-water" /> <span>Volumen
+															de agua</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.volumeWater}</span></li>
+												<li><span> <i class="pi pi-percentage" /> <span>Segundo
+															Vacío</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.secondVaccum}</span></li>
+												<li><span> <i class="pi pi-shield" /> <span>Brix
+															inicial</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.initialBrix}</span></li>
+												<li><span> <i class="pi pi-star-o" /> <span>Brix
+															final</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.ultimateBrix}</span></li>
+												<li><span> <i class="pi pi-tag" /> <span>Volumen
+															total de mosto fermentado</span>
+												</span> <span class="listitem-value"> <h:outputText
+															value="#{formulationBean.formulation.volumeFermentedWort}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText></span></li>
+												<li><span> <i class="fas fa-filter" /> <span>Volumen
+															de ordinario</span>
+												</span> <span class="listitem-value">#{formulationBean.formulation.ordinary}</span></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								
+								<div class="mt-3">
+									<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+										styleClass="ui-button-secondary ui-button-raised w-full md:w-auto"
+										action="/protected/production/formulations.xhtml?faces-redirect=true"
+										process="@this" />
+								</div>
+	
+							</p:outputPanel>
+						</p:panel>
+
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

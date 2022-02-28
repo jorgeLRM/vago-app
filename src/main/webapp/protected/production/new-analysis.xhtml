@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{analysisBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="ANÁLISIS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Agregar análisis">
+								<p:outputPanel id="manage-analysis-content" class="ui-fluid">
+									<p:outputPanel rendered="#{not empty analysisBean.analysis}">
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="typeAnalysis">Tipo de análisis</p:outputLabel>
+												<p:selectOneMenu id="typeAnalysis"
+													value="#{analysisBean.analysis.typeAnalysis}"
+													required="true" converter="omnifaces.GenericEnumConverter">
+													<!--<f:selectItem itemLabel="Seleccionar tipo de análisis"
+													itemValue="" noSelectionOption="true" />-->
+													<f:selectItems value="#{analysisBean.typesAnalyzes}"
+														var="typeAnalysis" itemLabel="#{typeAnalysis.type}"
+														itemValue="#{typeAnalysis}" />
+													<p:ajax update="productionSelect" event="change" />
+												</p:selectOneMenu>
+												<p:blockUI block="main-template" trigger="typeAnalysis"/>
+											</div>
+
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel>Producción</p:outputLabel>
+												<p:selectOneMenu id="productionSelect"
+													value="#{analysisBean.production}" required="true"
+													converter="omnifaces.SelectItemsConverter" filter="true"
+													filterMatchMode="contains" styleClass="w-full">
+													<f:selectItem itemLabel="- Seleccionar -"
+														itemValue="#{null}" noSelectionOption="true" />
+													<f:selectItems value="#{analysisBean.productions}"
+														var="production" itemValue="#{production}"
+														itemLabel="#{production.lot}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="fq">FQ</p:outputLabel>
+												<p:inputText id="fq" value="#{analysisBean.analysis.fq}"
+													maxlength="50" required="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="dateOfIssue">Fecha de emisión</p:outputLabel>
+												<p:datePicker id="dateOfIssue"
+													value="#{analysisBean.analysis.dateOfIssue}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2060" mask="true" pattern="dd/MM/yyyy"
+													required="true" />
+											</div>
+										</div>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-4">
+												<p:outputLabel for="alcohol">Alcohol volumen a 20°</p:outputLabel>
+												<p:spinner id="alcohol"
+													value="#{analysisBean.analysis.alcohol}" min="0"
+													stepFactor="0.01" required="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-4">
+												<p:outputLabel for="methanol">Metanol</p:outputLabel>
+												<p:spinner id="methanol"
+													value="#{analysisBean.analysis.methanol}" min="0"
+													stepFactor="0.01" required="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-4">
+												<p:outputLabel for="furfural">Furfural</p:outputLabel>
+												<p:spinner id="furfural"
+													value="#{analysisBean.analysis.furfural}" min="0"
+													stepFactor="0.01" required="true" />
+											</div>
+										</div>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="volume">Volumen de muestra (Litros)</p:outputLabel>
+												<p:spinner id="volume"
+													value="#{analysisBean.analysis.volume}" min="0"
+													stepFactor="0.01" required="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel>Documento del laboratorio (pdf) *</p:outputLabel>
+												<div class="flex flex-wrap align-items-center">
+													<p:fileUpload mode="simple" skinSimple="true" auto="true"
+														process="@this" update="set-file-analysis"
+														styleClass="ui-button-raised ui-button-info w-auto"
+														listener="#{analysisBean.handleFileUpload}"
+														sizeLimit="5000000" fileLimit="1"
+														allowTypes="/(\.|\/)(pdf)$/" accept=".pdf"
+														invalidSizeMessage="Tamaño máximo 5MB"
+														invalidFileMessage="Sólo es permitido el formato pdf"
+														label="Elegir documento" />
+													<h:outputLink id="set-file-analysis"
+														value="#{analysisBean.getAnalysisPath(analysisBean.analysis.document)}"
+														target="_blank">
+																	#{analysisBean.analysis.document}	
+																</h:outputLink>
+												</div>
+											</div>
+										</div>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12">
+												<p:outputLabel>Observaciones</p:outputLabel>
+												<p:inputTextarea value="#{analysisBean.analysis.observations}" 
+													maxlength="100"/>
+											</div>
+										</div>
+
+										<div class="mt-3">
+											<p:commandButton value="Guardar" icon="pi pi-check"
+												styleClass="ui-button-raised mr-0 md:mr-3 w-full md:w-auto"
+												action="#{analysisBean.save()}"
+												update="manage-analysis-content"
+												process="manage-analysis-content @this" />
+											<p:commandButton icon="fas fa-arrow-circle-left"
+												value="Regresar"
+												styleClass="ui-button-secondary ui-button-raised w-full md:w-auto"
+												action="/protected/production/analysis.xhtml?faces-redirect=true"
+												process="@this" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+							</p:panel>
+
+							<p:dialog header="Confirmar análisis" widgetVar="dlg3" minHeight="40"
+								width="350" showEffect="fade">
+								
+								
+								
+								<f:facet name="footer">
+									<p:commandButton type="button" value="No"
+										styleClass="ui-button-flat p-mr-2" style="width: 6rem" />
+									<p:commandButton type="button" value="Yes" style="width: 5rem" />
+								</f:facet>
+							</p:dialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

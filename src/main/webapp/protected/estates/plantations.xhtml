@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{plantationBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="PLANTÍOS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR PLANTÍOS</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo plantío" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/estates/new-plantation.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-plantations" widgetVar="dtPlantations"
+								var="plantation" value="#{plantationBean.plantations}"
+								reflow="true" styleClass="products-table" paginator="true"
+								rows="10" paginatorPosition="bottom" showGridlines="true"
+								size="small" style="text-align:center"
+								rowKey="#{plantation.id}" >
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"></span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtPlantations').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{plantation.id}"
+									style="text-align:center" width="1">
+									<h:outputText value="#{plantation.id}" />
+								</p:column>
+
+								<p:column headerText="Lote" filterBy="#{plantation.lot}"
+									style="text-align:center" width="5">
+									<h:outputText value="#{plantation.lot}" />
+								</p:column>
+
+								<p:column headerText="Predio" style="text-align:center"
+									width="1" filterBy="#{plantation.estate.name}">
+									<h:outputText value="#{plantation.estate.name}" />
+								</p:column>
+
+								<p:column headerText="Maguey" style="text-align:center"
+									width="1" filterBy="#{plantation.maguey.name}">
+									<h:outputText value="#{plantation.maguey.name}" />
+								</p:column>
+
+								<p:column headerText="Existencias" sortBy="#{plantation.stock}"
+									style="text-align:center" width="1">
+									<h:outputText value="#{plantation.stock}" />
+								</p:column>
+
+								<p:column headerText="Edad" style="text-align:center" width="1"
+									sortBy="#{plantationBean.getYearsFromPeriod(plantation.plantingDate, plantationBean.TODAY)}"
+									filterBy="#{plantationBean.getYearsFromPeriod(plantation.plantingDate, plantationBean.TODAY)}">
+									<h:outputText
+										value="#{plantationBean.getYearsFromPeriod(plantation.plantingDate, plantationBean.TODAY)}" />
+								</p:column>
+
+								<p:column headerText="Acciones" style="text-align:center"
+									width="1">
+
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										styleClass="rounded-button ui-button-help ui-button-raised mr-2"
+										outcome="/protected/estates/view-plantation.xhtml?faces-redirect=true">
+										<f:param name="id" value="#{plantation.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewButton" value="Ver registro"
+										position="bottom" />
+
+									<p:commandButton id="deleteButton"
+										class="ui-button-danger rounded-button ui-button-raised"
+										icon="pi pi-trash" process="@this"
+										oncomplete="PF('deletePlantationDialog').show()">
+										<f:setPropertyActionListener value="#{plantation}"
+											target="#{plantationBean.plantation}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="Eliminar registro"
+										position="bottom" />
+								</p:column>
+							</p:dataTable>
+							
+							<p:confirmDialog widgetVar="deletePlantationDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" id="yesDeleteButton" icon="pi pi-check"
+									actionListener="#{plantationBean.delete()}" process="@this"
+									oncomplete="PF('deletePlantationDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:blockUI block="main-template" trigger="yesDeleteButton" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times"
+									onclick="PF('deletePlantationDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

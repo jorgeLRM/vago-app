@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{productionBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="PRODUCCIÓN" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+
+							<p:panel header="Agregar producción">
+								<p:outputPanel id="manage-production-content" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty productionBean.production}">
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Lote de corte</p:outputLabel>
+												<p:selectOneMenu
+													value="#{productionBean.production.lotDetail}"
+													required="true" converter="omnifaces.SelectItemsConverter"
+													filter="true" filterMatchMode="content">
+													<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"
+														noSelectionOption="false" />
+													<f:selectItems value="#{productionBean.cuttings}"
+														var="cutting" itemValue="#{cutting.lotDetail}"
+														itemLabel="#{cutting.lot}" />
+													<p:ajax
+														listener="#{productionBean.onCuttingLotChange()}"
+														update="productionLot, productionLot2, producer, maguey, preview" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Lote de producción</p:outputLabel>
+												<p:outputPanel styleClass="grid mt-1">
+													<div class="col-12 md:col-3">
+														<p:inputText id="productionLot"
+															value="#{productionBean.firstPartLot}"
+															disabled="true"/>
+													</div>
+													<div class="col-12 md:col-9">
+														<p:inputText id="productionLot2"
+															value="#{productionBean.secondPartLot}"
+															maxlength="40" required="true">
+															<p:ajax event="keyup" update="preview"/>	
+														</p:inputText>
+													</div>
+												</p:outputPanel>
+												<small class="p-d-block">Vista previa del lote:  <p:outputLabel id="preview">#{productionBean.firstPartLot}-#{productionBean.secondPartLot}</p:outputLabel></small>
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Productor</p:outputLabel>
+												<p:inputText id="producer"
+													value="#{productionBean.production.lotDetail.palenque.producer.name}"
+													disabled="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Magueyes del corte</p:outputLabel>
+												<p:inputText id="maguey" disabled="true"
+													value="#{productionBean.magueyes}" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="addmissionDate">Fecha de ingreso a fábrica</p:outputLabel>
+												<p:datePicker id="addmissionDate"
+													value="#{productionBean.production.admissionDate}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2090" mask="true" pattern="dd/MM/yyyy"
+													required="true" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="startCoocking">Inicio de la cocción</p:outputLabel>
+												<p:datePicker id="startCoocking"
+													value="#{productionBean.production.startCoocking}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2090" mask="true" pattern="dd/MM/yyyy" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="endCoocking">Fin de la cocción</p:outputLabel>
+												<p:datePicker id="endCoocking"
+													value="#{productionBean.production.endCoocking}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2090" mask="true" pattern="dd/MM/yyyy" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="wastage">Mermas (Litros)</p:outputLabel>
+												<p:inputText id="wastage" required="true"
+													value="#{productionBean.production.wastage}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="paymentStatus">Estatus de pago</p:outputLabel>
+												<p:selectOneMenu id="paymentStatus"
+													value="#{productionBean.production.paymentStatus}"
+													required="true" converter="omnifaces.SelectItemsConverter">
+													<f:selectItems
+														value="#{productionBean.paymentStatus}"
+														var="paymentStatus" itemValue="#{paymentStatus}"
+														itemLabel="#{paymentStatus.type}" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="productionStatus">Estatus de producción</p:outputLabel>
+												<p:inputText id="productionStatus" 
+													value="#{productionBean.production.productionStatus.type}" 
+													disabled="true" styleClass="#{productionBean.production.productionStatus.color}"/>
+												<!--<p:selectOneMenu id="productionStatus"
+													value="#{productionController.production.productionStatus}"
+													required="true" converter="omnifaces.SelectItemsConverter">
+													<f:selectItems
+														value="#{productionController.productionStatus}"
+														var="productionStatus" itemValue="#{productionStatus}"
+														itemLabel="#{productionStatus.type}" />
+												</p:selectOneMenu>-->
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="destination">Ubicación del lote</p:outputLabel>
+												<p:inputText id="destination"
+													value="#{productionBean.production.location}"
+													maxlength="60"/>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="alcoholicGradeDist1">Grado alcoholico 1era destilación</p:outputLabel>
+												<p:spinner id="alcoholicGradeDist1"
+													value="#{productionBean.production.alcoholicGradeDist1}"
+													stepFactor="0.25" min="0.00" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="volumeDistillation2">Volumen 2da destilación (Litros)</p:outputLabel>
+												<p:spinner id="volumeDistillation2"
+													value="#{productionBean.production.volumeDistillation2}"
+													min="0.00" requried="true"/>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="alcoholicGradeDist2">Grado alcoholico 2da destilación</p:outputLabel>
+												<p:spinner id="alcoholicGradeDist2"
+													value="#{productionBean.production.alcoholicGradeDist2}"
+													stepFactor="0.25" min="0.00" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12">
+												<p:outputLabel for="observations">Observaciones</p:outputLabel>
+												<p:inputTextarea id="observations" rows="4"
+													value="#{productionBean.production.observations}"
+													maxlength="100" />
+											</div>
+										</div>
+
+										<div class="grid mt-3">
+											<p:outputLabel value="* Valores obligatorios" />
+										</div>
+										
+										<div class="mt-3">
+											<p:commandButton value="Guardar" icon="pi pi-check"
+												styleClass="ui-button-raised w-full md:w-auto mr-0 md:mr-3"
+												update="manage-production-content"
+												process="manage-production-content @this"
+												oncomplete="PF('saveProductionDialog').show()"/>
+											<p:commandButton value="Regresar"
+												icon="fas fa-arrow-circle-left"
+												action="/protected/production/productions.xhtml?faces-redirect=true"
+												process="@this"
+												styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+							</p:panel>
+							
+							<p:confirmDialog widgetVar="saveProductionDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de guardar la información?" header="Confirm"
+								severity="warn">
+								<div style="text-align: left;">
+									<ul>
+										<li>El lote y la fecha de ingreso a fabrica no se podrán cambiar después.</li>
+									</ul>
+								</div>
+								<p:commandButton value="Si" icon="pi pi-check"
+									action="#{productionBean.save()}" process="@this"
+									oncomplete="PF('saveProductionDialog').hide()" 
+									styleClass="ui-button-raised"/>
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised" 
+									icon="pi pi-times"
+									onclick="PF('saveProductionDialog').hide()" />
+							</p:confirmDialog>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{producerBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="PRODUCTORES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR" detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{producerBean.producer == null}"/>
+		<h:panelGroup layout="block" rendered="#{producerBean.producer != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Editar productor">
+								<p:outputPanel id="edit-producer-content" class="ui-fluid">
+									<div class="grid">
+										<div class="col-12 md:col-6">
+											<p:fieldset legend="Perfil">
+												<div class="w-full">
+													<div class="w-full text-center">
+														<p:graphicImage id="setImage" value="#{producerBean.getProducersPath(producerBean.producer.photo)}"
+											            	height="200" width="200" cache="false" />
+											        </div>
+											        <div class="w-full text-center">
+											        	<h:outputLink id="set-wrapper-image" styleClass="mt-2"
+															value="#{producerBean.getProducersPath(producerBean.producer.photo)}" target="_blank">
+															Ver imagen
+														</h:outputLink>
+											        </div>
+											        <div class="mt-2 text-center">
+											        	<p:fileUpload mode="simple" skinSimple="true" auto="true"
+									                      process="@this" update="messages, :form:setImage, :form:set-wrapper-image" styleClass="ui-button-raised ui-button-info w-auto"
+									                      listener="#{producerBean.handleFileUploadPhoto}"
+									                      sizeLimit="5000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+									                      accept=".gif,.jpg,.jpeg,.png"
+									                      invalidSizeMessage="Tamaño máximo 2MB"
+														  invalidFileMessage="Sólo es permitido el formato gif | jpg | jpeg | png"
+														  label="Elegir imagen"/>
+											        </div>
+											        
+											        <div class="formgrid grid mt-4">
+											        	<div class="field col-12">
+															<p:outputLabel for="name">Nombre</p:outputLabel>
+															<p:inputText id="name" value="#{producerBean.producer.name}"
+																disabled="true" maxlength="60" />
+														</div>
+											        </div>
+											        <div class="formgrid grid mt-2">
+											        	<div class="field col-12">
+															<p:outputLabel for="abbreviation">Abreviación</p:outputLabel>
+															<p:inputText id="abbreviation" value="#{producerBean.producer.abbreviation}"
+																maxlength="60" disabled="true"/>
+														</div>
+											        </div>
+											        <div class="formgrid grid mt-2">
+											        	<div class="field col-12">
+															<p:outputLabel for="occupation">Tipo de productor</p:outputLabel>
+															<p:selectOneMenu id="occupation"
+																value="#{producerBean.producer.typeProducer}"
+																required="true" converter="omnifaces.GenericEnumConverter">
+																<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}" noSelectionOption="true"/>
+																<f:selectItems value="#{producerBean.typeProducers}"
+																	var="typeProducer" itemLabel="#{typeProducer.type}"
+																	itemValue="#{typeProducer}" />
+															</p:selectOneMenu>
+														</div>
+											        </div>
+												</div>
+											</p:fieldset>
+										</div>
+										<div class="col-12 md:col-6">
+											<p:fieldset legend="Información personal">
+												<div class="w-full">
+													<div class="formgrid grid">
+														<div class="field col-12">
+															<p:outputLabel for="telephone">Teléfono</p:outputLabel>
+															<p:inputText id="telephone" value="#{producerBean.producer.telephone}"
+																maxlength="10" />
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12">
+															<p:outputLabel for="email">Correo electrónico</p:outputLabel>
+															<p:inputText id="email" value="#{producerBean.producer.email}"
+																maxlength="60" />
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12">
+															<p:outputLabel for="bank">Banco</p:outputLabel>
+															<p:inputText id="bank" value="#{producerBean.producer.bank}"
+																maxlength="15" />
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12">
+															<p:outputLabel for="clabe">CLABE</p:outputLabel>
+															<p:inputText id="clabe" value="#{producerBean.producer.interbankKey}"
+																maxlength="18" />
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12">
+															<p:outputLabel>Documento</p:outputLabel>
+															<div class="flex flex-wrap align-items-center">
+																<p:fileUpload mode="simple" skinSimple="true" auto="true"
+											                      	process="@this" update="set-file-producer" styleClass="ui-button-raised ui-button-info w-auto"
+											                      	listener="#{producerBean.handleFileUploadDocument}"
+											                      	sizeLimit="5000000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
+											                      	accept=".pdf"
+											                     	invalidSizeMessage="Tamaño máximo 5MB"
+																	invalidFileMessage="Sólo es permitido el formato pdf"
+																  	label="Elegir documento"/>
+																<h:outputLink id="set-file-producer"
+																	value="#{producerBean.getProducersPath(producerBean.producer.document)}" target="_blank">
+																	#{producerBean.producer.document}	
+																</h:outputLink>
+																
+															</div>
+														</div>
+													</div>
+												</div>
+											</p:fieldset>
+										</div>
+									</div>
+									
+									<div class="mt-3">
+										<p:commandButton value="Guardar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{producerBean.update()}"
+											process="edit-producer-content @this" update="edit-producer-content" />
+										<p:commandButton value="Cancelar"
+											icon="fas fa-arrow-circle-left"
+											action="/protected/estates/producers.xhtml?faces-redirect=true"
+											immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{agaveBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="AGAVES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR" detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{agaveBean.agave == null}"/>
+		<h:panelGroup layout="block" rendered="#{agaveBean.agave != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Editar agave">
+								<p:outputPanel id="new-agave-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="name">Nombre</p:outputLabel>
+											<p:inputText id="name" value="#{agaveBean.agave.name}"
+												required="true" maxlength="50" disabled="true" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="description">Descripción</p:outputLabel>
+											<p:inputTextarea id="description"
+												value="#{agaveBean.agave.description}" maxlength="100" />
+										</div>
+									</div>
+									<div class="mt-2">
+										<p:commandButton value="Editar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{agaveBean.update()}"
+											process="new-agave-content @this" update="new-agave-content" />
+										<p:commandButton value="Cancelar"
+											icon="fas fa-arrow-circle-left"
+											action="/protected/estates/agaves.xhtml?faces-redirect=true"
+											immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

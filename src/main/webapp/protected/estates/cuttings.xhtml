@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{cuttingBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="CORTES" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR CORTES</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo agave" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/estates/new-cutting.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-cuttings" widgetVar="dtCuttings"
+								var="cutting" value="#{cuttingBean.cuttings}" reflow="true"
+								styleClass="products-table" paginator="true" rows="10"
+								paginatorPosition="bottom" showGridlines="true" size="small"
+								style="text-align:center">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> <p:selectOneMenu
+												id="changeFilter" value="#{cuttingBean.status}"
+												styleClass="w-full md:w-auto">
+												<p:ajax listener="#{cuttingBean.refreshTable()}"
+													update="dt-cuttings" />
+												<f:selectItem itemLabel="TODOS" itemValue="TODOS" />
+												<f:selectItem itemLabel="ACEPTADOS" itemValue="ACEPTADOS" />
+												<f:selectItem itemLabel="CANCELADOS" itemValue="CANCELADOS" />
+											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />
+										</span> <span class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtCuttings').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{cutting.id}" width="1"
+									style="text-align:center">
+									<h:outputText value="#{cutting.id}" />
+								</p:column>
+								<p:column headerText="Lote" filterBy="#{cutting.lot}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{cutting.lot}" />
+								</p:column>
+								<p:column headerText="No. de guía"
+									filterBy="#{cutting.guideNumber}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{cutting.guideNumber}" />
+								</p:column>
+								<p:column headerText="Fecha de corte" style="text-align:center"
+									width="1">
+									<h:outputText value="#{cutting.cutoffDate}" />
+								</p:column>
+								<p:column headerText="Palenque" style="text-align:center"
+									width="2">
+									<h:outputText value="#{cutting.lotDetail.palenque.name}" />
+								</p:column>
+								<p:column headerText="Estatus" width="1"
+									style="text-align:center">
+									<h:outputText
+										styleClass="product-badge status-#{cutting.status.badge}"
+										value="#{cutting.status.text}" />
+								</p:column>
+								<p:column headerText="Acciones" width="1"
+									style="text-align:center">
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										outcome="/protected/estates/view-cutting.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+										<f:param name="id" value="#{cutting.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewButton" value="Ver registro"
+										position="bottom" />
+
+									<p:commandButton id="cancelButton"
+										class="ui-button-danger rounded-button ui-button-raised"
+										icon="pi pi-times-circle" process="@this"
+										rendered="#{cutting.status == 'ACTIVE'}"
+										oncomplete="PF('cancelCuttingDialog').show()">
+										<f:setPropertyActionListener value="#{cutting}"
+											target="#{cuttingBean.cutting}" />
+									</p:commandButton>
+									<p:tooltip for="cancelButton" value="Cancelar registro"
+										position="bottom" />
+								</p:column>
+							</p:dataTable>
+
+							<p:confirmDialog widgetVar="cancelCuttingDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de cancelar este Corte?"
+								header="Confirmar" severity="warn">
+								<div style="text-align: left">
+									<ul>
+										<li>No se podrán revertir los cambios.</li>
+									</ul>
+								</div>
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{cuttingBean.tryToCancel()}" process="@this"
+									update="messages, dt-cuttings"
+									oncomplete="PF('cancelCuttingDialog').hide()" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-button-secondary" icon="pi pi-times"
+									onclick="PF('cancelCuttingDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>
