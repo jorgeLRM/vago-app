@@ -77,8 +77,8 @@
 												<p:datePicker id="gridingDate"
 													value="#{formulation.gridingDate}" monthNavigator="true"
 													yearNavigator="true" showWeek="true"
-													mindate="#{formulationBean.production.admissionDate}"
-													maxdate="#{formulationBean.production.admissionDate.plusDays(31)}"
+													mindate="#{formulationBean.production.endCoocking}"
+													maxdate="#{formulationBean.production.endCoocking.plusDays(31)}"
 													required="true" locale="es" mask="true"
 													pattern="dd/MM/yyyy"
 													disabled="#{formulationBean.newFormulations.size() > (rowIndex + 1)}">
@@ -110,8 +110,8 @@
 												<p:datePicker id="formulationDate"
 													value="#{formulation.formulationDate}"
 													monthNavigator="true" yearNavigator="true" showWeek="true"
-													mindate="#{formulationBean.production.admissionDate}"
-													maxdate="#{formulationBean.production.admissionDate.plusDays(31)}"
+													mindate="#{formulationBean.production.endCoocking}"
+													maxdate="#{formulationBean.production.endCoocking.plusDays(31)}"
 													required="true" locale="es" mask="true"
 													pattern="dd/MM/yyyy"
 													disabled="#{formulationBean.newFormulations.size() > (rowIndex + 1)}" />
@@ -139,8 +139,8 @@
 												<p:datePicker id="destilationDate"
 													value="#{formulation.destilationDate}"
 													monthNavigator="true" yearNavigator="true" showWeek="true"
-													mindate="#{formulationBean.production.admissionDate}"
-													maxdate="#{formulationBean.production.admissionDate.plusDays(31)}"
+													mindate="#{formulationBean.production.endCoocking}"
+													maxdate="#{formulationBean.production.endCoocking.plusDays(31)}"
 													required="true" locale="es" mask="true"
 													pattern="dd/MM/yyyy"
 													disabled="#{formulationBean.newFormulations.size() > (rowIndex + 1)}" />

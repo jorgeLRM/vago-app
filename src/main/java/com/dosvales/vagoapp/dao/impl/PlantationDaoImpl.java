@@ -29,13 +29,10 @@ public class PlantationDaoImpl extends GenericDaoImpl<Plantation, Long> implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Plantation> findAllReadyForCuttingByEstate(Long idEstate) {
-		return em.createNativeQuery("SELECT * "
-				+ "FROM plantation p "
-				+ "INNER JOIN maguey m "
-				+ "ON m.id = p.idMaguey "
-				+ "INNER JOIN estate e "
-				+ "ON e.id = p.idEstate "
-				+ "WHERE TIMESTAMPDIFF(YEAR, p.plantingDate, curdate()) >= m.ageOfMaturation "
+		return em.createNativeQuery("SELECT * FROM plantation p INNER JOIN maguey m "
+				+ "ON m.id = p.idMaguey INNER JOIN estate e "
+				+ "ON e.id = p.idEstate WHERE DATE_PART('year',AGE(now(), "
+				+ "p.plantingDate)) >= m.ageOfMaturation "
 				+ "AND p.idEstate = :idEstate AND p.stock > 0", Plantation.class)
 				.setParameter("idEstate", idEstate)
 				.getResultList();
