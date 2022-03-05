@@ -22,6 +22,7 @@ import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.StandardProduction;
 import com.dosvales.vagoapp.model.Tub;
 import com.dosvales.vagoapp.service.FormulationService;
+import com.dosvales.vagoapp.service.PalenqueService;
 import com.dosvales.vagoapp.service.StandardProductionService;
 import com.dosvales.vagoapp.service.TubService;
 
@@ -39,6 +40,9 @@ public class FormulationBean implements Serializable {
 	
 	@Inject
 	private TubService tubService;
+	
+	@Inject
+	private PalenqueService palenqueService;
 	
 	private boolean editable = true;
 	
@@ -77,7 +81,7 @@ public class FormulationBean implements Serializable {
 		if (isTheRowValid(f)) {
 			newFormulations.add(new Formulation());
 		} else {
-			showMessage("Cuidado","Las fechas de su última formulacion no tienen orden cronologico. "
+			showMessage("Cuidado","Las fechas de su última formulación no tienen orden cronológico. "
 					+ "La fecha de formulación debe ser mayor o igual que la de molienda y la fecha de destilación debe "
 					+ "ser mayor que la de molienda.", FacesMessage.SEVERITY_WARN);
 		}
@@ -188,15 +192,13 @@ public class FormulationBean implements Serializable {
 				tub.setAvailable(false);
 		
 		if (newFormulations.size() > 1 && freeTubs != null) {
-			for (int x = 0; x < newFormulations.size() - 1; x++) {
-				for (int y = 1; y < newFormulations.size(); y++) {
-					if (newFormulations.get(y).getGridingDate().isAfter(newFormulations.get(x).getGridingDate().minusDays(1)) &&
-					   (newFormulations.get(y).getGridingDate().isBefore(newFormulations.get(x).getDestilationDate()) ||
-						newFormulations.get(y).getGridingDate().equals(newFormulations.get(x).getDestilationDate()))) {
-						int index = tubsByPalenque.indexOf(newFormulations.get(x).getTub());
-						availableTubs.get(index).setAvailable(false);
-					}
-				}
+			int x = newFormulations.size() -1;
+			for (int y = 0; y < newFormulations.size() -1; y++) {
+				if (newFormulations.get(x).getGridingDate().isAfter(newFormulations.get(y).getGridingDate().minusDays(1)) &&
+						newFormulations.get(x).getGridingDate().isBefore(newFormulations.get(y).getDestilationDate())) {
+					int index = tubsByPalenque.indexOf(newFormulations.get(y).getTub());						
+					availableTubs.get(index).setAvailable(false);
+				}	
 			}
 		}
 	}

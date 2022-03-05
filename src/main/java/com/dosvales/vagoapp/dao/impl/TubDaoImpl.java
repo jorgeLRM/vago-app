@@ -52,7 +52,10 @@ public class TubDaoImpl extends GenericDaoImpl<Tub, Long> implements TubDao, Ser
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Tub> findTubsAvailableByDate(LocalDate date) {
-		return em.createNativeQuery("SELECT * FROM tub t WHERE NOT EXISTS (SELECT NULL FROM formulation f WHERE t.id = f.idtub AND f.destilationdate > :date AND f.status = 'ACTIVE') AND t.status = 'ACTIVE' ORDER BY t.numbertub DESC", Tub.class)
+		return em.createNativeQuery("SELECT * FROM Tub t WHERE NOT EXISTS ("
+				+ "SELECT NULL FROM Formulation f WHERE t.id = f.idtub AND "
+				+ "f.destilationdate > :date AND f.status = 'ACTIVE') AND "
+				+ "t.status = 'ACTIVE' ORDER BY t.numbertub DESC", Tub.class)
 				.setParameter("date", date)
 				.getResultList();
 	}
