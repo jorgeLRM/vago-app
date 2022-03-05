@@ -1,3 +1,4 @@
+
 package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;

@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{plantationBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="PLANTÍOS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{plantationBean.plantation == null}" />
+		<h:panelGroup layout="block"
+			rendered="#{plantationBean.plantation != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h4>Resumen del plantío</h4>
+
+						<div class="p-grid">
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/box.png" library="custom" />
+									<h2>Lote</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.lot}</span>
+								</div>
+							</div>
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box"
+									style="background-color: #{plantationBean.getClassForStatus(plantationBean.plantation)}">
+									<p:graphicImage name="images/warehouse.png" library="custom" />
+									<h2>Stock</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.stock}</span>
+								</div>
+							</div>
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/agave.png" library="custom" />
+									<h2>Maguey</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.maguey.name}</span>
+								</div>
+							</div>
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box"
+									style="background-color: #{plantationBean.readyToCut(plantationBean.plantation) eq true ? '#82E0AA' : '#E59866'}">
+									<p:graphicImage name="images/growing.png" library="custom" />
+									<h2>Edad</h2>
+									<span style="font-weight: bold">#{plantationBean.getYearsFromPeriod(plantationBean.plantation.plantingDate,
+										plantationBean.TODAY)} años</span>
+								</div>
+							</div>
+
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/placeholder.png" library="custom" />
+									<h2>Predio</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.estate.name}</span>
+								</div>
+							</div>
+
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/planting.png" library="custom" />
+									<h2>Fecha de plantación</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.plantingDate}</span>
+								</div>
+							</div>
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/registration.png" library="custom" />
+									<h2>Fecha de registro</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.registrationDate}</span>
+								</div>
+							</div>
+
+							<div class="p-col-12 p-md-3">
+								<div class="card widget-feature-box">
+									<p:graphicImage name="images/initialstock.png" library="custom" />
+									<h2>Stock inicial</h2>
+									<span style="font-weight: bold">#{plantationBean.plantation.initialStock}</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="flex justify-content-between flex-wrap">
+							<div>
+								<pe:legend layout="horizontal" widgetVar="lgndHorizontal"
+									values="#{plantationBean.stockStatusLegend}">
+									<f:facet name="title">
+                    					Estatus del stock
+            						</f:facet>
+								</pe:legend>
+							</div>
+							<div>
+								<pe:legend layout="horizontal" widgetVar="lgndHorizontal"
+									values="#{plantationBean.plantationStatusLegend}">
+									<f:facet name="title">
+                    					Estatus de la plantación
+            						</f:facet>
+								</pe:legend>
+							</div>
+						</div>
+						
+						<div class="mt-1">
+							<p:commandButton value="Regresar"
+									icon="fas fa-arrow-circle-left"
+									action="/protected/estates/plantations.xhtml?faces-redirect=true"
+									process="@this"
+									styleClass="ui-button-raised ui-button-secondary  w-full md:w-auto mt-3 md:mt-0" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

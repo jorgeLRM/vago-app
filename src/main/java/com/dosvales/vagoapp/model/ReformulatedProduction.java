@@ -6,26 +6,20 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue(value="ReformulatedProduction")
+@NamedEntityGraph(name = "graph.ReformulatedProduction.reformulatedDetails", 
+attributeNodes = @NamedAttributeNode("reformulatedDetails"))
 public class ReformulatedProduction extends Production {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Double volume;
-	
 	@OneToMany(mappedBy="reformulatedProduction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<ReformulatedDetail> reformulatedDetails = new ArrayList<ReformulatedDetail>();
-	
-	public Double getVolume() {
-		return volume;
-	}
-
-	public void setVolume(Double volume) {
-		this.volume = volume;
-	}
 
 	public List<ReformulatedDetail> getReformulatedDetails() {
 		return reformulatedDetails;

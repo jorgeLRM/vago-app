@@ -38,27 +38,18 @@ public class PlantationBean implements Serializable {
 	
 	@Inject
 	private PlantationService plantationService;
-	
 	@Inject
 	private EstateService estateService;
-
 	@Inject
 	private MagueyService magueyService;
 	
 	private int age;
-	
 	private LocalDate registrationDate;
-	
 	private Plantation plantation;
-	
 	private Estate estate;
-	
 	private List<Plantation> newPlantations;
-	
 	private List<Plantation> plantations;
-	
 	private List<Maguey> magueyes;
-	
 	private List<Estate> estates;
 	
 	public void openNew() {
@@ -169,13 +160,11 @@ public class PlantationBean implements Serializable {
 	}
 	
 	public Plantation checkHasAssociations(Plantation p) throws RelatedRecordException {
-		/*Plantation found = plantationService.findWithCuttingDetail(p.getId());
-		if (found.getCuttingDetail().isEnpty()) {
+		Plantation found = plantationService.findWithCuttingDetail(p.getId());
+		if (found.getCuttingDetails().isEmpty()) {
 			return found;
 		}
 		throw new RelatedRecordException("La plantación no se puede eliminar porque ya se ha utilizado anteriormente.");
-		*/
-		return null;
 	}
 
 	public LinkedHashMap<String, String> getStockStatusLegend() {

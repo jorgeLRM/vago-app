@@ -45,7 +45,9 @@ public class ProductionPanelBean implements Serializable {
 			try {
 				production = productionService.findWithAssociations(Long.valueOf(id));
 				cuttingDetails = cuttingDetailService.findAllByCutting(production.getLotDetail().getCutting());
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 

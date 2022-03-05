@@ -39,11 +39,6 @@ public class CuttingServiceImpl extends GenericServiceImpl<Cutting, Long> implem
 	}
 
 	@Override
-	public Cutting findWithProduction(Long id) {
-		return dao.findWithProduction(id);
-	}
-
-	@Override
 	public Cutting findByGuideNumber(String guideNumber) {
 		return dao.findByGuideNumber(guideNumber);
 	}

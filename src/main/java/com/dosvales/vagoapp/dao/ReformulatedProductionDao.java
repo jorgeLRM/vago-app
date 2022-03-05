@@ -7,5 +7,9 @@ import com.dosvales.vagoapp.model.ReformulatedProduction;
 
 @Local
 public interface ReformulatedProductionDao extends GenericDao<ReformulatedProduction, Long>{
-
+	
+	ReformulatedProduction findByLot(String lot);
+	
+	ReformulatedProduction findWithAssociations(Long id);
+	
 }

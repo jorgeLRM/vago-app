@@ -74,10 +74,15 @@ public class StandardProductionBean implements Serializable {
 		String page = "";
 		try {
 			production.setLot(firstPartLot + "-" + secondPartLot);
-			production.setTotalVolume(production.getVolumeDistillation2());
-			productionService.save(production);
-			addMessage("Operación exitosa", "Producción guardada exitosamente", FacesMessage.SEVERITY_INFO);
-			page = "/protected/production/productions.xhtml?faces-redirect=true";
+			StandardProduction found = productionService.findByLot(production.getLot());
+			if (found == null) {
+				production.setTotalVolume(production.getVolumeDistillation2());
+				productionService.save(production);
+				addMessage("Operación exitosa", "Producción guardada exitosamente", FacesMessage.SEVERITY_INFO);
+				page = "/protected/production/productions.xhtml?faces-redirect=true";
+			} else {
+				showMessage("Cuidado", "El lote que intentas ingresar ya está registrado", FacesMessage.SEVERITY_WARN);
+			}
 		} catch (Exception ex) {
 			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
 		}

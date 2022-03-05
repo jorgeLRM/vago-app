@@ -11,8 +11,6 @@ public interface CuttingService extends GenericService<Cutting, Long>{
 	
 	Cutting findWithCuttingDetail(Long id);
 	
-	Cutting findWithProduction(Long id);
-	
 	Cutting findByGuideNumber(String guideNumber);
 	
 	void cancel(Cutting cutting);

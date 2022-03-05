@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:d="http://primefaces.org/diamond">
+
+    <div class="layout-sidebar">
+        <h:link class="logo" outcome="/empty">
+            <p:graphicImage id="app-logo" styleClass="logo-image"
+                            name="images/#{guestPreferences.logoColor eq 'white' ? 'logo-white.svg' : 'logo-dark.svg'}"
+                            library="diamond-layout"/>
+            <span class="app-name">DIAMOND</span>
+        </h:link>
+
+        <div class="layout-menu-container">
+            <h:form id="sidebar-form">
+                <d:menu widgetVar="diamondMenuWidget">
+                    <p:submenu id="om_homepage" label="Inicio" icon="pi pi-home">
+                        <p:menuitem id="om_dashboard" value="Dashboard" icon="pi pi-home" outcome="/empty"/>
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu id="om_estatesmodule" label="Predios" icon="pi pi-star-fill">
+                        <p:menuitem id="om_agaves" value="Agaves" icon="fa-solid fa-leaf" outcome="/protected/estates/agaves"/>
+                        <p:menuitem id="om_magueyes" value="Magueyes" icon="fa-solid fa-seedling" outcome="/protected/estates/magueyes"/>
+                        <p:menuitem id="om_producers" value="Productores" icon="fa-solid fa-tractor" outcome="/protected/estates/producers"/>
+                        <p:menuitem id="om_estates" value="Predios" icon="fa-solid fa-map-location-dot" outcome="/protected/estates/estates"/>
+                        <p:menuitem id="om_palenques" value="Palenques" icon="fa-solid fa-dumpster" outcome="/protected/estates/palenques"/>
+                        <p:menuitem id="om_plantations" value="Plantíos" icon="fa-brands fa-pagelines" outcome="/protected/estates/plantations"/>
+                        <p:menuitem id="om_cuttings" value="Cortes" icon="fa-solid fa-scissors" outcome="/protected/estates/cuttings"/>
+                    </p:submenu>
+                    <p:submenu id="om_productionmodule" label="Producción" icon="pi pi-star-fill">
+                    	<p:menuitem id="om_tubs" value="Tinas" icon="fas fa-archive" outcome="/protected/production/tubs"/>
+                    	<p:menuitem id="om_productions" value="Producción" icon="fas fa-cogs" outcome="/protected/production/productions"/>
+                    	<p:menuitem id="om_reformulations" value="Reformulaciones" icon="fas fa-tachometer-alt" outcome="/protected/production/reformulations"/>
+                    	<p:menuitem id="om_formulations" value="Formulaciones" icon="fas fa-vials" outcome="/protected/production/formulations"/>
+                    	<p:menuitem id="om_analysis" value="Análisis" icon="fas fa-vial" outcome="/protected/production/analysis"/>
+                    	<p:menuitem id="om_tails" value="Colas" icon="fab fa-mix" outcome="/protected/production/tails"/>
+                    	<p:menuitem id="om_transfers" value="Traslados" icon="fas fa-bus" outcome="/protected/production/transfers"/>
+                    </p:submenu>
+                    <!--<p:submenu id="om_utils" label="Utilities" icon="pi pi-compass">
+                        <p:menuitem id="om_display" value="Display" icon="pi pi-desktop" outcome="/display"/>
+                        <p:menuitem id="om_elevation" value="Elevation" icon="pi pi-external-link"
+                                    outcome="/elevation"/>
+                        <p:menuitem id="om_flexbox" value="FlexBox" icon="pi pi-directions" outcome="/flexbox"/>
+                        <p:menuitem id="om_icons" value="Icons" icon="pi pi-search" outcome="/icons"/>
+                        <p:menuitem id="om_text" value="Text" icon="pi pi-pencil" outcome="/text"/>
+                        <p:menuitem id="om_widgets" value="Widgets" icon="pi pi-star" outcome="/widgets"/>
+                        <p:menuitem id="om_grid" value="Grid System" icon="pi pi-th-large" outcome="/grid"/>
+                        <p:menuitem id="om_spacing" value="Spacing" icon="pi pi-arrow-right" outcome="/spacing"/>
+                        <p:menuitem id="om_typography" value="Typography" icon="pi pi-align-center"
+                                    outcome="/typography"/>
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu id="om_default" label="Pages" icon="pi pi-briefcase">
+                        <p:menuitem id="om_crud" value="Crud" icon="pi pi-pencil" outcome="/crud"/>
+                        <p:menuitem id="om_calendar" value="Calendar" icon="pi pi-calendar-plus" outcome="/calendar"/>
+                        <p:menuitem id="om_chronoline" value="Chronoline" icon="pi pi-calendar" outcome="/chronoline"/>
+                        <p:menuitem id="om_landing" value="Landing" icon="pi pi-user-plus" url="landing.html"/>
+                        <p:menuitem id="om_login" value="Login" icon="pi pi-sign-in" outcome="/login"/>
+                        <p:menuitem id="om_invoice" value="Invoice" icon="pi pi-dollar" outcome="/invoice"/>
+                        <p:menuitem id="om_help" value="Help" icon="pi pi-question-circle" outcome="/help"/>
+                        <p:menuitem id="om_error" value="Error" icon="pi pi-times-circle" outcome="/error"/>
+                        <p:menuitem id="om_notfound" value="Not Found" icon="pi pi-exclamation-circle"
+                                    outcome="/notfound"/>
+                        <p:menuitem id="om_access" value="Access Denied" icon="pi pi-lock" outcome="/access"/>
+                        <p:menuitem id="om_empty" value="Empty" icon="pi pi-circle-off" outcome="/empty"/>
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu id="om_hierarchy" label="Hierarchy" icon="pi pi-align-left">
+                        <p:submenu id="om_sm1" label="Submenu 1" icon="pi pi-align-left">
+                            <p:submenu id="om_sm11" label="Submenu 1.1" icon="pi pi-align-left">
+                                <p:menuitem id="om_lnk111" value="Link 1.1.1" icon="pi pi-align-left" url="#"/>
+                                <p:menuitem id="om_lnk112" value="Link 1.1.2" icon="pi pi-align-left" url="#"/>
+                                <p:menuitem id="om_lnk113" value="Link 1.1.3" icon="pi pi-align-left" url="#"/>
+                            </p:submenu>
+                            <p:submenu id="om_sm12" label="Submenu 1.2" icon="pi pi-align-left">
+                                <p:menuitem id="om_lnk121" value="Link 1.2.1" icon="pi pi-align-left" url="#"/>
+                            </p:submenu>
+                        </p:submenu>
+                        <p:submenu id="om_sm2" label="Submenu 2" icon="pi pi-align-left">
+                            <p:submenu id="om_sm21" label="Submenu 2.1" icon="pi pi-align-left">
+                                <p:menuitem id="om_lnk211" value="Link 2.1.1" icon="pi pi-align-left" url="#"/>
+                                <p:menuitem id="om_lnk212" value="Link 2.1.2" icon="pi pi-align-left" url="#"/>
+                            </p:submenu>
+                            <p:submenu id="om_sm22" label="Submenu 2.2" icon="pi pi-align-left">
+                                <p:menuitem id="om_lnk221" value="Link 2.2.1" icon="pi pi-align-left" url="#"/>
+                            </p:submenu>
+                        </p:submenu>
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu id="om_getstarted" label="Start" icon="pi pi-download">
+                        <p:menuitem id="om_buy" value="Buy Now" icon="pi pi-shopping-cart"
+                                    url="https://www.primefaces.org/store"/>
+                        <p:menuitem id="om_doc" value="Documentation" icon="pi pi-info-circle"
+                                    outcome="/documentation"/>
+                    </p:submenu>
+                    <p:separator/>-->
+                </d:menu>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>

@@ -1,16 +1,23 @@
 package com.dosvales.vagoapp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="plantation")
+@NamedEntityGraph(name = "graph.Plantation.cuttingDetails", 
+attributeNodes = @NamedAttributeNode("cuttingDetails"))
 public class Plantation extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -41,6 +48,9 @@ public class Plantation extends AbstractEntity {
 	@JoinColumn(name = "idMaguey")
 	private Maguey maguey;
 
+	@OneToMany(mappedBy="plantation")
+	private List<CuttingDetail> cuttingDetails = new ArrayList<CuttingDetail>();
+	
 	public StockStatus getStockStatus() {
 		if (stock == 0) {
 			return StockStatus.OUTOFSTOCK;
@@ -120,5 +130,13 @@ public class Plantation extends AbstractEntity {
 
 	public void setMaguey(Maguey maguey) {
 		this.maguey = maguey;
+	}
+
+	public List<CuttingDetail> getCuttingDetails() {
+		return cuttingDetails;
+	}
+
+	public void setCuttingDetails(List<CuttingDetail> cuttingDetails) {
+		this.cuttingDetails = cuttingDetails;
 	}
 }

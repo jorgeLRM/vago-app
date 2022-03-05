@@ -9,7 +9,7 @@ public class ReformulatedDetail extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer volume;
+	private Double volume;
 	
 	@ManyToOne
 	@JoinColumn(name="idStandardProduction")
@@ -19,11 +19,11 @@ public class ReformulatedDetail extends AbstractEntity {
 	@JoinColumn(name="idReformulatedProduction")
 	private ReformulatedProduction reformulatedProduction;
 
-	public Integer getVolume() {
+	public Double getVolume() {
 		return volume;
 	}
 
-	public void setVolume(Integer volume) {
+	public void setVolume(Double volume) {
 		this.volume = volume;
 	}
 

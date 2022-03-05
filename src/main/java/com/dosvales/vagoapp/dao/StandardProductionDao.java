@@ -22,6 +22,8 @@ public interface StandardProductionDao extends GenericDao<StandardProduction, Lo
 	
 	StandardProduction findWithAssociations(Long id);
 	
+	StandardProduction findByLot(String lot);
+	
 	List<StandardProduction> findAllByStatus(ProductionStatus status);
 	
 	List<StandardProduction> findAllInProcess();

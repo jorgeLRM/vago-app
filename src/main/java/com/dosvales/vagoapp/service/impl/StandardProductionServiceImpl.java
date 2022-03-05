@@ -69,4 +69,9 @@ public class StandardProductionServiceImpl extends GenericServiceImpl<StandardPr
 		return dao.findAllTerminated();
 	}
 
+	@Override
+	public StandardProduction findByLot(String lot) {
+		return dao.findByLot(lot);
+	}
+
 }

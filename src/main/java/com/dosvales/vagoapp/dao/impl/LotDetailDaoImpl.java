@@ -16,8 +16,8 @@ public class LotDetailDaoImpl extends GenericDaoImpl<LotDetail, Long> implements
 	@Override
 	public Integer countAllByYearAndProducer(Integer year, Long idProducer) {
 		return em.createNativeQuery("SELECT * "
-				+ "FROM LotDetail AS l "
-				+ "INNER JOIN Palenque AS p "
+				+ "FROM lotdetail AS l "
+				+ "INNER JOIN palenque AS p "
 				+ "ON l.idPalenque = p.id "
 				+ "WHERE EXTRACT(year FROM l.registrationDate) = :year "
 				+ "AND p.idProducer = :idProducer", LotDetail.class)

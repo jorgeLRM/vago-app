@@ -18,6 +18,8 @@ public interface StandardProductionService extends GenericService<StandardProduc
 	
 	StandardProduction findWithAssociations(Long id);
 	
+	StandardProduction findByLot(String lot);
+	
 	List<StandardProduction> findAllCanceled();
 	
 	List<StandardProduction> findAllInProcess();

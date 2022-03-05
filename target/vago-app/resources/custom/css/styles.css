@@ -1,0 +1,69 @@
+body .ui-panelgrid .ui-panelgrid-cell {
+    background-color: transparent;
+}
+
+.my-heading-row {
+    background-color: var(--surface-c);
+    font-weight: bold;
+}
+
+.outputLabel {
+    font-weight: bold;
+}
+
+.ui-panelgrid.showcase-text-align-center .ui-grid-responsive .ui-panelgrid-cell {
+    text-align: center;
+}
+
+.customPanelGrid .ui-panelgrid-content {
+    align-items: center;
+}
+
+.product-item .product-item-content {
+    border: 1px solid var(--surface-d);
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.product-item .product-image {
+    width: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.yellow-row {
+    background-color: #F4D03F !important;
+    background-image: none !important;
+    color: #17202A !important;
+}
+
+.green-row {
+    background-color: #2ECC71 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+.red-row {
+    background-color: #E74C3C !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+.white-row {
+    background-color: #FDFEFE !important;
+    background-image: none !important;
+    color: #17202A !important;
+}
+
+.text-red {
+	color: white;
+	font-weight: bold;
+	background-color: red;
+}
+
+.text-green {
+	color: white;
+	font-weigth: bold;
+	background-color: green;
+}

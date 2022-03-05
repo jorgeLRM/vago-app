@@ -1,0 +1,440 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{tubBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="TINAS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+
+							<p:card>
+								<p:wizard id="wizard">
+									<p:tab id="cdGeneral" title="General">
+										<p:panel header="Información general">
+											<p:outputPanel id="general-tub" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty tubBean.tub}">
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="palenque">Palenque</p:outputLabel>
+															<p:selectOneMenu id="palenque"
+																value="#{tubBean.tub.palenque}" required="true"
+																converter="omnifaces.SelectItemsConverter" filter="true"
+																filterMatchMode="content">
+																<p:ajax update="numberTub, address, producer"
+																	listener="#{tubBean.onPalenqueChange}" />
+																<f:selectItem itemLabel="Seleccionar palenque"
+																	itemValue="" noSelectionOption="true" />
+																<f:selectItems value="#{tubBean.palenques}"
+																	var="palenque" itemValue="#{palenque}"
+																	itemLabel="#{palenque.name}" />
+															</p:selectOneMenu>
+															<p:blockUI block="main-template" trigger="palenque" />
+														</div>
+
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="numberTub">Número de tina</p:outputLabel>
+															<p:selectOneMenu id="numberTub"
+																value="#{tubBean.tub.numberTub}" required="true"
+																converter="omnifaces.SelectItemsConverter" filter="true"
+																filterMatchMode="content">
+																<f:selectItem itemLabel="- Seleccionar -"
+																	itemValue="#{null}" noSelectionOption="true" />
+																<f:selectItems value="#{tubBean.availableNumbers}"
+																	var="number" itemValue="#{number}"
+																	itemLabel="#{number}" />
+															</p:selectOneMenu>
+														</div>
+													</div>
+													<div class="formgrid grid">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="address">Ubicación</p:outputLabel>
+															<p:inputText id="address"
+																value="#{tubBean.tub.palenque.address.address}"
+																disabled="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="producer">Productor</p:outputLabel>
+															<p:inputText id="producer"
+																value="#{tubBean.tub.palenque.producer.name}"
+																disabled="true" />
+														</div>
+													</div>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+
+									<p:tab id="cdHeights" title="Alturas">
+										<p:panel header="Alturas de la tina">
+											<p:outputPanel id="height-tub" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty tubBean.tub}">
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="height1">Altura 1</p:outputLabel>
+															<p:spinner id="height1"
+																value="#{tubBean.tub.height1}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="height2">Altura 2</p:outputLabel>
+															<p:spinner id="height2"
+																value="#{tubBean.tub.height2}" min="30"
+																required="true" />
+														</div>
+													</div>
+
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="height3">Altura 3</p:outputLabel>
+															<p:spinner id="height3"
+																value="#{tubBean.tub.height3}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="height4">Altura 4</p:outputLabel>
+															<p:spinner id="height4"
+																value="#{tubBean.tub.height4}" min="30"
+																required="true" />
+														</div>
+													</div>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+
+									<p:tab id="cdTopDiameter" title="Diametros superiores">
+										<p:panel header="Diametros superiores de la tina">
+											<p:outputPanel id="topDiameter-tub" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty tubBean.tub}">
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="topDiameter1">Diametro superior 1</p:outputLabel>
+															<p:spinner id="topDiameter1"
+																value="#{tubBean.tub.topDiameter1}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="topDiameter2">Diametro superior 2</p:outputLabel>
+															<p:spinner id="topDiameter2"
+																value="#{tubBean.tub.topDiameter2}" min="30"
+																required="true" />
+														</div>
+													</div>
+
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="topDiameter3">Diametro superior 3</p:outputLabel>
+															<p:spinner id="topDiameter3"
+																value="#{tubBean.tub.topDiameter3}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="topDiameter4">Diametro superior 4</p:outputLabel>
+															<p:spinner id="topDiameter4"
+																value="#{tubBean.tub.topDiameter4}" min="30"
+																required="true" />
+														</div>
+													</div>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+
+									<p:tab id="cdBottomDiameter" title="Diametros inferiores">
+										<p:panel header="Diametros inferiores de la tina">
+											<p:outputPanel id="bottomDiameter-tub" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty tubBean.tub}">
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="bottomDiameter1">Diametro inferior 1</p:outputLabel>
+															<p:spinner id="bottomDiameter1"
+																value="#{tubBean.tub.bottomDiameter1}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="bottomDiameter2">Diametro inferior 2</p:outputLabel>
+															<p:spinner id="bottomDiameter2"
+																value="#{tubBean.tub.bottomDiameter2}" min="30"
+																required="true" />
+														</div>
+													</div>
+
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="bottomDiameter3">Diametro inferior 3</p:outputLabel>
+															<p:spinner id="bottomDiameter3"
+																value="#{tubBean.tub.bottomDiameter3}" min="30"
+																required="true" />
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="bottomDiameter4">Diametro inferior 4</p:outputLabel>
+															<p:spinner id="bottomDiameter4"
+																value="#{tubBean.tub.bottomDiameter4}" min="30"
+																required="true" />
+														</div>
+													</div>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+
+									<p:tab id="cdConfirm" title="Confirmación">
+										<p:panel header="Confirmación">
+											<p:outputPanel id="confirmation-tub" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty tubBean.tub}">
+													<p:panelGrid columns="4"
+														style="border:0px none; background-color:transparent;"
+														columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+														layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+
+														<p:row styleClass="my-heading-row">
+														Información general
+													</p:row>
+
+														<p:outputLabel value="Palenque:" />
+														<h:outputText value="#{tubBean.tub.palenque.name}"
+															styleClass="outputLabel" />
+
+														<p:outputLabel value="Número de tina:" />
+														<h:outputText value="#{tubBean.tub.numberTub}"
+															styleClass="outputLabel" />
+
+														<p:outputLabel value="Volumen (litros):" />
+														<h:outputText value="#{tubBean.tub.volume}"
+															styleClass="outputLabel">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+
+														<p:outputLabel value="Factor:" />
+														<h:outputText value="#{tubBean.tub.factor}"
+															styleClass="outputLabel">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+
+														<p:row styleClass="my-heading-row">
+														Alturas
+													</p:row>
+													</p:panelGrid>
+
+													<p:panelGrid
+														style="margin-top:10px;margin-left:auto;margin-right:auto;width:100%">
+														<f:facet name="header">
+															<p:row>
+																<p:column>Altura 1</p:column>
+																<p:column>Altura 2</p:column>
+																<p:column>Altura 3</p:column>
+																<p:column>Altura 4</p:column>
+															</p:row>
+														</f:facet>
+
+														<p:row>
+															<p:column style="text-align:center;">
+																<h:outputText value="#{tubBean.tub.height1} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText value="#{tubBean.tub.height2} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText value="#{tubBean.tub.height3} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText value="#{tubBean.tub.height4} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+														</p:row>
+
+														<f:facet name="footer">
+															<p:row>
+																<p:column colspan="3" style="text-align: right">
+																	<h:outputText value="Altura promedio"
+																		styleClass="outputLabel" />
+																</p:column>
+																<p:column>
+																	<h:outputText
+																		value="#{tubBean.tub.averageHeight}"
+																		styleClass="outputLabel">
+																		<f:convertNumber pattern="#0.00" />
+																	</h:outputText>
+																	<h:outputText value=" cm" styleClass="outputLabel" />
+																</p:column>
+															</p:row>
+														</f:facet>
+													</p:panelGrid>
+
+													<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+														style="border:0px none; margin-top:10px; background-color:transparent;"
+														layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+														<p:row styleClass="my-heading-row">
+														Diametros superiores
+													</p:row>
+													</p:panelGrid>
+
+													<p:panelGrid
+														style="margin-top:10px;margin-left:auto;margin-right:auto;width:100%">
+														<f:facet name="header">
+															<p:row>
+																<p:column>Diametro 1</p:column>
+																<p:column>Diametro 2</p:column>
+																<p:column>Diametro 3</p:column>
+																<p:column>Diametro 4</p:column>
+															</p:row>
+														</f:facet>
+
+														<p:row>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.topDiameter1} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.topDiameter2} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.topDiameter3} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.topDiameter4} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+														</p:row>
+
+														<f:facet name="footer">
+															<p:row>
+																<p:column colspan="2">
+																	<h:outputText value="Diametro superior promedio: "
+																		styleClass="outputLabel" />
+																	<h:outputText
+																		value="#{tubBean.tub.averageTopDiameter}"
+																		styleClass="outputLabel">
+																		<f:convertNumber pattern="#0.00" />
+																	</h:outputText>
+																	<h:outputText value=" cm" styleClass="outputLabel" />
+																</p:column>
+																<p:column colspan="2">
+																	<h:outputText value="Radio superior: "
+																		styleClass="outputLabel" />
+																	<h:outputText value="#{tubBean.tub.topRadius}"
+																		styleClass="outputLabel">
+																		<f:convertNumber pattern="#0.00" />
+																	</h:outputText>
+																	<h:outputText value=" cm" styleClass="outputLabel" />
+																</p:column>
+															</p:row>
+														</f:facet>
+													</p:panelGrid>
+
+													<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+														style="border:0px none; margin-top:10px; background-color:transparent;"
+														layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+														<p:row styleClass="my-heading-row">
+														Diametros inferiores
+													</p:row>
+													</p:panelGrid>
+
+													<p:panelGrid
+														style="margin-top:10px;margin-left:auto;margin-right:auto;width:100%">
+														<f:facet name="header">
+															<p:row>
+																<p:column>Diametro 1</p:column>
+																<p:column>Diametro 2</p:column>
+																<p:column>Diametro 3</p:column>
+																<p:column>Diametro 4</p:column>
+															</p:row>
+														</f:facet>
+
+														<p:row>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.bottomDiameter1} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.bottomDiameter2} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.bottomDiameter3} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+															<p:column style="text-align:center;">
+																<h:outputText
+																	value="#{tubBean.tub.bottomDiameter4} cm"
+																	styleClass="outputLabel" />
+															</p:column>
+														</p:row>
+
+														<f:facet name="footer">
+															<p:row>
+																<p:column colspan="2">
+																	<h:outputText value="Diametro inferior promedio: "
+																		styleClass="outputLabel" />
+																	<h:outputText
+																		value="#{tubBean.tub.averageBottomDiameter}"
+																		styleClass="outputLabel">
+																		<f:convertNumber pattern="#0.00" />
+																	</h:outputText>
+																	<h:outputText value=" cm" styleClass="outputLabel" />
+																</p:column>
+																<p:column colspan="2">
+																	<h:outputText value="Radio inferior: "
+																		styleClass="outputLabel" />
+																	<h:outputText value="#{tubBean.tub.bottomRadius}"
+																		styleClass="outputLabel">
+																		<f:convertNumber pattern="#0.00" />
+																	</h:outputText>
+																	<h:outputText value=" cm" styleClass="outputLabel" />
+																</p:column>
+															</p:row>
+														</f:facet>
+													</p:panelGrid>
+												</p:outputPanel>
+											</p:outputPanel>
+
+											<p:commandButton value="Confirmar"
+												action="#{tubBean.tryToSave()}" process="@this"
+												styleClass="mt-3 ui-button-raised" />
+										</p:panel>
+									</p:tab>
+								</p:wizard>
+							</p:card>
+							
+							<div class="mt-3">
+								<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+									styleClass="ui-button-secondary ui-button-raised w-full md:w-auto"
+									action="/protected/production/tubs.xhtml?faces-redirect=true"
+									process="@this" />
+							</div>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

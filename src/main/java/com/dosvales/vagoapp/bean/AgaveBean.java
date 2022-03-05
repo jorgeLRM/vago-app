@@ -30,9 +30,7 @@ public class AgaveBean implements Serializable {
 	private AgaveService agaveService;
 
 	private List<Agave> agaves;
-
 	private Agave agave;
-	
 	private EntityStatus status = EntityStatus.ACTIVE;
 	
 	public void openNew() {
@@ -74,7 +72,6 @@ public class AgaveBean implements Serializable {
 	
 	public String save(Agave a) {
 		agaveService.save(a);
-		addMessage("Operación exitosa", "Agave guardado exitosamente", FacesMessage.SEVERITY_INFO);
 		return "/protected/estates/agaves.xhtml?faces-redirect=true";
 	}
 
@@ -109,7 +106,7 @@ public class AgaveBean implements Serializable {
 		if (found.getMagueyes().isEmpty()) {
 			return found;
 		}
-		throw new RelatedRecordException("El agave no se puede eliminar porque ya se ha utilizado anteriormente. Intenta deshabilitarlo se ya no lo necesitas.");
+		throw new RelatedRecordException("El agave no se puede eliminar porque ya se ha utilizado anteriormente. Intenta deshabilitarlo si ya no lo necesitas.");
 	}
 	
 	public void enabledDisabledAgave() {

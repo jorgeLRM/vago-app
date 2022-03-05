@@ -23,8 +23,8 @@ public class StandardProductionDaoImpl extends GenericDaoImpl<StandardProduction
 	@Override
 	public List<StandardProduction> findAllWithoutTail() {
 		return em.createNativeQuery("SELECT * "
-				+ "FROM Production AS p "
-				+ "LEFT JOIN Tail AS t "
+				+ "FROM production AS p "
+				+ "LEFT JOIN tail AS t "
 				+ "ON p.id = t.idStandardProduction "
 				+ "WHERE t.idStandardProduction IS NULL "
 				+ "AND p.typeProduction = 'StandardProduction' "
@@ -45,7 +45,8 @@ public class StandardProductionDaoImpl extends GenericDaoImpl<StandardProduction
 	@Override
 	public List<StandardProduction> findAllFails() {
 		return em.createQuery("FROM StandardProduction p "
-				+ "WHERE p.productionStatus = com.dosvales.vagoapp.model.ProductionStatus.REPROBATE", 
+				+ "WHERE p.productionStatus = com.dosvales.vagoapp.model.ProductionStatus.REPROBATE "
+				+ "ORDER BY p.id", 
 				StandardProduction.class)
 				.getResultList();
 	}
@@ -53,10 +54,11 @@ public class StandardProductionDaoImpl extends GenericDaoImpl<StandardProduction
 	@Override
 	public List<StandardProduction> findAllAvailable(Producer producer) {
 		return em.createQuery("FROM StandardProduction p "
-				+ "WHERE p.lotDetail.producer = :producer "
+				+ "WHERE p.lotDetail.palenque.producer = :producer "
 				+ "AND (p.productionStatus = com.dosvales.vagoapp.model.ProductionStatus.INBULK "
 				+ "OR p.productionStatus = com.dosvales.vagoapp.model.ProductionStatus.FOROFFICEMIXING) "
-				+ "AND p.totalVolume > 0", StandardProduction.class)
+				+ "AND p.totalVolume > 0 "
+				+ "ORDER BY p.id", StandardProduction.class)
 				.setParameter("producer", producer)
 				.getResultList();
 	}
@@ -96,6 +98,18 @@ public class StandardProductionDaoImpl extends GenericDaoImpl<StandardProduction
 				+ "OR p.productionStatus = com.dosvales.vagoapp.model.ProductionStatus.FOROFFICEMIXING";
 		return em.createQuery(jpql, StandardProduction.class)
 				.getResultList();
+	}
+
+	@Override
+	public StandardProduction findByLot(String lot) {
+		StandardProduction production = null;
+		try {
+			production = em.createQuery("FROM StandardProduction p WHERE UPPER(p.lot) = :lot", 
+					StandardProduction.class)
+					.setParameter("lot", lot.toUpperCase())
+					.getSingleResult();
+		} catch (Exception ex) {}
+		return production;
 	}
 
 }

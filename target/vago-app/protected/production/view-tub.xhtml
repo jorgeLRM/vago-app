@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{tubBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="TINAS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{tubBean.tub == null}" />
+		<h:panelGroup layout="block" rendered="#{tubBean.tub != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<p:panel header="Detalles de la tina">
+							<p:outputPanel id="tub" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty tubBean.tub}">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent;">
+
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="Palenque:" />
+										<h:outputText value="#{tubBean.tub.palenque.name}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Número de tina:" />
+										<h:outputText value="#{tubBean.tub.numberTub}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Volumen (litros):" />
+										<h:outputText value="#{tubBean.tub.volume}"
+											styleClass="outputLabel">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+
+										<p:outputLabel value="Factor:" />
+										<h:outputText value="#{tubBean.tub.factor}"
+											styleClass="outputLabel">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+
+										<p:row styleClass="my-heading-row">
+											Alturas
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable var="height" value="#{tubBean.tub.heights}"
+										rowIndexVar="rowIndex">
+										<p:column headerText="Nombre">
+											<h:outputText value="Altura #{rowIndex+1}" />
+										</p:column>
+
+										<p:column headerText="Altura">
+											<h:outputText value="#{height} cm" />
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+												<p:column style="text-align:right"
+													footerText="Altura promedio:" />
+												<p:column>
+													<f:facet name="footer">
+														<h:outputText value="#{tubBean.tub.averageHeight}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+														<h:outputText value=" cm" />
+													</f:facet>
+												</p:column>
+											</p:row>
+										</p:columnGroup>
+									</p:dataTable>
+
+									<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent; margin-top:10px;">
+										<p:row styleClass="my-heading-row">
+											Diametros superiores
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable var="topDiameter"
+										value="#{tubBean.tub.topDiameters}"
+										rowIndexVar="rowIndex">
+										<p:column headerText="Nombre">
+											<h:outputText value="Diametro superior #{rowIndex+1}" />
+										</p:column>
+
+										<p:column headerText="Diametro">
+											<h:outputText value="#{topDiameter} cm" />
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+												<p:column>
+													<f:facet name="footer">Radio superior:
+														<h:outputText value="#{tubBean.tub.topRadius}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+														<h:outputText value=" cm" />
+													</f:facet>
+												</p:column>
+												<p:column>
+													<f:facet name="footer">Diametro superior promedio:
+														<h:outputText
+															value="#{tubBean.tub.averageTopDiameter}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+														<h:outputText value=" cm" />
+													</f:facet>
+												</p:column>
+											</p:row>
+										</p:columnGroup>
+									</p:dataTable>
+
+									<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent; margin-top:10px">
+										<p:row styleClass="my-heading-row">
+											Diametros inferiores
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable var="bottomDiameter"
+										value="#{tubBean.tub.bottomDiameters}"
+										rowIndexVar="rowIndex">
+										<p:column headerText="Nombre">
+											<h:outputText value="Diametro inferior #{rowIndex+1}" />
+										</p:column>
+
+										<p:column headerText="Diametro">
+											<h:outputText value="#{bottomDiameter} cm" />
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+												<p:column>
+													<f:facet name="footer">Radio inferior:
+														<h:outputText value="#{tubBean.tub.bottomRadius}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+														<h:outputText value=" cm" />
+													</f:facet>
+												</p:column>
+												<p:column>
+													<f:facet name="footer">Diametro inferior promedio:
+														<h:outputText
+															value="#{tubBean.tub.averageBottomDiameter}">
+															<f:convertNumber pattern="#0.00" />
+														</h:outputText>
+														<h:outputText value=" cm" />
+													</f:facet>
+												</p:column>
+											</p:row>
+										</p:columnGroup>
+									</p:dataTable>
+
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+									styleClass="ui-button-secondary ui-button-raised"
+									action="/protected/production/tubs.xhtml?faces-redirect=true"
+									process="@this" />
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

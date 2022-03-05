@@ -43,35 +43,23 @@ public class CuttingBean implements Serializable {
 
 	@Inject
 	private CuttingService cuttingService;
-	
 	@Inject
 	private PalenqueService palenqueService;
-	
 	@Inject
 	private EstateService estateService;
-	
 	@Inject
 	private PlantationService plantationService;
-
 	@Inject
 	private LotDetailService lotService;
 	
 	private Integer quantityTotal;
-	
 	private Integer weightTotal;
-	
 	private Cutting cutting;
-	
 	private Estate estate;
-	
 	private DualListModel<Plantation> dualListPlantation;
-	
 	private List<Cutting> cuttings;
-	
 	private List<Palenque> palenques;
-	
 	private List<Estate> estates;
-	
 	private List<CuttingDetail> cuttingDetailWrapper;
 	
 	private String status = "ACEPTADOS";
@@ -186,11 +174,11 @@ public class CuttingBean implements Serializable {
 	}
 	
 	public Cutting checkHasAssociations(Cutting e) throws RelatedRecordException {
-		Cutting found = cuttingService.findWithProduction(e.getId());
-		if (found.getLotDetail().getProduction() == null) {
-			return found;
+		if (e.getLotDetail().getProduction() == null) {
+			return e;
 		}
 		throw new RelatedRecordException("El corte no se puede cancelar porque ya se ha utilizado anteriormente.");
+		
 	}
 	
 	public void handleFileUpload(FileUploadEvent event) {

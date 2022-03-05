@@ -23,10 +23,10 @@ public class CuttingDaoImpl extends GenericDaoImpl<Cutting, Long> implements Cut
 	@Override
 	public List<Cutting> findAllAvailable() {
 		return em.createNativeQuery("SELECT * "
-				+ "FROM Cutting AS c "
-				+ "INNER JOIN LotDetail AS l "
+				+ "FROM cutting AS c "
+				+ "INNER JOIN lotdetail AS l "
 				+ "ON c.idLotDetail = l.id "
-				+ "LEFT JOIN Production AS p on l.id = p.idLotDetail "
+				+ "LEFT JOIN production AS p on l.id = p.idLotDetail "
 				+ "WHERE p.idLotDetail IS NULL AND c.status = 'ACTIVE'", Cutting.class)
 				.getResultList();
 	}
@@ -34,14 +34,6 @@ public class CuttingDaoImpl extends GenericDaoImpl<Cutting, Long> implements Cut
 	@Override
 	public Cutting findWithCuttingDetail(Long id) {
 		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Cutting.cuttingDetails");
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("javax.persistence.fetchgraph", entityGraph);
-		return em.find(Cutting.class, id, properties);
-	}
-
-	@Override
-	public Cutting findWithProduction(Long id) {
-		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Cutting.productions");
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("javax.persistence.fetchgraph", entityGraph);
 		return em.find(Cutting.class, id, properties);

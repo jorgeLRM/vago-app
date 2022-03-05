@@ -26,4 +26,14 @@ public class ReformulatedProductionServiceImpl extends GenericServiceImpl<Reform
 		return dao;
 	}
 
+	@Override
+	public ReformulatedProduction findByLot(String lot) {
+		return dao.findByLot(lot);
+	}
+
+	@Override
+	public ReformulatedProduction findWithAssociations(Long id) {
+		return dao.findWithAssociations(id);
+	}
+
 }

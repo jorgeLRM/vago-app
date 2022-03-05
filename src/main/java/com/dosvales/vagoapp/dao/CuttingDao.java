@@ -12,8 +12,6 @@ public interface CuttingDao extends GenericDao<Cutting, Long>{
 	
 	Cutting findWithCuttingDetail(Long id);
 	
-	Cutting findWithProduction(Long id);
-	
 	Cutting findByGuideNumber(String guideNumber);
 	
 	List<Cutting> findAllByStatus(EntityStatus status);

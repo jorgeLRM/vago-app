@@ -15,7 +15,7 @@ public class FacesUtil {
 	}
 	
 	public static void uploadFile(String path, InputStream inputStream) throws IOException {
-		FileOutputStream fileOutputStream = new FileOutputStream(path);
+		FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
 		byte[] buffer = new byte[6124];
 		int bulk;
 		while (true) {
