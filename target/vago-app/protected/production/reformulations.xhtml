@@ -30,7 +30,7 @@
 										ADMINISTRAR REFORMULACIONES</p:outputLabel>
 								</p:toolbarGroup>
 								<p:toolbarGroup align="right" class="w-full md:w-auto">
-									<p:commandButton value="Nueva producción" icon="pi pi-plus"
+									<p:commandButton value="Nueva reformulación" icon="pi pi-plus"
 										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
 										action="/protected/production/new-reformulation.xhtml?faces-redirect=true" />
 								</p:toolbarGroup>
@@ -74,17 +74,17 @@
 									<h:outputText value="#{reformulation.productionStatus.type}" />
 								</p:column>
 
-								<!-- <p:column headerText="Acciones" style="text-align:center"
+								<p:column headerText="Acciones" style="text-align:center"
 									width="1">
 									<p:linkButton icon="fas fa-columns" id="panelButton"
-										outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
+										outcome="/protected/production/reformulation-panel.xhtml?faces-redirect=true"
 										styleClass="edit-button rounded-button ui-button-raised ui-button-info">
-										<f:param name="id" value="#{production.id}" />
+										<f:param name="id" value="#{reformulation.id}" />
 									</p:linkButton>
 									<p:tooltip for="panelButton" value="Ver panel de producción"
 										position="bottom" />
 
-									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+									<!-- <p:linkButton icon="fas fa-pencil-alt" id="editButton"
 										outcome="/protected/production/edit-production.xhtml?faces-redirect=true"
 										styleClass="edit-button rounded-button ui-button-raised ui-button-warning"
 										rendered="#{production.productionStatus != 'INBULK' and production.productionStatus != 'CANCELED' and production.productionStatus != 'REPROBATE'}">
@@ -101,8 +101,8 @@
 											target="#{productionController.production}" />
 									</p:commandButton>
 									<p:tooltip for="deleteButton" value="Eliminar registro"
-										position="bottom" />
-								</p:column>-->
+										position="bottom" />-->
+								</p:column>
 							</p:dataTable>
 
 							<!--<p:confirmDialog widgetVar="cancelCuttingDialog"

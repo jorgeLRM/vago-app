@@ -118,13 +118,13 @@
 									<p:tooltip for="enableButton" value="Habilitar registro"
 										position="bottom" />
 
-									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
-										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										styleClass="rounded-button ui-button-help ui-button-raised mr-2"
 										outcome="/protected/production/view-tub.xhtml?faces-redirect=true"
 										rendered="#{tub.status == 'ACTIVE'}">
 										<f:param name="id" value="#{tub.id}" />
 									</p:linkButton>
-									<p:tooltip for="editButton" value="Editar registro"
+									<p:tooltip for="viewButton" value="Ver registro"
 										position="bottom" />
 
 									<p:commandButton id="deleteButton" icon="pi pi-trash"

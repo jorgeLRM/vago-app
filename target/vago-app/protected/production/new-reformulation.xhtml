@@ -22,7 +22,172 @@
 								<p:effect event="load" type="fade" delay="2000" closable="true" />
 							</p:growl>
 
-							
+							<p:panel header="Agregar reformulación">
+								<p:outputPanel id="manage-reformulated-content" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty reformulationBean.reformulation}">
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="failedProductions">Producciones reprobadas</p:outputLabel>
+												<p:selectOneMenu id="failedProductions"
+													value="#{reformulationBean.failedProduction}"
+													required="true" converter="omnifaces.SelectItemsConverter"
+													filter="true" filterMatchMode="content">
+													<f:selectItem itemLabel="Seleccionar lote" itemValue=""
+														noSelectionOption="true" />
+													<f:selectItems
+														value="#{reformulationBean.failedProductions}"
+														var="failedProduction" itemValue="#{failedProduction}"
+														itemLabel="#{failedProduction.lot}" />
+													<p:ajax
+														listener="#{reformulationBean.onFailedProductionChange()}"
+														update="productionsAvailable, volume1, productionLot, productionLot2, total1" />
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-3">
+												<p:outputLabel for="total1">Total</p:outputLabel>
+												<p:inputText id="total1"
+													value="#{reformulationBean.failedProduction.totalVolume}"
+													disabled="true" />
+											</div>
+											<div class="field col-12 md:col-3">
+												<p:outputLabel for="volume1">Volumen (Litros)</p:outputLabel>
+												<p:spinner id="volume1"
+													value="#{reformulationBean.volumeFailedProduction}" min="1"
+													required="true"
+													max="#{reformulationBean.failedProduction.volumeDistillation2}" />
+											</div>
+										</div>
+
+										<p:blockUI block="main-template" trigger="failedProductions" />
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="productionsAvailable">Producciones disponibles</p:outputLabel>
+												<p:selectOneMenu id="productionsAvailable"
+													value="#{reformulationBean.productionAvailable}"
+													required="true" converter="omnifaces.SelectItemsConverter"
+													filter="true" filterMatchMode="content">
+													<p:ajax event="change" update="total2" />
+													<f:selectItem itemLabel="Seleccionar lote" itemValue=""
+														noSelectionOption="true" />
+													<f:selectItems
+														value="#{reformulationBean.productionsAvailable}"
+														var="productionAvailable"
+														itemValue="#{productionAvailable}"
+														itemLabel="#{productionAvailable.lot}" />
+													<p:ajax event="change" update="volume2, productionLot2, preview" listener="#{reformulationBean.onProductionAvailableChange()}"/>
+												</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-3">
+												<p:outputLabel for="total2">Total</p:outputLabel>
+												<p:inputText id="total2"
+													value="#{reformulationBean.productionAvailable.totalVolume}"
+													disabled="true" />
+											</div>
+											<div class="field col-12 md:col-3">
+												<p:outputLabel for="volume2">Volumen (Litros)</p:outputLabel>
+												<p:spinner id="volume2"
+													value="#{reformulationBean.volumeProductionAvailable}"
+													min="1"
+													max="#{reformulationBean.productionAvailable.volumeDistillation2}"
+													required="true" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="productionLot">Lote de producción</p:outputLabel>
+												<div class="grid field">
+													<div class="col-3">
+														<p:inputText id="productionLot"
+															value="#{reformulationBean.firstPartLot}" disabled="true" />
+													</div>
+													<div class="col-9">
+														<p:inputText id="productionLot2"
+															value="#{reformulationBean.secondPartLot}" maxlength="40"
+															required="true" >
+															<p:ajax event="keyup" update="preview" />	
+														</p:inputText>
+													</div>
+												</div>
+												<small class="p-d-block">Vista previa del lote: <p:outputLabel
+													id="preview">#{reformulationBean.firstPartLot}-#{reformulationBean.secondPartLot}</p:outputLabel></small>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="admissionDate">Fecha de ingreso a fabrica</p:outputLabel>
+												<p:datePicker id="admissionDate"
+													value="#{reformulationBean.reformulation.admissionDate}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2060" mask="true" pattern="dd/MM/yyyy"
+													required="true" />
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="destination">Destino</p:outputLabel>
+												<p:inputText id="destination"
+													value="#{reformulationBean.reformulation.location}"
+													maxlength="60" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="wastage">Mermas (Litros)</p:outputLabel>
+												<p:inputText id="wastage"
+													value="#{reformulationBean.reformulation.wastage}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="productionStatus">Estatus de producción</p:outputLabel>
+												<p:inputText id="productionStatus"
+													value="#{reformulationBean.reformulation.productionStatus.type}"
+													disabled="true"
+													styleClass="#{reformulationBean.reformulation.productionStatus.color}" />
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel for="paymentStatus">Estatus de pago</p:outputLabel>
+												<p:selectOneMenu id="paymentStatus"
+													value="#{reformulationBean.reformulation.paymentStatus}"
+													required="true" converter="omnifaces.SelectItemsConverter">
+													<f:selectItems value="#{reformulationBean.paymentStatus}"
+														var="paymentStatus" itemValue="#{paymentStatus}"
+														itemLabel="#{paymentStatus.type}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+
+										<div class="formgrid grid">
+											<div class="field col-12">
+												<p:outputLabel for="observations">Observaciones</p:outputLabel>
+												<p:inputTextarea id="observations" rows="4"
+													value="#{reformulationBean.reformulation.observations}"
+													maxlength="100" />
+											</div>
+										</div>
+
+										<div class="grid mt-3">
+											<p:outputLabel value="* Valores obligatorios" />
+										</div>
+										
+										<div class="mt-3">
+											<p:commandButton value="Guardar" icon="pi pi-check"
+												styleClass="ui-button-raised mr-0 md:mr-3 w-full md:w-auto"
+												action="#{reformulationBean.save()}"
+												update="manage-reformulated-content"
+												process="manage-reformulated-content @this" />
+											<p:commandButton value="Cancelar" icon="pi pi-times"
+												action="/protected/production/reformulations.xhtml?faces-redirect=true"
+												process="@this"
+												styleClass="ui-button-raised ui-button-secondary mt-3 md:mt-0 w-full md:w-auto" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+							</p:panel>
 
 						</h:form>
 					</div>

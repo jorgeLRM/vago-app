@@ -34,35 +34,24 @@ public class FormulationBean implements Serializable {
 	
 	@Inject
 	private StandardProductionService productionService;
-	
 	@Inject
 	private FormulationService formulationService;
-	
 	@Inject
 	private TubService tubService;
-	
 	@Inject
 	private PalenqueService palenqueService;
 	
 	private boolean editable = true;
-	
 	private Palenque palenque;
-	
 	private StandardProduction production;
-	
 	private Formulation formulation;
-	
 	private Formulation enableFormulation;
-	
 	private List<Formulation> newFormulations;
-	
 	private List<Formulation> formulations;
-	
 	private List<StandardProduction> productions;
-	
 	private List<Tub> tubsByPalenque;
-	
 	private List<AvailableTub> availableTubs;
+	private List<Palenque> palenques;
 	
 	public void openNew() {
 		newFormulations = new ArrayList<Formulation>();
@@ -246,5 +235,10 @@ public class FormulationBean implements Serializable {
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
+	}
+
+	public List<Palenque> getPalenques() {
+		palenques = palenqueService.findAllActive();
+		return palenques;
 	}
 }

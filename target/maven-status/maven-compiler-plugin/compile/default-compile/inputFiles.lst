@@ -23,6 +23,7 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\impl\AgaveDaoImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Transfer.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\StandardProductionService.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\ProviderBean.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\TransferBean.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\StandardProductionDao.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\AnalysisServiceImpl.java
@@ -51,6 +52,7 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Photo.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\impl\TubDaoImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\ReformulatedProductionDao.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\ReformulationPanelBean.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Plantation.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\UserDao.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\EstateBean.java
@@ -80,8 +82,11 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\ProducerServiceImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\util\FacesUtil.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\impl\PhotoDaoImpl.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\ProviderService.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\UserService.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\ProducerBean.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\CalculatorBean.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Provider.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\PalenqueServiceImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\generic\GenericDaoImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\MagueyServiceImpl.java
@@ -94,6 +99,7 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Palenque.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\CuttingDetailService.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\PalenqueService.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\ProviderDao.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\CuttingDetail.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\ReformulatedProductionService.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\PaymentStatus.java
@@ -123,6 +129,7 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\FormulationServiceImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\PhotoDao.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\Tub.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\RowCalculator.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\PhotoMagueyBean.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\impl\PhotoMagueyDaoImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\CuttingDao.java
@@ -141,4 +148,6 @@ C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\MagueyBean.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\ProductionServiceImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\bean\TailBean.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\dao\impl\ProviderDaoImpl.java
 C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\model\ReformulatedProduction.java
+C:\Users\jorge\Documents\java-apps\eclipse-workspace\vago-app\src\main\java\com\dosvales\vagoapp\service\impl\ProviderServiceImpl.java
