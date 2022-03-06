@@ -29,11 +29,6 @@ public class AnalysisServiceImpl extends GenericServiceImpl<Analysis, Long> impl
 	}
 
 	@Override
-	public List<Analysis> findAllPreliminaryAnalysis() {
-		return dao.findAllByTypeAnalysis(TypeAnalysis.PRELIMINARY);
-	}
-
-	@Override
 	public List<Analysis> findAllOfficialAnalysis() {
 		return dao.findAllByTypeAnalysis(TypeAnalysis.OFFICIAL);
 	}
@@ -41,6 +36,16 @@ public class AnalysisServiceImpl extends GenericServiceImpl<Analysis, Long> impl
 	@Override
 	public GenericDao<Analysis, Long> getDao() {
 		return dao;
+	}
+
+	@Override
+	public List<Analysis> findAllPreliminaryBodyAnalysis() {
+		return dao.findAllByTypeAnalysis(TypeAnalysis.PRELIMINARY_BODY);
+	}
+
+	@Override
+	public List<Analysis> findAllPreliminaryTailAnalysis() {
+		return dao.findAllByTypeAnalysis(TypeAnalysis.PRELIMINARY_TAIL);
 	}
 
 }

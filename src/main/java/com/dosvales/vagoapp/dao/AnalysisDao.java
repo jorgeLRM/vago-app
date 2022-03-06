@@ -12,7 +12,6 @@ import com.dosvales.vagoapp.model.TypeAnalysis;
 public interface AnalysisDao extends GenericDao<Analysis, Long>{
 	
 	Analysis findByFq(String fq);
-	
 	List<Analysis> findAllByTypeAnalysis(TypeAnalysis type);
 	
 }

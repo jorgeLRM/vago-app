@@ -17,7 +17,7 @@ public class ProductionDaoImpl extends GenericDaoImpl<Production, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Production> findAllWithoutPreliminaryAnalysis() {
+	public List<Production> findAllWithoutPreliminaryBodyAnalysis() {
 		return em.createNativeQuery("SELECT * "
 				+ "FROM production AS p "
 				+ "LEFT JOIN analysis AS a "
@@ -27,7 +27,22 @@ public class ProductionDaoImpl extends GenericDaoImpl<Production, Long> implemen
 				+ "FROM analysis AS a2 WHERE a2.typeAnalysis = :typeAnalysis))) "
 				+ "AND (p.productionStatus = 'FORMULATION' "
 				+ "OR p.productionStatus = 'PREPARATIONREFORMULATION')", Production.class)
-				.setParameter("typeAnalysis", TypeAnalysis.PRELIMINARY.name())
+				.setParameter("typeAnalysis", TypeAnalysis.PRELIMINARY_BODY.name())
+				.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Production> findAllWithoutPreliminaryTailAnalysis() {
+		return em.createNativeQuery("SELECT * "
+				+ "FROM production AS p "
+				+ "LEFT JOIN analysis AS a "
+				+ "ON p.id = a.idProduction "
+				+ "WHERE (a.typeAnalysis != :typeAnalysis AND p.id NOT IN (SELECT a2.idProduction "
+				+ "FROM analysis AS a2 WHERE a2.typeAnalysis = :typeAnalysis))) "
+				+ "AND (p.productionStatus = 'PRELIMINARYPOSITIVE' "
+				+ "OR p.productionStatus = 'PRELIMINARYNEGATIVE')", Production.class)
+				.setParameter("typeAnalysis", TypeAnalysis.PRELIMINARY_BODY.name())
 				.getResultList();
 	}
 
@@ -38,11 +53,11 @@ public class ProductionDaoImpl extends GenericDaoImpl<Production, Long> implemen
 				+ "FROM production AS p "
 				+ "LEFT JOIN analysis AS a "
 				+ "ON p.id = a.idProduction "
-				+ "WHERE (a.idProduction IS NULL "
-				+ "OR (a.typeAnalysis != :typeAnalysis AND p.id NOT IN (SELECT a2.idProduction "
+				+ "WHERE (a.typeAnalysis != :typeAnalysis AND p.id NOT IN (SELECT a2.idProduction "
 				+ "FROM analysis AS a2 WHERE a2.typeAnalysis = :typeAnalysis))) "
 				+ "AND ((p.productionStatus = 'MIXTURE' AND p.typeProduction = 'StandardProduction')"
-				+ "OR (p.productionStatus = 'PRELIMINARYANALYSIS' AND p.typeProduction = 'ReformulatedProduction'))", Production.class)
+				+ "OR ((p.productionStatus = 'PRELIMINARYPOSITIVE' OR p.productionStatus = 'PRELIMINARYNEGATIVE') "
+				+ "AND p.typeProduction = 'ReformulatedProduction'))", Production.class)
 				.setParameter("typeAnalysis", TypeAnalysis.OFFICIAL.name())
 				.getResultList();
 	}

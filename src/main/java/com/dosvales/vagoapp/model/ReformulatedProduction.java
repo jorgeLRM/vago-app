@@ -31,19 +31,19 @@ public class ReformulatedProduction extends Production {
 
 	@Override
 	public void nextStatus() {
-		if (productionStatus == ProductionStatus.PREPARATIONREFORMULATION) {
+		/*if (productionStatus == ProductionStatus.PREPARATIONREFORMULATION) {
 			productionStatus = ProductionStatus.PRELIMINARYANALYSIS;
 		} else if (productionStatus == ProductionStatus.PRELIMINARYANALYSIS) {
 			productionStatus = ProductionStatus.OFFICIALANALYSIS;
-		} 
+		}*/
 	}
 
 	@Override
 	public void previousStatus() {
-		if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
+		/*if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
 			productionStatus = ProductionStatus.PRELIMINARYANALYSIS;
 		} else if (productionStatus == ProductionStatus.PRELIMINARYANALYSIS) {
 			productionStatus = ProductionStatus.PREPARATIONREFORMULATION;
-		}
+		}*/
 	}
 }

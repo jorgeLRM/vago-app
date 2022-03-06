@@ -1,12 +1,14 @@
 package com.dosvales.vagoapp.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -53,6 +55,9 @@ public class Analysis extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "idProduction")
 	private Production production;
+	
+	@OneToMany(mappedBy="analysis")
+	private List<Parameter> parameters;
 	
 	public boolean isAlcoholAccepted() {
 		return MIN_ALCOHOL <= this.alcohol && this.alcohol <= MAX_ALCOHOL;
@@ -152,5 +157,13 @@ public class Analysis extends AbstractEntity {
 
 	public void setDateOfIssue(LocalDate dateOfIssue) {
 		this.dateOfIssue = dateOfIssue;
+	}
+
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(List<Parameter> parameters) {
+		this.parameters = parameters;
 	}
 }

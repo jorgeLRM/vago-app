@@ -21,11 +21,6 @@ public class ProductionServiceImpl extends GenericServiceImpl<Production, Long> 
 
 	@EJB
 	private ProductionDao dao;
-	
-	@Override
-	public List<Production> findAllWithoutPreliminaryAnalysis() {
-		return dao.findAllWithoutPreliminaryAnalysis();
-	}
 
 	@Override
 	public List<Production> findAllWithoutOfficialAnalysis() {
@@ -40,6 +35,16 @@ public class ProductionServiceImpl extends GenericServiceImpl<Production, Long> 
 	@Override
 	public GenericDao<Production, Long> getDao() {
 		return dao;
+	}
+
+	@Override
+	public List<Production> findAllWithoutPreliminaryBodyAnalysis() {
+		return dao.findAllWithoutPreliminaryBodyAnalysis();
+	}
+
+	@Override
+	public List<Production> findAllWithoutPreliminaryTailAnalysis() {
+		return dao.findAllWithoutPreliminaryTailAnalysis();
 	}
 
 }

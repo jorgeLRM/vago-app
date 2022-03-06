@@ -51,7 +51,8 @@
 												<p:ajax listener="#{analysisBean.refreshTable()}"
 													update="dt-analysis" />
 												<f:selectItem itemLabel="TODOS" itemValue="ALL" />
-												<f:selectItem itemLabel="PRELIMINAR" itemValue="PRELIMINARY" />
+												<f:selectItem itemLabel="PRELIMINAR COLA" itemValue="PRELIMINARY TAIL" />
+												<f:selectItem itemLabel="PRELIMINAR CUERPO" itemValue="PRELIMINARY BODY" />
 												<f:selectItem itemLabel="OFICIAL" itemValue="OFFICIAL" />
 										</p:selectOneMenu>
 										<p:blockUI block="main-template" trigger="changeFilter" />

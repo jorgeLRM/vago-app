@@ -7,10 +7,9 @@ import com.dosvales.vagoapp.service.generic.GenericService;
 
 public interface ProductionService extends GenericService<Production, Long>{
 	
-	List<Production> findAllWithoutPreliminaryAnalysis();
-	
+	List<Production> findAllWithoutPreliminaryBodyAnalysis();
+	List<Production> findAllWithoutPreliminaryTailAnalysis();
 	List<Production> findAllWithoutOfficialAnalysis();
-	
 	List<Production> findAllWithoutTransfer();
 	
 	

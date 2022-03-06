@@ -10,10 +10,9 @@ import com.dosvales.vagoapp.model.Production;
 @Local
 public interface ProductionDao extends GenericDao<Production, Long>{
 	
-	List<Production> findAllWithoutPreliminaryAnalysis();
-	
+	List<Production> findAllWithoutPreliminaryBodyAnalysis();
+	List<Production> findAllWithoutPreliminaryTailAnalysis();
 	List<Production> findAllWithoutOfficialAnalysis();
-	
 	List<Production> findAllWithoutTransfer();
 	
 }

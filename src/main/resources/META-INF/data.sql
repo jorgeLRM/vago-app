@@ -83,3 +83,43 @@ INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcohol
 INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-04', '2022-02-05', 1.75, 2, 1115, 1115, 'J-02-MC-22', 3, '2022-02-11', 'Tinas', 0, 'INPROCESS', 'REPROBATE', 'StandardProduction', 'ACTIVE');
 INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-06', '2022-02-07', 1, 1, 1005, 1005, 'TR-02-CY-22', 4, '2022-02-13', 'Tinas', 0, 'INPROCESS', 'INBULK', 'StandardProduction', 'ACTIVE');
 
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Alcohol Volumen a 20 °C', 35.0, 55.0, '% Alc. Vol.', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Extracto seco', 0.0, 10.0, 'g/L', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Alcoholes superiores', 100.0, 500.0, 'mg/100 mL A.A.', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Metanol', 30.0, 300.0, 'mg/100 mL A.A.', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Furfural', 0.0, 5.0, 'mg/100 mL A.A.', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Aldehídos', 0.0, 40.0, 'mg/100 mL A.A.', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Plomo (Pb)', 0.0, 0.5, 'mg/L', 1);
+INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, active) VALUES ('Arsénico (As)', 0.0, 0.5, 'mg/L', 1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -123,7 +123,7 @@ public class StandardProduction extends Production {
 
 	@Override
 	public void nextStatus() {
-		if (productionStatus == ProductionStatus.PREPARATION) {
+		/*if (productionStatus == ProductionStatus.PREPARATION) {
 			productionStatus = ProductionStatus.FORMULATION;
 		} else if (productionStatus == ProductionStatus.FORMULATION) {
 			productionStatus = ProductionStatus.PRELIMINARYANALYSIS;
@@ -131,12 +131,12 @@ public class StandardProduction extends Production {
 			productionStatus = ProductionStatus.MIXTURE;
 		} else if (productionStatus == ProductionStatus.MIXTURE) {
 			productionStatus = ProductionStatus.OFFICIALANALYSIS;
-		} 
+		} */
 	}
 
 	@Override
 	public void previousStatus() {
-		if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
+		/*if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
 			productionStatus = ProductionStatus.MIXTURE;
 		} else if (productionStatus == ProductionStatus.MIXTURE) {
 			productionStatus = ProductionStatus.PRELIMINARYANALYSIS;
@@ -144,6 +144,6 @@ public class StandardProduction extends Production {
 			productionStatus = ProductionStatus.FORMULATION;
 		} else if (productionStatus == ProductionStatus.FORMULATION) {
 			productionStatus = ProductionStatus.PREPARATION;
-		}
+		}*/
 	}
 }
