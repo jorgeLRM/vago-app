@@ -30,22 +30,13 @@
 										<div class="formgrid grid mt-2">
 											<div class="field col-12 md:col-6">
 												<p:outputLabel for="production">Lote de producción</p:outputLabel>
-												<p:selectOneMenu id="production"
-													value="#{transferBean.transfer.production}" required="true"
-													converter="omnifaces.SelectItemsConverter" filter="true"
-													filterMatchMode="contains" styleClass="w-full">
-													<p:ajax event="change" update="producer" />
-													<f:selectItem itemLabel="- Seleccionar -" itemValue=""
-														noSelectionOption="true" />
-													<f:selectItems value="#{transferBean.productions}"
-														var="production" itemValue="#{production}"
-														itemLabel="#{production.lot}" />
-												</p:selectOneMenu>
+												<p:inputText id="production" value="#{transferBean.production.lot}" 
+													readonly="true"/>
 											</div>
 											<div class="field col-12 md:col-6">
 												<p:outputLabel for="producer">Productor</p:outputLabel>
 												<p:inputText
-													value="#{transferBean.transfer.production.lotDetail.palenque.producer.name}"
+													value="#{transferBean.production.lotDetail.palenque.producer.name}"
 													id="producer" disabled="true" />
 											</div>
 										</div>
@@ -97,10 +88,12 @@
 												action="#{transferBean.save()}"
 												update="new-transfer-content"
 												process="new-transfer-content @this" />
-											<p:commandButton value="Cancelar" icon="pi pi-times"
-												action="/protected/production/transfers.xhtml?faces-redirect=true"
+											<p:linkButton value="Regresar" icon="fas fa-arrow-circle-left"
+												outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
 												process="@this"
-												styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" />
+												styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" >
+												<f:param name="id" value="#{transferBean.production.id}"/>	
+											</p:linkButton>
 										</div>
 
 									</p:outputPanel>

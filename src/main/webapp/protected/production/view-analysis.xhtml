@@ -8,7 +8,8 @@
 
 	<f:metadata>
 		<f:viewParam name="id" />
-		<f:viewAction action="#{analysisBean.load(id)}" />
+		<f:viewParam name="idProduction" />
+		<f:viewAction action="#{analysisBean.load(id, idProduction)}" />
 	</f:metadata>
 
 	<ui:define name="title">Producción</ui:define>
@@ -24,81 +25,107 @@
 				<div class="p-col-12">
 					<div class="card">
 
-						<p:panel header="Detalles del análisis">
-							<p:outputPanel id="analysis" class="ui-fluid">
+						<p:panel header="Agregar análisis">
+							<p:outputPanel id="manage-analysis-content" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty analysisBean.analysis}">
+									<p:fieldset legend="General">
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="typeAnalysis">Tipo de análisis</p:outputLabel>
+												<p:inputText id="typeAnalysis"
+													value="#{analysisBean.analysis.typeAnalysis.type}"
+													readonly="true" />
+											</div>
 
-								<div class="grid">
-									<div class="col-12 md:col-6">
-
-										<div class="card col-12">
-											<h4>General</h4>
-
-											<ul class="widget-image-list">
-												<li><span></span> <span></span></li>
-												<li><span> 
-														<span>Tipo de análisis</span>
-												</span> <span class="listitem-value">#{analysisBean.analysis.typeAnalysis.type}</span></li>
-												<li><span>  <span>Lote de producción</span>
-												</span> <span class="listitem-value">#{analysisBean.analysis.production.lot}</span></li>
-												<li><span> 
-														<span>FQ</span>
-												</span> <span class="listitem-value">#{analysisBean.analysis.fq}</span></li>
-												<li><span>  <span>Fecha de emisión</span>
-												</span> <span class="listitem-value">#{analysisBean.analysis.dateOfIssue}</span></li>
-												<li><span>  <span>Resultado</span>
-												</span> <span class="listitem-value text-bold">#{analysisBean.analysis.analysisStatus.text}</span></li>
-											</ul>
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel>Producción</p:outputLabel>
+												<p:inputText value="#{analysisBean.production.lot}"
+													readonly="true" />
+											</div>
 										</div>
-										
-										<div class="card col-12">
-											<p:outputLabel class="mb-3">Observaciones</p:outputLabel>
-											<p:inputTextarea value="#{analysisBean.analysis.observations}" disabled="true"/>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="fq">FQ</p:outputLabel>
+												<p:inputText id="fq" value="#{analysisBean.analysis.fq}"
+													readonly="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="dateOfIssue">Fecha de emisión</p:outputLabel>
+												<p:datePicker id="dateOfIssue"
+													value="#{analysisBean.analysis.dateOfIssue}"
+													monthNavigator="true" yearNavigator="true" showWeek="true"
+													yearRange="1990:2060" mask="true" pattern="dd/MM/yyyy"
+													readonly="true" />
+											</div>
 										</div>
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="volume">Volumen del lote</p:outputLabel>
+												<p:spinner id="volume"
+													value="#{analysisBean.analysis.volume}" min="0"
+													stepFactor="0.01" readonly="true" />
+											</div>
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel>Documento del laboratorio (pdf) *</p:outputLabel>
+												<div class="flex flex-wrap align-items-center">
+													<h:outputLink id="set-file-analysis"
+														value="#{analysisBean.getAnalysisPath(analysisBean.analysis.document)}"
+														target="_blank">
+																	#{analysisBean.analysis.document}	
+																</h:outputLink>
+												</div>
+											</div>
+										</div>
+									</p:fieldset>
+									<p:fieldset legend="Ensayos" class="mt-3">
+										<p:dataTable id="dt-parameters" var="parameter"
+											value="#{analysisBean.analysis.parameters}"
+											showGridlines="true" reflow="true"
+											rowStyleClass="#{parameter.accepted ? 'green-row' : 'red-row'}">
 
+											<p:column headerText="ENSAYO" width="10">
+												<h:outputText value="#{parameter.assay.name}" />
+											</p:column>
+
+											<p:column headerText="RESULTADO" width="15">
+												<h:outputText value="#{parameter.result}" style="font-weight: bold;"/>
+											</p:column>
+
+											<p:column headerText="MÍNIMO PERMISIBLE" width="10">
+												<h:outputText value="#{parameter.assay.allowableMinimum}" />
+											</p:column>
+
+											<p:column headerText="MÁXIMO PERMISIBLE" width="10">
+												<h:outputText value="#{parameter.assay.maximumAllowable}" />
+											</p:column>
+
+											<p:column headerText="UNIDADES" width="10">
+												<h:outputText value="#{parameter.assay.unit}" />
+											</p:column>
+
+										</p:dataTable>
+
+										<div class="ui-fluid p-formgrid p-grid mt-3">
+											<div class="p-field p-col-12">
+												<p:outputLabel>Observaciones</p:outputLabel>
+												<p:inputTextarea readonly="true"
+													value="#{analysisBean.analysis.observations}"
+													maxlength="100" />
+											</div>
+										</div>
+									</p:fieldset>
+
+									<div class="mt-3">
+										<p:linkButton value="Regresar" icon="fas fa-arrow-circle-left"
+											outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
+											process="@this"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto">
+											<f:param name="id" value="#{analysisBean.production.id}" />
+										</p:linkButton>
 									</div>
-									<div class="col-12 md:col-6">
-										<div class="p-grid">
-											<div class="p-col-12 p-md-6">
-												<div class="card widget-feature-box">
-													<p:graphicImage name="images/alcohol.png" library="custom" />
-													<h2>Alcohol</h2>
-													<span>#{analysisBean.analysis.alcohol}</span>
-												</div>
-											</div>
-											<div class="p-col-12 p-md-6">
-												<div class="card widget-feature-box">
-													<p:graphicImage name="images/metanol.png" library="custom" />
-													<h2>Metanol</h2>
-													<span>#{analysisBean.analysis.methanol}</span>
-												</div>
-											</div>
-											<div class="p-col-12 p-md-6">
-												<div class="card widget-feature-box">
-													<p:graphicImage name="images/furfural.png" library="custom" />
-													<h2>Furfural</h2>
-													<span>#{analysisBean.analysis.furfural}</span>
-												</div>
-											</div>
-											<div class="p-col-12 p-md-6">
-												<div class="card widget-feature-box">
-													<p:graphicImage name="images/bottle.png" library="custom" />
-													<h2>Volumen de la muestra</h2>
-													<span>#{analysisBean.analysis.volume}</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
+								</p:outputPanel>
 							</p:outputPanel>
 						</p:panel>
-
-						<div class="mt-3">
-							<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
-								styleClass="ui-button-secondary ui-button-raised"
-								action="/protected/production/analysis.xhtml?faces-redirect=true"
-								process="@this" />
-						</div>
 
 					</div>
 				</div>

@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{productionBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="PRODUCCIÓN" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR PRODUCCIONES</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nueva producción" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/production/new-production.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-productions" widgetVar="dtProductions"
+								var="production" value="#{productionBean.productions}"
+								reflow="true" styleClass="products-table" paginator="true"
+								rows="10" paginatorPosition="bottom" showGridlines="true"
+								size="small" style="text-align:center"
+								rowStyleClass="#{production.productionStatus.color}">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> <p:selectOneMenu
+												id="changeFilter" value="#{productionBean.status}"
+												styleClass="w-full md:w-auto">
+												<p:ajax listener="#{productionBean.refreshTable()}"
+													update="dt-productions" />
+												<f:selectItem itemLabel="TODOS" itemValue="ALL" />
+												<f:selectItem itemLabel="EN PROCESO" itemValue="IN PROCESS" />
+												<f:selectItem itemLabel="TERMINADOS" itemValue="TERMINATED" />
+												<f:selectItem itemLabel="CANCELADOS" itemValue="CANCELED" />
+											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />
+										</span> <span class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtProductions').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" width="1"
+									style="text-align:center" sortBy="#{production.id}">
+									<h:outputText value="#{production.id}" />
+								</p:column>
+
+								<p:column headerText="Lote" width="2" style="text-align:center"
+									filterBy="#{production.lot}">
+									<h:outputText value="#{production.lot}" />
+								</p:column>
+
+								<p:column headerText="Ingreso a fabrica"
+									style="text-align:center" width="2"
+									sortBy="#{production.admissionDate}">
+									<h:outputText value="#{production.admissionDate}" />
+								</p:column>
+
+								<p:column headerText="Volumen total" style="text-align:center"
+									width="2">
+									<h:outputText value="#{production.totalVolume}" />
+								</p:column>
+
+								<p:column headerText="Estatus" style="text-align:center"
+									width="2" filterBy="#{production.productionStatus.type}">
+									<h:outputText value="#{production.productionStatus.type}" />
+								</p:column>
+
+								<p:column headerText="Acciones" style="text-align:center"
+									width="1">
+									<p:linkButton icon="fas fa-columns" id="panelButton"
+										outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-info">
+										<f:param name="id" value="#{production.id}" />
+									</p:linkButton>
+									<p:tooltip for="panelButton" value="Ver panel de producción"
+										position="bottom" />
+
+									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+										outcome="/protected/production/edit-production.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-warning"
+										rendered="#{production.productionStatus != 'INBULK' and production.productionStatus != 'CANCELED' and production.productionStatus != 'REPROBATE'}">
+										<f:param name="id" value="#{production.id}" />
+									</p:linkButton>
+									<p:tooltip for="editButton" value="Editar registro"
+										position="bottom" />
+
+									<!-- <p:commandButton id="deleteButton"
+										class="ui-button-danger rounded-button ui-button-raised"
+										icon="pi pi-trash" process="@this"
+										action="#{productionController.tryToDelete()}">
+										<f:setPropertyActionListener value="#{production}"
+											target="#{productionController.production}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="Eliminar registro"
+										position="bottom" />-->
+								</p:column>
+							</p:dataTable>
+
+							<!--<p:confirmDialog widgetVar="cancelCuttingDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de cancelar este Corte?"
+								header="Confirmar" severity="warn">
+								<div style="text-align: left">
+									<ul>
+										<li>No se podrán revertir los cambios.</li>
+									</ul>
+								</div>
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{cuttingBean.tryToCancel()}" process="@this"
+									update="messages, dt-cuttings"
+									oncomplete="PF('cancelCuttingDialog').hide()" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-button-secondary" icon="pi pi-times"
+									onclick="PF('cancelCuttingDialog').hide()" />
+							</p:confirmDialog>-->
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

@@ -6,7 +6,8 @@
 	template="/WEB-INF/template/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{tailBean.openNew()}" />
+		<f:viewParam name="idProduction" />
+		<f:viewAction action="#{tailBean.openNew(idProduction)}" />
 	</f:metadata>
 
 	<ui:define name="title">Producción</ui:define>
@@ -29,16 +30,9 @@
 
 										<div class="formgrid grid">
 											<div class="field col-12 md:col-6">
-												<p:outputLabel>Producción *</p:outputLabel>
-												<p:selectOneMenu value="#{tailBean.production}"
-													required="true" converter="omnifaces.SelectItemsConverter"
-													filter="true" filterMatchMode="content">
-													<f:selectItem itemLabel="Seleccionar producción"
-														itemValue="" noSelectionOption="true" />
-													<f:selectItems value="#{tailBean.productions}"
-														var="production" itemValue="#{production}"
-														itemLabel="#{production.lot}" />
-												</p:selectOneMenu>
+												<p:outputLabel>Producción</p:outputLabel>
+												<p:inputText value="#{tailBean.production.lot}" 
+													readonly="true"/>
 											</div>
 											<div class="field col-12 md:col-6">
 												<p:outputLabel for="startRipening">Inicio de maduración</p:outputLabel>
@@ -59,7 +53,7 @@
 													mask="true" pattern="dd/MM/yyyy" required="true" />
 											</div>
 											<div class="field col-12 md:col-6">
-												<p:outputLabel for="volume">Volumen</p:outputLabel>
+												<p:outputLabel for="volume">Volumen de agua + colas</p:outputLabel>
 												<p:spinner id="volume"
 													value="#{tailBean.tail.volumeWaterTail}" min="0" />
 											</div>
@@ -67,7 +61,7 @@
 
 										<div class="formgrid grid">
 											<div class="field col-12 md:col-6">
-												<p:outputLabel for="alcoholicGrade">Grado alcoholico</p:outputLabel>
+												<p:outputLabel for="alcoholicGrade">Grado alcohólico de colas + agua</p:outputLabel>
 												<p:spinner id="alcoholicGrade"
 													value="#{tailBean.tail.alcoholicGradeWaterTail}"
 													stepFactor="0.25" min="0.00" />
@@ -86,7 +80,7 @@
 													value="#{tailBean.tail.volumeMezcal}" min="0" />
 											</div>
 											<div class="field col-12 md:col-6">
-												<p:outputLabel for="alcoholicGradeMezcal">Grados de alcohol del mezcal</p:outputLabel>
+												<p:outputLabel for="alcoholicGradeMezcal">Grado alcohólico del mezcal</p:outputLabel>
 												<p:spinner id="alcoholicGradeMezcal"
 													value="#{tailBean.tail.alcoholicGradeMezcal}"
 													stepFactor="0.25" min="0.00" />
@@ -103,10 +97,12 @@
 												action="#{tailBean.save()}"
 												update="manage-tail-content"
 												process="manage-tail-content @this" />
-											<p:commandButton value="Cancelar" icon="pi pi-times"
-												action="/protected/production/tails.xhtml?faces-redirect=true"
+											<p:linkButton value="Regresar" icon="fas fa-arrow-circle-left"
+												outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
 												process="@this"
-												styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" />
+												styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" >
+												<f:param name="id" value="#{tailBean.production.id}"/>	
+											</p:linkButton>
 										</div>
 
 									</p:outputPanel>

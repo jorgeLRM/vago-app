@@ -1,16 +1,14 @@
 package com.dosvales.vagoapp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -18,8 +16,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="production")
-@DiscriminatorColumn(name="typeProduction", discriminatorType = DiscriminatorType.STRING)
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Production extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -28,13 +24,25 @@ public abstract class Production extends AbstractEntity {
 	
 	private Double totalVolume = 0.0;
 	
+	private Double stock = 0.0;
+	
 	private LocalDate admissionDate;
 	
 	private String observations;
 	
 	private String location;
 	
-	private Integer wastage;
+	private Double wastage = 0.0;
+	
+	private LocalDate startCoocking;
+
+	private LocalDate endCoocking;
+
+	private Double alcoholicGradeDist1 = 0.0;
+
+	private Double alcoholicGradeDist2 = 0.0;
+
+	private Double volumeDistillation2 = 0.0;
 	
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus paymentStatus;
@@ -50,7 +58,14 @@ public abstract class Production extends AbstractEntity {
 	private Transfer transfer;
 	
 	@OneToMany(mappedBy="production")
-	private Set<Analysis> analyzes = new HashSet<Analysis>();
+	protected List<Analysis> analyzes = new ArrayList<Analysis>();
+	
+	@OneToOne(mappedBy="production")
+	@JoinColumn(name = "idTail")
+	private Tail tail;
+	
+	@OneToMany(mappedBy="production")
+	private Set<Formulation> formulations = new HashSet<Formulation>();
 	
 	public abstract void nextStatus();
 	
@@ -88,11 +103,11 @@ public abstract class Production extends AbstractEntity {
 		this.location = location;
 	}
 
-	public Integer getWastage() {
+	public Double getWastage() {
 		return wastage;
 	}
 
-	public void setWastage(Integer wastage) {
+	public void setWastage(Double wastage) {
 		this.wastage = wastage;
 	}
 
@@ -136,11 +151,75 @@ public abstract class Production extends AbstractEntity {
 		this.transfer = transfer;
 	}
 
-	public Set<Analysis> getAnalyzes() {
+	public List<Analysis> getAnalyzes() {
 		return analyzes;
 	}
 
-	public void setAnalyzes(Set<Analysis> analyzes) {
+	public void setAnalyzes(List<Analysis> analyzes) {
 		this.analyzes = analyzes;
+	}
+
+	public LocalDate getStartCoocking() {
+		return startCoocking;
+	}
+
+	public void setStartCoocking(LocalDate startCoocking) {
+		this.startCoocking = startCoocking;
+	}
+
+	public LocalDate getEndCoocking() {
+		return endCoocking;
+	}
+
+	public void setEndCoocking(LocalDate endCoocking) {
+		this.endCoocking = endCoocking;
+	}
+
+	public Double getAlcoholicGradeDist1() {
+		return alcoholicGradeDist1;
+	}
+
+	public void setAlcoholicGradeDist1(Double alcoholicGradeDist1) {
+		this.alcoholicGradeDist1 = alcoholicGradeDist1;
+	}
+
+	public Double getAlcoholicGradeDist2() {
+		return alcoholicGradeDist2;
+	}
+
+	public void setAlcoholicGradeDist2(Double alcoholicGradeDist2) {
+		this.alcoholicGradeDist2 = alcoholicGradeDist2;
+	}
+
+	public Double getVolumeDistillation2() {
+		return volumeDistillation2;
+	}
+
+	public void setVolumeDistillation2(Double volumeDistillation2) {
+		this.volumeDistillation2 = volumeDistillation2;
+	}
+
+	public Tail getTail() {
+		return tail;
+	}
+
+	public void setTail(Tail tail) {
+		this.tail = tail;
+	}
+
+	public Set<Formulation> getFormulations() {
+		return formulations;
+	}
+
+	public void setFormulations(Set<Formulation> formulations) {
+		this.formulations = formulations;
+	}
+
+	public Double getStock() {
+		return stock;
+	}
+
+	public void setStock(Double stock) {
+		this.stock = stock;
 	}
 }

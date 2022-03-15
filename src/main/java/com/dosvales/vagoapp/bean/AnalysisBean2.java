@@ -18,9 +18,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 
 import com.dosvales.vagoapp.model.Analysis;
-import com.dosvales.vagoapp.model.AnalysisStatus;
 import com.dosvales.vagoapp.model.Production;
-import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.TypeAnalysis;
 import com.dosvales.vagoapp.service.AnalysisService;
 import com.dosvales.vagoapp.service.ProductionService;
@@ -94,17 +92,18 @@ public class AnalysisBean2 implements Serializable {
 	}
 	
 	public void updateStatus(Analysis a) {
-		if (isAnalysisPositive(a)) {
+		/*if (isAnalysisPositive(a)) {
 			a.setAnalysisStatus(AnalysisStatus.POSITIVE);
 		} else {
 			a.setAnalysisStatus(AnalysisStatus.NEGATIVE);
-		}
+		}*/
 	}
 	
 	public boolean isAnalysisPositive(Analysis a) {
-		return a.isAlcoholAccepted() && 
+		/*return a.isAlcoholAccepted() && 
 				a.isFurfuralAccepted() &&
-				a.isMethanolAccepted();
+				a.isMethanolAccepted();*/
+		return false;
 	}
 	
 	public String update() {
@@ -140,13 +139,14 @@ public class AnalysisBean2 implements Serializable {
 	}
 	
 	public boolean isValidToDelete(Analysis a) {
-		if (a.getTypeAnalysis() == TypeAnalysis.PRELIMINARY_BODY || 
+		/*if (a.getTypeAnalysis() == TypeAnalysis.PRELIMINARY_BODY || 
 				a.getTypeAnalysis() == TypeAnalysis.PRELIMINARY_TAIL) {
 			return a.getProduction().getProductionStatus() == ProductionStatus.PRELIMINARYPOSITIVE ||
 					a.getProduction().getProductionStatus() == ProductionStatus.PRELIMINARYNEGATIVE;
 		} else {
 			return a.getProduction().getProductionStatus() == ProductionStatus.OFFICIALANALYSIS;
-		}
+		}*/
+		return false;
 	}
 	
 	public void handleFileUpload(FileUploadEvent event) {

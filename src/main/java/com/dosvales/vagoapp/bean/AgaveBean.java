@@ -72,6 +72,7 @@ public class AgaveBean implements Serializable {
 	
 	public String save(Agave a) {
 		agaveService.save(a);
+		addMessage("Operación exitosa", "Agave guardado exitosamente", FacesMessage.SEVERITY_INFO);
 		return "/protected/estates/agaves.xhtml?faces-redirect=true";
 	}
 

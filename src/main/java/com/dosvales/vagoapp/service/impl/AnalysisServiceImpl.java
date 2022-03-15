@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import com.dosvales.vagoapp.dao.AnalysisDao;
 import com.dosvales.vagoapp.dao.generic.GenericDao;
 import com.dosvales.vagoapp.model.Analysis;
+import com.dosvales.vagoapp.model.Production;
 import com.dosvales.vagoapp.model.TypeAnalysis;
 import com.dosvales.vagoapp.service.AnalysisService;
 import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
@@ -46,6 +47,16 @@ public class AnalysisServiceImpl extends GenericServiceImpl<Analysis, Long> impl
 	@Override
 	public List<Analysis> findAllPreliminaryTailAnalysis() {
 		return dao.findAllByTypeAnalysis(TypeAnalysis.PRELIMINARY_TAIL);
+	}
+
+	@Override
+	public List<Analysis> findAllByProduction(Production production) {
+		return dao.findAllByProduction(production);
+	}
+
+	@Override
+	public Analysis findWithParameters(Long id) {
+		return dao.findWithParameters(id);
 	}
 
 }

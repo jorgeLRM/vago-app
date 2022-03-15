@@ -11,45 +11,63 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.dosvales.vagoapp.filter.ProductionFilter;
 import com.dosvales.vagoapp.model.Cutting;
+import com.dosvales.vagoapp.model.CuttingDetail;
 import com.dosvales.vagoapp.model.PaymentStatus;
+import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.StandardProduction;
+import com.dosvales.vagoapp.service.CuttingDetailService;
 import com.dosvales.vagoapp.service.CuttingService;
+import com.dosvales.vagoapp.service.ProducerService;
 import com.dosvales.vagoapp.service.StandardProductionService;
+import com.dosvales.vagoapp.util.ArrayUtil;
 
 @Named("productionBean")
 @ViewScoped
 public class StandardProductionBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Inject
-	private StandardProductionService productionService;
-	
-	@Inject
-	private CuttingService cuttingService;
-	
-	private String magueyes = "";
-	
-	private Double oldVolumeDistillation2 = 0.0;
-	
-	private String firstPartLot;
-	
-	private String secondPartLot;
+
+	private final Integer MIN_YEAR = 2021;
+	private final Integer MAX_YEAR = 2070;
 	
 	private StandardProduction production;
+	private String magueyes = "";
+	private ProductionFilter filter;
 	
 	private List<StandardProduction> productions;
-	
 	private List<Cutting> cuttings;
+	private List<Producer> producers;
+	private List<Integer> years;
 	
-	private String status = "IN PROCESS";
-	
+	private String firstPartLot;
+	private String secondPartLot;
+	private Double oldVolumeDistillation2 = 0.0;
+	private String lotPreview;
+
+	@Inject
+	private StandardProductionService productionService;
+	@Inject
+	private CuttingService cuttingService;
+	@Inject
+	private ProducerService producerService;
+	@Inject
+	private CuttingDetailService cuttingDetailService;
+
 	public void openNew() {
 		production = new StandardProduction();
 		production.setProductionStatus(ProductionStatus.PREPARATION);
 		magueyes = "";
+		setLotPreview("");
+	}
+	
+	public void init() {
+		filter = new ProductionFilter();
+		years = ArrayUtil.createArray(MIN_YEAR, MAX_YEAR);
+		producers = producerService.findAllMezcalProducers();
+		refreshTable();
 	}
 	
 	public void load(String id) {
@@ -57,15 +75,7 @@ public class StandardProductionBean implements Serializable {
 			try {
 				production = productionService.findById(Long.valueOf(id));
 				oldVolumeDistillation2 = production.getVolumeDistillation2();
-				magueyes = production.getLotDetail().getCutting().getLot().split("-")[2];
-			} catch (Exception ex) {}
-		}
-	}
-	
-	public void loadPanel(String id) {
-		if (id != null && id.length() > 0) {
-			try {
-				production = productionService.findWithAssociations(Long.valueOf(id));
+				magueyes = searchMagueyes(production.getLotDetail().getCutting());
 			} catch (Exception ex) {}
 		}
 	}
@@ -73,9 +83,9 @@ public class StandardProductionBean implements Serializable {
 	public String save() {
 		String page = "";
 		try {
-			production.setLot(firstPartLot + "-" + secondPartLot);
-			StandardProduction found = productionService.findByLot(production.getLot());
+			StandardProduction found = productionService.findByLot(lotPreview);
 			if (found == null) {
+				production.setLot(lotPreview);
 				production.setTotalVolume(production.getVolumeDistillation2());
 				productionService.save(production);
 				addMessage("Operación exitosa", "Producción guardada exitosamente", FacesMessage.SEVERITY_INFO);
@@ -107,7 +117,8 @@ public class StandardProductionBean implements Serializable {
 			String[] lot = production.getLotDetail().getCutting().getLot().split("-");
 			firstPartLot = lot[0] + "-" + lot[1];
 			secondPartLot = lot[2] + "-" + lot[3];
-			magueyes = lot[2];
+			buildLotPreview();
+			magueyes = searchMagueyes(production.getLotDetail().getCutting());
 		}else {
 			firstPartLot = "";
 			secondPartLot = "";
@@ -115,22 +126,77 @@ public class StandardProductionBean implements Serializable {
 		}
 	}
 	
-	public void refreshTable() {
-		if (status.equals("IN PROCESS")) {
-			productions = productionService.findAllInProcess();
-		} else if (status.equals("TERMINATED")) {
-			productions = productionService.findAllTerminated();
-		}else if (status.equals("CANCELED")) {
-			productions = productionService.findAllCanceled();
-		} else {
-			productions = productionService.findAll();
+	public void buildLotPreview() {
+		setLotPreview(firstPartLot + "-" +secondPartLot);
+	}
+	
+	public String searchMagueyes(Cutting c) {
+		List<CuttingDetail> cuttingDetails = cuttingDetailService.findAllByCutting(c);
+		cuttingDetails.sort((o1, o2)
+				-> o1.getNumberPinneapples().compareTo(
+						o2.getNumberPinneapples()));
+		String cat = "";
+		for (CuttingDetail cd : cuttingDetails) {
+			cat += cd.getPlantation().getMaguey().getName();
+			cat += ", ";
 		}
+		cat = cat.trim().substring(0, cat.lastIndexOf(','));
+		return cat;
+	}
+	
+	public void refreshTable() {
+		productions = productionService.findAllByFilter(filter);
 	}
 	
 	public PaymentStatus[] getPaymentStatus() {
 		return PaymentStatus.values();
 	}
 	
+	public List<Cutting> getCuttings() {
+		cuttings = cuttingService.findAllAvailable();
+		return cuttings;
+	}
+	
+	public ProductionFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(ProductionFilter filter) {
+		this.filter = filter;
+	}
+
+	public List<StandardProduction> getProductions() {
+		return productions;
+	}
+
+	public StandardProduction getProduction() {
+		return production;
+	}
+
+	public void setProduction(StandardProduction production) {
+		this.production = production;
+	}
+
+	public String getMagueyes() {
+		return magueyes;
+	}
+
+	public List<Producer> getProducers() {
+		return producers;
+	}
+
+	public List<Integer> getYears() {
+		return years;
+	}
+
+	public String getLotPreview() {
+		return lotPreview;
+	}
+
+	public void setLotPreview(String lotPreview) {
+		this.lotPreview = lotPreview;
+	}
+
 	public String getFirstPartLot() {
 		return firstPartLot;
 	}
@@ -147,36 +213,7 @@ public class StandardProductionBean implements Serializable {
 		this.secondPartLot = secondPartLot;
 	}
 
-	public StandardProduction getProduction() {
-		return production;
-	}
-
-	public void setProduction(StandardProduction production) {
-		this.production = production;
-	}
-
-	public List<StandardProduction> getProductions() {
-		return productions;
-	}
-
-	public List<Cutting> getCuttings() {
-		cuttings = cuttingService.findAllAvailable();
-		return cuttings;
-	}
-
-	public String getMagueyes() {
-		return magueyes;
-	}
-
-	public void setMagueyes(String magueyes) {
-		this.magueyes = magueyes;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public Double getOldVolumeDistillation2() {
+		return oldVolumeDistillation2;
 	}
 }

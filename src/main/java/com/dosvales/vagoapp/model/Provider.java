@@ -9,6 +9,8 @@ public class Provider extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final String DEFAULT_IMAGE = "no_image.png";
+	
 	private String name;
 	
 	private String telephone;
@@ -21,7 +23,7 @@ public class Provider extends AbstractEntity {
 	
 	private String email;
 	
-	private String logo;
+	private String logo = DEFAULT_IMAGE;
 
 	public String getName() {
 		return name;

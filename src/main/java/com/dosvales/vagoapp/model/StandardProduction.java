@@ -14,6 +14,8 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @Entity
 @DiscriminatorValue(value = "StandardProduction")
@@ -41,11 +43,11 @@ public class StandardProduction extends Production {
 
 	private LocalDate endCoocking;
 
-	private Double alcoholicGradeDist1;
+	private Double alcoholicGradeDist1 = 0.0;
 
-	private Double alcoholicGradeDist2;
+	private Double alcoholicGradeDist2 = 0.0;
 
-	private Double volumeDistillation2;
+	private Double volumeDistillation2 = 0.0;
 	
 	@OneToMany(mappedBy = "standardProduction")
 	private List<ReformulatedDetail> reformulatedDetails = new ArrayList<ReformulatedDetail>();
@@ -56,6 +58,28 @@ public class StandardProduction extends Production {
 	
 	@OneToMany(mappedBy="production")
 	private Set<Formulation> formulations = new HashSet<Formulation>();
+	
+	@PrePersist
+	public void prePersist() {
+		reset();
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		reset();
+	}
+	
+	public void reset() {
+		if (alcoholicGradeDist1 == null) {
+			alcoholicGradeDist1 = 0.0;
+		}
+		if (alcoholicGradeDist2 == null) {
+			alcoholicGradeDist2 = 0.0;
+		}
+		if (volumeDistillation2 == null) {
+			volumeDistillation2 = 0.0;
+		}
+	}
 	
 	public LocalDate getStartCoocking() {
 		return startCoocking;
@@ -131,19 +155,39 @@ public class StandardProduction extends Production {
 			productionStatus = ProductionStatus.MIXTURE;
 		} else if (productionStatus == ProductionStatus.MIXTURE) {
 			productionStatus = ProductionStatus.OFFICIALANALYSIS;
-		} */
+		}*/
 	}
 
 	@Override
 	public void previousStatus() {
-		/*if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
+		if (productionStatus == ProductionStatus.OFFICIALANALYSIS) {
 			productionStatus = ProductionStatus.MIXTURE;
 		} else if (productionStatus == ProductionStatus.MIXTURE) {
-			productionStatus = ProductionStatus.PRELIMINARYANALYSIS;
-		} else if (productionStatus == ProductionStatus.PRELIMINARYANALYSIS) {
+			if (analyzes.size() == 3) {
+				if (analyzes.get(1).isPositive()) {
+					productionStatus = ProductionStatus.PRELIMINARYTAILPOSITIVE;
+				} else {
+					productionStatus = ProductionStatus.PRELIMINARYTAILNEGATIVE;
+				}
+			} else if (analyzes.size() == 2) {
+				if (analyzes.get(0).isPositive()) {
+					productionStatus = ProductionStatus.PRELIMINARYBODYPOSITIVE;
+				} else {
+					productionStatus = ProductionStatus.PRELIMINARYBODYNEGATIVE;
+				}
+			}
+		} else if (productionStatus == ProductionStatus.PRELIMINARYTAILNEGATIVE ||
+				productionStatus == ProductionStatus.PRELIMINARYTAILPOSITIVE) {
+			if (analyzes.get(0).isPositive()) {
+				productionStatus = ProductionStatus.PRELIMINARYBODYPOSITIVE;
+			} else {
+				productionStatus = ProductionStatus.PRELIMINARYBODYNEGATIVE;
+			}
+		}else if (productionStatus == ProductionStatus.PRELIMINARYBODYNEGATIVE ||
+				productionStatus == ProductionStatus.PRELIMINARYBODYPOSITIVE) {
 			productionStatus = ProductionStatus.FORMULATION;
 		} else if (productionStatus == ProductionStatus.FORMULATION) {
 			productionStatus = ProductionStatus.PREPARATION;
-		}*/
+		}
 	}
 }

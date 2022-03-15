@@ -3,22 +3,26 @@ package com.dosvales.vagoapp.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="analysis")
+@NamedEntityGraph(name = "graph.Analysis.parameters", 
+attributeNodes = @NamedAttributeNode("parameters"))
 public class Analysis extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Transient
+	/*@Transient
 	private static final Double MIN_ALCOHOL = 35.0;
 	@Transient
 	private static final Double MAX_ALCOHOL = 55.0;
@@ -29,23 +33,23 @@ public class Analysis extends AbstractEntity {
 	@Transient
 	private static final Double MIN_FURFURAL = 0.0;
 	@Transient
-	private static final Double MAX_FURFURAL = 5.0;
+	private static final Double MAX_FURFURAL = 5.0;*/
 	
 	private LocalDate dateOfIssue;
 	
 	private String fq;
 	
-	private Double alcohol;
+	/*private Double alcohol;
 	
 	private Double methanol;
 	
-	private Double furfural;
+	private Double furfural;*/
 	
 	private Double volume;
 	
 	private String document;
 	
-	private AnalysisStatus analysisStatus;
+	//private AnalysisStatus analysisStatus;
 	
 	private String observations;
 	
@@ -56,10 +60,22 @@ public class Analysis extends AbstractEntity {
 	@JoinColumn(name = "idProduction")
 	private Production production;
 	
-	@OneToMany(mappedBy="analysis")
+	@OneToMany(mappedBy="analysis", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Parameter> parameters;
 	
-	public boolean isAlcoholAccepted() {
+	public boolean isPositive() {
+		boolean result = true;
+		for (Parameter parameter: parameters) {
+			if (parameter.getResult() < parameter.getAssay().getAllowableMinimum() 
+					|| parameter.getResult() > parameter.getAssay().getMaximumAllowable()) {
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	/*public boolean isAlcoholAccepted() {
 		return MIN_ALCOHOL <= this.alcohol && this.alcohol <= MAX_ALCOHOL;
 	}
 	
@@ -69,7 +85,7 @@ public class Analysis extends AbstractEntity {
 	
 	public boolean isFurfuralAccepted() {
 		return MIN_FURFURAL <= this.furfural && this.furfural <= MAX_FURFURAL;
-	}
+	}*/
 	
 	public String getFq() {
 		return fq;
@@ -79,7 +95,7 @@ public class Analysis extends AbstractEntity {
 		this.fq = fq;
 	}
 
-	public Double getAlcohol() {
+	/*public Double getAlcohol() {
 		return alcohol;
 	}
 
@@ -101,7 +117,7 @@ public class Analysis extends AbstractEntity {
 
 	public void setFurfural(Double furfural) {
 		this.furfural = furfural;
-	}
+	}*/
 
 	public Double getVolume() {
 		return volume;
@@ -135,13 +151,13 @@ public class Analysis extends AbstractEntity {
 		this.production = production;
 	}
 
-	public AnalysisStatus getAnalysisStatus() {
+	/*public AnalysisStatus getAnalysisStatus() {
 		return analysisStatus;
 	}
 
 	public void setAnalysisStatus(AnalysisStatus analysisStatus) {
 		this.analysisStatus = analysisStatus;
-	}
+	}*/
 
 	public String getObservations() {
 		return observations;

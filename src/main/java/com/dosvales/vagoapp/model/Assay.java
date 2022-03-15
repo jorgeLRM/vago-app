@@ -20,6 +20,8 @@ public class Assay extends AbstractEntity {
 	
 	private String unit;
 	
+	private boolean byDefault;
+	
 	@OneToMany(mappedBy="assay")
 	private List<Parameter> parameters;
 
@@ -61,5 +63,13 @@ public class Assay extends AbstractEntity {
 
 	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
+	}
+
+	public boolean isByDefault() {
+		return byDefault;
+	}
+
+	public void setByDefault(boolean byDefault) {
+		this.byDefault = byDefault;
 	}
 }

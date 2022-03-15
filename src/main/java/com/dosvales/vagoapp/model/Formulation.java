@@ -49,7 +49,7 @@ public class Formulation extends AbstractEntity {
 	
 	@ManyToOne
 	@JoinColumn (name = "idProduction")
-	private StandardProduction production;
+	private Production production;
 	
 	public LocalDate getGridingDate() {
 		return gridingDate;
@@ -121,14 +121,6 @@ public class Formulation extends AbstractEntity {
 
 	public void setTub(Tub tub) {
 		this.tub = tub;
-	}
-
-	public StandardProduction getProduction() {
-		return production;
-	}
-
-	public void setProduction(StandardProduction production) {
-		this.production = production;
 	}
 
 	public Double getVolumeJuiceBagasse() {

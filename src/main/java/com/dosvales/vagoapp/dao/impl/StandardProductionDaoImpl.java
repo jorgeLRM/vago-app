@@ -7,9 +7,11 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityGraph;
+import javax.persistence.Query;
 
 import com.dosvales.vagoapp.dao.StandardProductionDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
+import com.dosvales.vagoapp.filter.ProductionFilter;
 import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.StandardProduction;
@@ -110,6 +112,35 @@ public class StandardProductionDaoImpl extends GenericDaoImpl<StandardProduction
 					.getSingleResult();
 		} catch (Exception ex) {}
 		return production;
+	}
+	
+	//-----------------
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<StandardProduction> findAllByFilter(ProductionFilter filter) {
+		String jpql = "SELECT sp FROM StandardProduction sp";
+		if (filter.getYear() != null || filter.getProducer() != null) {
+			jpql += " WHERE";
+			if (filter.getYear() != null) {
+				jpql += " YEAR(sp.lotDetail.registrationDate) = :year";
+			}
+			if (filter.getProducer() != null) {
+				if (filter.getYear() != null) {
+					jpql += " AND sp.lotDetail.palenque.producer = :producer";
+				} else {
+					jpql += " sp.producer.lotDetail.palenque.producer = :producer";
+				}
+			}
+		}
+		Query query = em.createQuery(jpql, StandardProduction.class);
+		if (filter.getProducer() != null) {
+			query.setParameter("producer", filter.getProducer());
+		}
+		if (filter.getYear() != null) {
+			query.setParameter("year", filter.getYear());
+		}
+		return query.getResultList();
 	}
 
 }

@@ -21,6 +21,14 @@ public class Parameter extends AbstractEntity {
 	@JoinColumn(name="idAssay")
 	private Assay assay;
 
+	public boolean isAccepted() {
+		boolean accepted = false;
+		if (result != null) {
+			accepted = (result >= assay.getAllowableMinimum() && result <= assay.getMaximumAllowable());
+		}
+		return accepted;
+	}
+	
 	public Double getResult() {
 		return result;
 	}

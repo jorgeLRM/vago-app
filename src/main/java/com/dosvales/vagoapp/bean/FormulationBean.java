@@ -32,6 +32,14 @@ public class FormulationBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private StandardProduction production;
+	private Formulation formulation;
+	private Palenque palenque;
+	private List<Formulation> newFormulations;
+	private List<Tub> tubsByPalenque;
+	private List<AvailableTub> availableTubs;
+	private List<Palenque> palenques;
+
 	@Inject
 	private StandardProductionService productionService;
 	@Inject
@@ -41,38 +49,36 @@ public class FormulationBean implements Serializable {
 	@Inject
 	private PalenqueService palenqueService;
 	
-	private boolean editable = true;
-	private Palenque palenque;
-	private StandardProduction production;
-	private Formulation formulation;
-	private Formulation enableFormulation;
-	private List<Formulation> newFormulations;
-	private List<Formulation> formulations;
-	private List<StandardProduction> productions;
-	private List<Tub> tubsByPalenque;
-	private List<AvailableTub> availableTubs;
-	private List<Palenque> palenques;
-	
-	public void openNew() {
-		newFormulations = new ArrayList<Formulation>();
+	public void openNew(String idProduction) {
+		try {
+			production = productionService.findById(Long.valueOf(idProduction));
+			newFormulations = new ArrayList<Formulation>();
+			resetProduction();
+		} catch (Exception ex) {}
 	}
 	
-	public void load(String id) {
-		if (id != null && id.length() > 0) {
+	public void load(String idProduction, String id) {
+		if (idProduction != null && idProduction.length() > 0 
+				&& id != null && id.length() > 0) {
 			try {
+				production = productionService.findWithAssociations(Long.valueOf(id));
 				formulation = formulationService.findById(Long.valueOf(id));
 			} catch (Exception ex) {}
 		}
 	}
 	
 	public void onAddRow() {
-		Formulation f = newFormulations.get(newFormulations.size() - 1);
-		if (isTheRowValid(f)) {
+		if (newFormulations.isEmpty()) {
 			newFormulations.add(new Formulation());
 		} else {
-			showMessage("Cuidado","Las fechas de su última formulación no tienen orden cronológico. "
-					+ "La fecha de formulación debe ser mayor o igual que la de molienda y la fecha de destilación debe "
-					+ "ser mayor que la de molienda.", FacesMessage.SEVERITY_WARN);
+			Formulation f = newFormulations.get(newFormulations.size() - 1);
+			if (isTheRowValid(f)) {
+				newFormulations.add(new Formulation());
+			} else {
+				showMessage("Cuidado","Las fechas de su última formulación no tienen orden cronológico. "
+						+ "La fecha de formulación debe ser mayor o igual que la de molienda y la fecha de destilación debe "
+						+ "ser mayor que la de molienda.", FacesMessage.SEVERITY_WARN);
+			}
 		}
 		PrimeFaces.current().ajax().update(":form:dt-newformulations");
 	}
@@ -89,31 +95,35 @@ public class FormulationBean implements Serializable {
 	@Transactional
 	public String saveList() {
 		String redirect = "";
-		Formulation fAux = newFormulations.get(newFormulations.size() - 1);
-		if (isTheRowValid(fAux)) {
-			for (Formulation f : newFormulations) {
-				Formulation found = formulationService.findByProductionTubAndGridingDate(production, f.getTub(), f.getGridingDate());
-				if (found != null) {
-					showMessage("Cuidado", "La formulación realizada en la tina: " + 
-							found.getTub().getNumberTub() + "\ncon fecha de molienda: " +
-							found.getGridingDate() + " ya esta registrada", FacesMessage.SEVERITY_WARN);
-					return redirect;
-				}
-				f.setProduction(production);
-			}
-			
-			try {
-				formulationService.create(newFormulations);
-				changeStatusProduction(production);
-				addMessage("Operación exitosa", "Formulaciones guardadas exitosamente", FacesMessage.SEVERITY_INFO);
-				redirect = "/protected/production/formulations.xhtml?faces-redirect=true";
-			} catch (Exception ex) {
-				showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
-			}
+		if (newFormulations.isEmpty()) {
+			showMessage("Cuidado", "Ingresa al menos una fila", FacesMessage.SEVERITY_WARN);
 		} else {
-			showMessage("Cuidado", "Las fechas de su última formulacion no tienen orden cronológico. "
-					+ "La fecha de formulación debe ser mayor o igual que la de molienda y la fecha de destilación debe "
-					+ "ser mayor que la de molienda.", FacesMessage.SEVERITY_WARN);
+			Formulation fAux = newFormulations.get(newFormulations.size() - 1);
+			if (isTheRowValid(fAux)) {
+				for (Formulation f : newFormulations) {
+					Formulation found = formulationService.findByProductionTubAndGridingDate(production, f.getTub(), f.getGridingDate());
+					if (found != null) {
+						showMessage("Cuidado", "La formulación realizada en la tina: " + 
+								found.getTub().getNumberTub() + "\ncon fecha de molienda: " +
+								found.getGridingDate() + " ya esta registrada", FacesMessage.SEVERITY_WARN);
+						return redirect;
+					}
+					f.setProduction(production);
+				}
+				
+				try {
+					formulationService.create(newFormulations);
+					changeStatusProduction(production);
+					addMessage("Operación exitosa", "Formulaciones guardadas exitosamente", FacesMessage.SEVERITY_INFO);
+					redirect = "/protected/production/production-panel?faces-redirect=true&id="+production.getId();
+				} catch (Exception ex) {
+					showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+				}
+			} else {
+				showMessage("Cuidado", "Las fechas de su última formulacion no tienen orden cronológico. "
+						+ "La fecha de formulación debe ser mayor o igual que la de molienda y la fecha de destilación debe "
+						+ "ser mayor que la de molienda.", FacesMessage.SEVERITY_WARN);
+			}
 		}
 		return redirect;
 	}
@@ -129,9 +139,9 @@ public class FormulationBean implements Serializable {
 			productionService.update(p);
 		}
 	}
+
 	
-	public void setProduction(StandardProduction production) {
-		this.production = production;
+	private void resetProduction() {
 		this.palenque = production.getLotDetail().getPalenque();
 		tubsByPalenque = tubService.findByPalenque(palenque);
 		
@@ -139,17 +149,13 @@ public class FormulationBean implements Serializable {
 		tubsByPalenque.forEach(tub -> {
 			availableTubs.add(new AvailableTub(tub, false));
 		});
-		
-		if (newFormulations.isEmpty()) {
-			newFormulations.add(new Formulation());
-		}
 	}
 
 	public void delete() {
 		try {
 			if (isValidToDelete(formulation)) {
 				formulationService.delete(formulation);
-				formulations.remove(formulation);
+				//formulations.remove(formulation);
 				addMessage("Operación exitosa", "Formulación eliminada exitosamente", FacesMessage.SEVERITY_INFO);
 				PrimeFaces.current().ajax().update(":form:dt-formulations");
 			} else {
@@ -192,53 +198,24 @@ public class FormulationBean implements Serializable {
 		}
 	}
 	
-	public void refreshTable() {
-		formulations = formulationService.findAll();
-	}
-
-	public Palenque getPalenque() {
-		return palenque;
-	}
-
 	public StandardProduction getProduction() {
 		return production;
 	}
-	
+
+	public Formulation getFormulation() {
+		return formulation;
+	}
+
 	public void setFormulation(Formulation formulation) {
 		this.formulation = formulation;
 	}
 	
-	public Formulation getFormulation() {
-		return formulation;
-	}
-	
-	public Formulation getEnableFormulation() {
-		return enableFormulation;
-	}
-
-	public List<Formulation> getNewFormulations() {
-		return newFormulations;
-	}
-
-	public List<Formulation> getFormulations() {
-		return formulations;
-	}
-	
-	public List<StandardProduction> getProductions() {
-		productions = productionService.findAllAvailableForFormulation();
-		return productions;
-	}
-
-	public boolean isEditable() {
-		return editable;
-	}
-
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-
 	public List<Palenque> getPalenques() {
 		palenques = palenqueService.findAllActive();
 		return palenques;
+	}
+	
+	public List<Formulation> getNewFormulations() {
+		return newFormulations;
 	}
 }

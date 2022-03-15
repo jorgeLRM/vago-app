@@ -13,11 +13,8 @@ import com.dosvales.vagoapp.model.TypeProducer;
 public interface ProducerDao extends GenericDao<Producer, Long>{
 	
 	Producer findByNameOrAbbreviation(String name, String abbreviation);
-	
 	List<Producer> findAllByTypeProducer(TypeProducer type);
-	
 	Producer findWithPalenquesAndEstates(Long id);
-	
 	List<Producer> findAllByStatus(EntityStatus status);
 	
 }

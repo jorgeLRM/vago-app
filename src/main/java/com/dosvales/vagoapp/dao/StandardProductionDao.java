@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.dosvales.vagoapp.dao.generic.GenericDao;
+import com.dosvales.vagoapp.filter.ProductionFilter;
 import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.StandardProduction;
@@ -29,4 +30,8 @@ public interface StandardProductionDao extends GenericDao<StandardProduction, Lo
 	List<StandardProduction> findAllInProcess();
 	
 	List<StandardProduction> findAllTerminated();
+	
+	// ------------------------------------------------------------
+	
+	List<StandardProduction> findAllByFilter(ProductionFilter filter);
 }

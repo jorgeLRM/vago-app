@@ -2,6 +2,7 @@ package com.dosvales.vagoapp.service;
 
 import java.util.List;
 
+import com.dosvales.vagoapp.filter.ProductionFilter;
 import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.StandardProduction;
 import com.dosvales.vagoapp.service.generic.GenericService;
@@ -25,5 +26,9 @@ public interface StandardProductionService extends GenericService<StandardProduc
 	List<StandardProduction> findAllInProcess();
 	
 	List<StandardProduction> findAllTerminated();
+	
+	//--------------------------------
+	
+	List<StandardProduction> findAllByFilter(ProductionFilter filter);
 	
 }

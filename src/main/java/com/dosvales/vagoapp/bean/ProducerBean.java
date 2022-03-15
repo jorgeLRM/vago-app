@@ -70,7 +70,7 @@ public class ProducerBean implements Serializable{
 		Producer found = producerService.findByNameOrAbbreviation(producer.getName(), producer.getAbbreviation());
 		if (found != null) {
 			if (found.getStatus() == EntityStatus.INACTIVE) {
-				throw new AppException("El nombre y/o abreviatura del productor que ingresaste ya se encuentra registrado pero está deshabilitado. Consulta los agaves deshabilitados para volverlo a habilitar.");
+				throw new AppException("El nombre y/o abreviatura del productor que ingresaste ya se encuentra registrado pero está deshabilitado. Consulta los productores deshabilitados para volverlo a habilitar.");
 			} else {
 				throw new DataFoundException("El nombre y/o abreviatura del productor ya se encuentra registrado");
 			}

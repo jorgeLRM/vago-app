@@ -6,7 +6,7 @@
 	template="/WEB-INF/template/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{productionBean.refreshTable()}" />
+		<f:viewAction action="#{productionBean.init()}" />
 	</f:metadata>
 
 	<ui:define name="title">Producción</ui:define>
@@ -32,7 +32,40 @@
 								<p:toolbarGroup align="right" class="w-full md:w-auto">
 									<p:commandButton value="Nueva producción" icon="pi pi-plus"
 										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
-										action="/protected/production/new-production.xhtml?faces-redirect=true" />
+										action="/protected/production/new-production.xhtml?faces-redirect=true" 
+										process="@this"/>
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:toolbar>
+								<p:toolbarGroup>
+									<div class="formgrid grid">
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="year" value="AÑO" class="mr-3"/>
+											<p:selectOneMenu id="year"
+												value="#{productionBean.filter.year}">
+												<p:ajax value="change" listener="#{productionBean.refreshTable()}" 
+													update="dt-productions"/>
+												<f:selectItems value="#{productionBean.years}" var="year"
+													itemValue="#{year}" itemLabel="#{year}" />
+											</p:selectOneMenu>
+											<p:blockUI block="main-template" trigger="year"/>
+										</div>
+										<div class="field col-12 md:col-4">
+											<p:outputLabel for="producer" value="PRODUCTOR" class="mr-3"/>
+											<p:selectOneMenu id="producer"
+												value="#{productionBean.filter.producer}"
+												converter="omnifaces.SelectItemsConverter">
+												<p:ajax value="change" listener="#{productionBean.refreshTable()}" 
+													update="dt-productions"/>
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"/>
+												<f:selectItems value="#{productionBean.producers}"
+													var="producer" itemLabel="#{producer.name}"
+													itemValue="#{producer}" />
+											</p:selectOneMenu>
+											<p:blockUI block="main-template" trigger="producer"/>
+										</div>
+									</div>
 								</p:toolbarGroup>
 							</p:toolbar>
 
@@ -45,7 +78,7 @@
 
 								<f:facet name="header">
 									<div class="products-table-header">
-										<span style="font-weight: bold"> <p:selectOneMenu
+										<span style="font-weight: bold"> <!--<p:selectOneMenu
 												id="changeFilter" value="#{productionBean.status}"
 												styleClass="w-full md:w-auto">
 												<p:ajax listener="#{productionBean.refreshTable()}"
@@ -54,7 +87,7 @@
 												<f:selectItem itemLabel="EN PROCESO" itemValue="IN PROCESS" />
 												<f:selectItem itemLabel="TERMINADOS" itemValue="TERMINATED" />
 												<f:selectItem itemLabel="CANCELADOS" itemValue="CANCELED" />
-											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />
+											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />-->
 										</span> <span class="filter-container ui-input-icon-left"> <i
 											class="pi pi-search"></i> <p:inputText id="globalFilter"
 												onkeyup="PF('dtProductions').filter()" placeholder="Buscar" />

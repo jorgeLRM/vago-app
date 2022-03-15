@@ -28,8 +28,8 @@ public class Tail extends AbstractEntity {
 	private Double alcoholicGradeMezcal;
 	
 	@OneToOne
-	@JoinColumn(name="idStandardProduction")
-	private StandardProduction standardProduction;
+	@JoinColumn(name="idProduction")
+	private Production production;
 	
 	public LocalDate getStartRipening() {
 		return startRipening;
@@ -87,11 +87,11 @@ public class Tail extends AbstractEntity {
 		this.alcoholicGradeMezcal = alcoholicGradeMezcal;
 	}
 
-	public StandardProduction getStandardProduction() {
-		return standardProduction;
+	public Production getProduction() {
+		return production;
 	}
 
-	public void setStandardProduction(StandardProduction standardProduction) {
-		this.standardProduction = standardProduction;
+	public void setProduction(Production production) {
+		this.production = production;
 	}
 }

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import com.dosvales.vagoapp.dao.StandardProductionDao;
 import com.dosvales.vagoapp.dao.generic.GenericDao;
+import com.dosvales.vagoapp.filter.ProductionFilter;
 import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.ProductionStatus;
 import com.dosvales.vagoapp.model.StandardProduction;
@@ -72,6 +73,13 @@ public class StandardProductionServiceImpl extends GenericServiceImpl<StandardPr
 	@Override
 	public StandardProduction findByLot(String lot) {
 		return dao.findByLot(lot);
+	}
+
+	//------------------------------------
+	
+	@Override
+	public List<StandardProduction> findAllByFilter(ProductionFilter filter) {
+		return dao.findAllByFilter(filter);
 	}
 
 }
