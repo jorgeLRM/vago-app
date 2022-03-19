@@ -1,0 +1,195 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{calculationBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Calculadora</ui:define>
+
+	<ui:param name="viewname" value="CALCULADORA DE VOLUMEN DE COLAS" />
+
+	<ui:define name="content">
+		<h:form id="calculatorForm">
+			<p:growl id="calculatorMessages" showDetail="true">
+				<p:effect event="load" type="fade" delay="2000" closable="true" />
+			</p:growl>
+
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:panel header="Calculadora de volumenes de colas">
+							<p:outputPanel id="calculator-content">
+								<p:panel>
+									<div class="formgrid grid">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel styleClass="mr-3" style="font-weight: 900;">Producción:</p:outputLabel>
+											<h:outputText value="#{calculationBean.production.lot}"/>
+										</div>
+									</div>
+								</p:panel>
+								
+								<p:panel styleClass="mt-3">
+									<div class="ui-fluid p-formgrid p-grid">
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="volumeProduction">Volumen de la producción</p:outputLabel>
+											<p:spinner id="volumeProduction" value="#{calculationBean.production.volumeDistillation2}"
+												min="0" stepFactor="0.01" disabled="true"/>
+										</div>
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="alcoholicGradeMezcal">Grado alcoholico de la producción</p:outputLabel>
+											<p:spinner id="alcoholicGradeMezcal" value="#{calculationBean.production.alcoholicGradeDist2}"
+												min="0" max="100" stepFactor="0.01" disabled="true"/>
+										</div>
+									</div>
+									<div class="ui-fluid p-formgrid p-grid" style="justify-content:center">
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="alcoholicGradeDesired">Grado alcoholico deseado</p:outputLabel>
+											<p:spinner id="alcoholicGradeDesired" value="#{calculationBean.calculation.alcoholicGradeDesired}"
+												min="0" max="100" stepFactor="0.01" disabled="true"/>
+										</div>
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="volumeWater">Litros de agua para ajuste</p:outputLabel>
+											<p:spinner id="volumeWater" value="#{calculationBean.volumeWater}"
+												min="0" stepFactor="0.01" disabled="true"/>
+										</div>
+									</div>
+									<div class="ui-fluid p-formgrid p-grid">
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="volumeTail">Litros de cola para ajuste</p:outputLabel>
+											<p:spinner id="volumeTail" value="#{calculationBean.volumeTail}"
+												min="0" stepFactor="0.01" disabled="true"/>
+										</div>
+										<div class="p-field p-col-12 p-md-6">
+											<p:outputLabel for="volumeWaterTail">Litros de agua + colas</p:outputLabel>
+											<p:spinner id="volumeWaterTail" value="#{calculationBean.volumeWater + calculationBean.volumeTail}"
+												min="0" stepFactor="0.01" disabled="true"/>
+										</div>
+									</div>
+								</p:panel>
+								
+								<p:panel styleClass="mt-3">
+									<p:dataTable var="rowCalculation" id="dt-newrowcalculations" widgetVar="dtnewrowcalculations" 
+										reflow="true" value="#{calculationBean.rows}" showGridlines="true" size="small" 
+										rowIndexVar="rowIndex" scrollable="true">
+										
+										<p:column headerText="%" width="5%" style="text-align:center">
+											<h:outputText value="#{rowCalculation.percentage} %"/>
+										</p:column>
+										
+										<p:column headerText="Nombre" width="2" style="text-align:center">
+											<p:outputLabel id="name" value="#{rowCalculation.name}"/>
+										</p:column>
+										
+										<p:column headerText="Volumen (l)" width="2" style="text-align:center">
+											<p:outputLabel id="volume" value="#{rowCalculation.volume}"/>
+										</p:column>
+
+										<p:column headerText="Alcohol" width="2" style="text-align:center">
+											<p:outputLabel id="alcohol" value="#{rowCalculation.alcohol}"/>
+										</p:column>
+										
+										<p:column headerText="Metanol" width="2" style="text-align:center">
+											<p:outputLabel id="methanol" value="#{rowCalculation.methanol}"/>
+										</p:column>
+										
+										<p:column headerText="Alcoholes Superiores" width="2" style="text-align:center">
+											<p:outputLabel id="higherAlcohols" value="#{rowCalculation.higherAlcohols}"/>
+										</p:column>
+										
+										<p:column headerText="Aldehídos" width="2" style="text-align:center">
+											<p:outputLabel id="aldehydes" value="#{rowCalculation.aldehydes}"/>
+										</p:column>
+										
+										<p:column headerText="Furfural" width="2" style="text-align:center">
+											<p:outputLabel id="furfurol" value="#{rowCalculation.furfurol}"/>
+										</p:column>
+									</p:dataTable>
+								</p:panel>
+								
+								<p:panel styleClass="mt-3">
+									<p:toolbar styleClass="p-mb-0 w-full">
+										<p:toolbarGroup class="w-full md:w-auto">
+											<p:outputLabel style="font-weight:bold"
+												styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+												RESULTADOS</p:outputLabel>
+										</p:toolbarGroup>
+									</p:toolbar>
+								
+									<p:dataTable id="dt-rowCalculator" widgetVar="dtRowCalculator" var="row"
+										value="#{calculationBean.row}" reflow="true" styleClass="products-table" 
+										showGridlines="true" size="small" style="text-align:center">
+										
+										<p:column headerText="%" width="1" style="text-align:center">
+											<h:outputText value="#{row.percentage}">
+												<f:convertNumber pattern="#0.00"/>
+											</h:outputText>
+											<h:outputText value="%"/>
+										</p:column>
+										
+										<p:column headerText="Volumen (l)" width="1" style="text-align:center">
+											<h:outputText value="#{row.volume} l"/>
+										</p:column>
+										
+										<p:column headerText="Alcohol" width="2" style="text-align:center">
+											<div style="background-color: #{calculationBean.getClassForValue('alcohol')}">
+												<h:outputText value="#{row.alcohol}">
+													<f:convertNumber pattern="#0.00"/>
+												</h:outputText>	
+											</div>
+										</p:column>
+										
+										<p:column headerText="Metanol" width="2" style="text-align:center">
+											<div style="background-color: #{calculationBean.getClassForValue('methanol')}">
+												<h:outputText value="#{row.methanol}">
+													<f:convertNumber pattern="#0.00"/>
+												</h:outputText>
+											</div>
+										</p:column>
+										
+										<p:column headerText="Alcoholes Superiores" width="2" style="text-align:center">
+											<div style="background-color: #{calculationBean.getClassForValue('higherAlcohols')}">
+												<h:outputText value="#{row.higherAlcohols}">
+													<f:convertNumber pattern="#0.00"/>
+												</h:outputText>
+											</div>
+										</p:column>
+										
+										<p:column headerText="Aldehídos" width="2" style="text-align:center">
+											<div style="background-color: #{calculationBean.getClassForValue('aldehydes')}">
+												<h:outputText value="#{row.aldehydes}">
+													<f:convertNumber pattern="#0.00"/>
+												</h:outputText>
+											</div>
+										</p:column>
+										
+										<p:column headerText="Furfural" width="2" style="text-align:center">
+											<div style="background-color: #{calculationBean.getClassForValue('furfurol')}">
+												<h:outputText value="#{row.furfurol}">
+													<f:convertNumber pattern="#0.00"/>
+												</h:outputText>
+											</div>
+										</p:column>
+									</p:dataTable>
+								</p:panel>
+								
+								<p:toolbar styleClass="mt-3">
+									<p:toolbarGroup>
+										<p:commandButton value="Regresar" icon="fas fa-arrow-circle-left"
+											action="/protected/production/calculations.xhtml?faces-redirect=true"
+											process="@this" styleClass="ui-button-raised ui-button-secondary w-full md:w-auto"/>
+										</p:toolbarGroup>
+									</p:toolbar>
+							</p:outputPanel>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

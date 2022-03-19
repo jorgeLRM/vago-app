@@ -57,6 +57,9 @@ public class StandardProduction extends Production {
 	@OneToMany(mappedBy="production")
 	private Set<Formulation> formulations = new HashSet<Formulation>();
 	
+	@OneToMany(mappedBy = "production")
+	private Set<Calculation> calculations = new HashSet<Calculation>();
+	
 	public LocalDate getStartCoocking() {
 		return startCoocking;
 	}
@@ -145,5 +148,13 @@ public class StandardProduction extends Production {
 		} else if (productionStatus == ProductionStatus.FORMULATION) {
 			productionStatus = ProductionStatus.PREPARATION;
 		}
+	}
+	
+	public Set<Calculation> getCalculations() {
+		return calculations;
+	}
+
+	public void setCalculations(Set<Calculation> calculations) {
+		this.calculations = calculations;
 	}
 }

@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{calculationBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="CALCULADORA DE COLAS" />
+	
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR PRODUCCIONES</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo cálculo" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/production/new-calculation.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+							
+							<p:dataTable id="dt-calculations" widgetVar="dtCalculations" var="calculation" 
+								value="#{calculationBean.calculations}" reflow="true" styleClass="products-table" 
+								paginator="true" rows="10" paginatorPosition="bottom" showGridlines="true"
+								size="small" style="text-align:center">
+								
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> 
+											<p:selectOneMenu id="productions" value="#{calculationBean.production}"
+												styleClass="w-full md:w-auto" converter="omnifaces.SelectItemsConverter"
+												filter="true" filterMatchMode="startsWith">
+												<p:ajax listener="#{calculationBean.refreshTable()}" update="dt-calculations"/>
+												<f:selectItems value="#{calculationBean.productions}"
+													var="production" itemValue="#{production}" itemLabel="#{production.lot}" />
+											</p:selectOneMenu> 
+											<p:blockUI block="main-template" trigger="productions" />
+										</span> 
+										
+										<span class="filter-container ui-input-icon-left"> 
+											<i class="pi pi-search"/> 
+											<p:inputText id="globalFilter" onkeyup="PF('dtCalculations').filter()" placeholder="Buscar"/>
+										</span>
+									</div>
+								</f:facet>
+								
+								<p:column headerText="Código" width="1" style="text-align:center" sortBy="#{calculation.id}">
+									<h:outputText value="#{calculation.id}"/>
+								</p:column>
+
+								<p:column headerText="Fecha y hora de guardado" width="2" style="text-align:center"
+									filterBy="#{calculation.time}">
+									<h:outputText value="#{calculation.time}"/>
+								</p:column>
+								
+								<p:column headerText="Acciones" width="1" style="text-align:center">
+									<p:linkButton id="viewCalculationButton" icon="pi pi-eye"
+										outcome="/protected/production/view-calculation.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+										<f:param name="id" value="#{calculation.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewCalculationButton" value="Ver registro" position="bottom"/>
+								
+									<p:commandButton id="deleteCalculationButton"
+										class="ui-button-danger rounded-button ui-button-raised"
+										oncomplete="PF('deleteCalculationDialog').show();"
+										process="@this" icon="pi pi-trash">
+										<f:setPropertyActionListener value="#{calculation}" target="#{calculationBean.calculation}"/>
+									</p:commandButton>
+									<p:tooltip for="deleteCalculationButton" value="Eliminar registro" position="bottom"/>
+								</p:column>
+							</p:dataTable>
+							
+							<p:confirmDialog widgetVar="deleteCalculationDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check" actionListener="#{calculationBean.delete()}" 
+									process="@this" oncomplete="PF('deleteCalculationDialog').hide()" 
+									styleClass="ui-butto-raised"/>
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteCalculationDialog').hide()"/>
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
