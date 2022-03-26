@@ -91,3 +91,5 @@ INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols
 INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 57.24, 13, 2, 320, 40, 'TR-01-SN-22 Cuerpo', NULL, 0, 1120, 2);
 INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 150, 2);
 INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 50, 2);
+
+INSERT INTO adjustmentplantation (status, movementType, quantity, reason, idPlantation) VALUES ('ACTIVE', 'NEGATIVE', 100, 'Se secaron las plantas', 1);

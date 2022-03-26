@@ -27,8 +27,9 @@ public class Estate extends AbstractEntity {
 	@Embedded
 	private Address address;
 	
+	// Tipo de variable modificada
 	@NotNull
-	private Integer crmnumber;
+	private String crmnumber;
 	
 	private String observations;
 	
@@ -55,11 +56,12 @@ public class Estate extends AbstractEntity {
 		this.address = address;
 	}
 
-	public Integer getCrmnumber() {
+	// Metodo Set y Get modificados (unicamente el tipo de dato utilizado)
+	public String getCrmnumber() {
 		return crmnumber;
 	}
 
-	public void setCrmnumber(Integer crmnumber) {
+	public void setCrmnumber(String crmnumber) {
 		this.crmnumber = crmnumber;
 	}
 

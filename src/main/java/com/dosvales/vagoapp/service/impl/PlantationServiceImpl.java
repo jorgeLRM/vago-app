@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import com.dosvales.vagoapp.dao.PlantationDao;
 import com.dosvales.vagoapp.dao.generic.GenericDao;
+import com.dosvales.vagoapp.model.Estate;
 import com.dosvales.vagoapp.model.Plantation;
 import com.dosvales.vagoapp.service.PlantationService;
 import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
@@ -54,4 +55,9 @@ public class PlantationServiceImpl extends GenericServiceImpl<Plantation, Long> 
 		return dao;
 	}
 
+	// Metodo agregado
+	@Override
+	public List<Plantation> findByEstate(Estate estate) {
+		return dao.findByEstate(estate);
+	}
 }

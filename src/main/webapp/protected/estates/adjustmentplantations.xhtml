@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{adjustmentPlBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="AJUSTES EN LOS PLANTÍOS DE MAGUEYES" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR AJUSTES EN PLANTÍOS</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo ajuste" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/estates/new-adjustmentpl.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-adjustments" widgetVar="dtAdjustments" var="adjustment"
+								value="#{adjustmentPlBean.adjustments}" reflow="true" styleClass="products-table" 
+								paginator="true" rows="10" paginatorPosition="bottom" showGridlines="true" 
+								size="small" style="text-align:center">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span class="filter-container ui-input-icon-left"> 
+											<i class="pi pi-search"/> 
+											<p:inputText id="globalFilter"
+												onkeyup="PF('dtAdjustments').filter()" placeholder="Buscar"/>
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{adjustment.id}" width="1" style="text-align:center">
+									<h:outputText value="#{adjustment.id}" />
+								</p:column>
+								<p:column headerText="Plantío" filterBy="#{adjustment.plantation.estate.name}"
+									width="5" style="text-align:center">
+									<h:outputText value="#{adjustment.plantation.estate.name}" />
+								</p:column>
+								<p:column headerText="Maguey" filterBy="#{adjustment.plantation.maguey.name}" width="1"
+									style="text-align:center">
+									<h:outputText value="#{adjustment.plantation.maguey.name}" />
+								</p:column>
+								<p:column headerText="Tipo de movimiento" width="2" style="text-align:center">
+									<h:outputText value="#{adjustment.movementType.type}" />
+								</p:column>
+								<p:column headerText="Cantidad" width="2" style="text-align:center">
+									<h:outputText value="#{adjustment.quantity}"/>
+								</p:column>
+								<p:column headerText="Razones" width="2" style="text-align:center">
+									<h:outputText value="#{adjustment.reason}"/>
+								</p:column>
+								<!--p:column headerText="Acciones" width="5" style="text-align:center">
+									
+								</p:column-->
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

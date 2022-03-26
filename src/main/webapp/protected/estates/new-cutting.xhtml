@@ -25,7 +25,7 @@
 
 							<p:panel header="Nuevo corte">
 
-								<p:staticMessage severity="warn" summary="WARN"
+								<p:staticMessage severity="warn" summary="ADVERTENCIA"
 									detail="Revisa la información, ya que no se podrán hacer cambios después."
 									style="width: 100%" styleClass="mb-3"/>
 
@@ -34,6 +34,11 @@
 										<p:panel header="Información general">
 											<p:outputPanel id="general-cuttingDetail" class="ui-fluid">
 												<p:outputPanel rendered="#{not empty cuttingBean.cutting}">
+													<p:staticMessage severity="warn" summary="ADVERTENCIA"
+														detail="Si no se ingresa el número de guía de corte y/o el documento, 
+															tendra que ingresarlos posteriormente."
+														style="width: 100%" styleClass="mb-3"/>
+													
 													<div class="formgrid grid mt-2">
 														<div class="field col-12 md:col-6">
 															<p:outputLabel for="cutoffdateForm">Fecha de corte</p:outputLabel>
@@ -43,12 +48,14 @@
 																showWeek="true" yearRange="1990:2050" mask="true"
 																pattern="dd/MM/yyyy" required="true" />
 														</div>
+														<!-- Se modifico el siguiente campo, ya no es obligatorio -->
 														<div class="field col-12 md:col-6">
 															<p:outputLabel for="guideNumber">Número de guía CRM</p:outputLabel>
 															<p:inputText id="guideNumber"
 																value="#{cuttingBean.cutting.guideNumber}"
-																required="true" maxlength="15">
+																required="false" maxlength="15">
 																<p:keyFilter mask="num" />
+																<p:ajax update=":form:general-cuttingDetail" event="change"/>
 															</p:inputText>
 														</div>
 													</div>
@@ -79,12 +86,12 @@
 													</div>
 													<div class="formgrid grid">
 														<div class="field col-12">
-															<p:outputLabel>Guía de corte *</p:outputLabel>
+															<p:outputLabel>Guía de corte</p:outputLabel>
 															<div class="flex flex-wrap align-items-center">
 																<p:commandButton value="Subir archivo"
 																	styleClass="ui-button-raised ui-button-secondary inline mr-3 w-auto"
-																	onclick="PF('changeFileCutting').show()"
-																	process="@this" />
+																	onclick="PF('changeFileCutting').show()" 
+																	process="@this"/>
 																<h:outputLabel id="set-file-cutting"
 																	value="#{cuttingBean.cutting.guideLink}" />
 															</div>
@@ -116,6 +123,8 @@
 															<div class="p-d-flex p-ai-center">
 																<h:outputText
 																	value="#{plmaguey.maguey.name} - Edad: #{cuttingBean.getYears(plmaguey.plantingDate)} años" />
+																<h:outputText value="#{cuttingBean.readyForCutting(plmaguey)}"/>
+																<!-- Se agrego el outputText anterior, es para indicar si el maguey esta maduro o tierno -->
 															</div>
 														</p:column>
 													</p:pickList>

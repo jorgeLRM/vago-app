@@ -1,10 +1,13 @@
 package com.dosvales.vagoapp.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -40,6 +43,10 @@ public class Plantation extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "idMaguey")
 	private Maguey maguey;
+	
+	// Variable agregada
+	@OneToMany(mappedBy = "plantation")
+	private Set<AdjustmentPlantation> adjusments = new HashSet<AdjustmentPlantation>();
 
 	public StockStatus getStockStatus() {
 		if (stock == 0) {
@@ -120,5 +127,14 @@ public class Plantation extends AbstractEntity {
 
 	public void setMaguey(Maguey maguey) {
 		this.maguey = maguey;
+	}
+
+	// Get y Set agregados correspondientes a la variable agregada
+	public Set<AdjustmentPlantation> getAdjusments() {
+		return adjusments;
+	}
+
+	public void setAdjusments(Set<AdjustmentPlantation> adjusments) {
+		this.adjusments = adjusments;
 	}
 }

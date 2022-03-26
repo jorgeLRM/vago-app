@@ -92,11 +92,11 @@ public class CuttingBean implements Serializable {
 	public String onFlowProcess(FlowEvent event) {
 		String step = event.getNewStep();
 		if (step.equals("cdMagueyes")) {
-			if (cutting.getGuideLink() == null) {
+			if (!cutting.getGuideNumber().isEmpty() && cutting.getGuideLink() == null) {
 				step = event.getOldStep();
 				showMessage("Cuidado", "Agrega la guía de corte.", FacesMessage.SEVERITY_WARN);
 			} else {
-				if (!exists(cutting)) {
+				if (cutting.getGuideNumber().isEmpty() || !exists(cutting)) {
 					dualListPlantation = createListModel(estate);
 				} else {
 					step = event.getOldStep();
@@ -208,11 +208,15 @@ public class CuttingBean implements Serializable {
 		String page = "";
 		if (cutting != null) {
 			try {
-				int lastIndex = cuttings.lastIndexOf(cutting);
-				cutting = cuttingService.update(cutting);
-				cuttings.set(lastIndex, cutting);
-				addMessage("Operación exitosa", "Corte actualizado exitosamente", FacesMessage.SEVERITY_INFO);
-				page = "/protected/estates/cuttings.xhtml?faces-redirect=true";
+				if (cutting.getGuideLink() == null) {
+					showMessage("Cuidado", "Agrega la guía de corte.", FacesMessage.SEVERITY_WARN);
+				} else {
+					cutting = cuttingService.update(cutting);
+					cuttings = cuttingService.findAllActive();
+					status = "ACEPTADOS";
+					addMessage("Operación exitosa", "Corte actualizado exitosamente", FacesMessage.SEVERITY_INFO);
+					page = "/protected/estates/cuttings.xhtml?faces-redirect=true";
+				}
 			} catch (Exception ex) {
 				showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
 			}
@@ -229,6 +233,11 @@ public class CuttingBean implements Serializable {
 	public int getYears(LocalDate date) {
 		Period period = Period.between(date, LocalDate.now());
 		return period.getYears();
+	}
+	
+	public String readyForCutting(Plantation plantation) {
+		Period period = Period.between(plantation.getPlantingDate(), LocalDate.now());
+		return (period.getYears() >= plantation.getMaguey().getAgeOfMaturation())?" (Maguey maduro)":" (Maguey tierno)";
 	}
 
 	public Integer getQuantityTotal(List<CuttingDetail> cds) {

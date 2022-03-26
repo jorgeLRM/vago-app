@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{adjustmentPlBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Predios</ui:define>
+	<ui:param name="viewname" value="AJUSTES EN PLANTÍOS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Nuevo ajuste de magueyes">
+								<p:outputPanel id="new-adjustment-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="estateSelect">Predio</p:outputLabel>
+											<p:selectOneMenu id="estateSelect"
+												value="#{adjustmentPlBean.estate}" required="true"
+												converter="omnifaces.SelectItemsConverter" filter="true"
+												filterMatchMode="contains" styleClass="w-full">
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{adjustmentPlBean.estates}"
+													var="estate" itemValue="#{estate}" itemLabel="#{estate.name}" />
+												<p:ajax update=":form:new-adjustment-content" event="change" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="producer" styleClass="mr-3">Propietario del predio</p:outputLabel>
+											<p:inputText id="producer"
+												value="#{adjustmentPlBean.estate.producer.name}"
+												disabled="true" />
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="plantationSelect">Plantío</p:outputLabel>
+											<p:selectOneMenu id="plantationSelect"
+												value="#{adjustmentPlBean.adjustment.plantation}" required="true"
+												converter="omnifaces.SelectItemsConverter" filter="true"
+												filterMatchMode="contains" styleClass="w-full">
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{adjustmentPlBean.plantations}"
+													var="plantation" itemValue="#{plantation}" itemLabel="#{plantation.lot}" />
+												<p:ajax update="stock" event="change" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="stock" styleClass="mr-3">Existencia actual</p:outputLabel>
+											<p:inputText id="stock"
+												value="#{adjustmentPlBean.adjustment.plantation.stock}"
+												disabled="true" />
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="movementSelect">Tipo de movimiento</p:outputLabel>
+											<p:selectOneMenu id="movementSelect"
+												value="#{adjustmentPlBean.adjustment.movementType}" required="true"
+												converter="omnifaces.SelectItemsConverter" filter="true"
+												filterMatchMode="contains" styleClass="w-full">
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{adjustmentPlBean.movementTypesPlantation}"
+													var="movement" itemValue="#{movement}" itemLabel="#{movement.type}" />
+												<p:ajax update=":form:new-adjustment-content" event="change" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="quantity">Cantidad de magueyes</p:outputLabel>
+											<p:spinner id="quantity" value="#{adjustmentPlBean.adjustment.quantity}" 
+												min="1" max="#{adjustmentPlBean.adjustment.plantation.stock}" />
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="description">Descripción</p:outputLabel>
+											<p:inputTextarea id="description" required="true"
+												value="#{adjustmentPlBean.adjustment.reason}" maxlength="100" />
+										</div>
+									</div>
+									<div class="grid mt-2">
+										<p:outputLabel class="font-bold" value="* Valores obligatorios" />
+									</div>
+									<div class="mt-3">
+										<p:commandButton value="Guardar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{adjustmentPlBean.tryToSave()}"
+											process="new-adjustment-content @this" update="new-adjustment-content" />
+										<p:commandButton value="Cancelar"
+											icon="fas fa-arrow-circle-left"
+											action="/protected/estates/adjustmentplantations.xhtml?faces-redirect=true"
+											immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

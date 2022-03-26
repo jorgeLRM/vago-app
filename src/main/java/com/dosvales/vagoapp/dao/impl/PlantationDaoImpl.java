@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 
 import com.dosvales.vagoapp.dao.PlantationDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
+import com.dosvales.vagoapp.model.Estate;
 import com.dosvales.vagoapp.model.Plantation;
 
 @Stateless
@@ -26,14 +27,16 @@ public class PlantationDaoImpl extends GenericDaoImpl<Plantation, Long> implemen
 		return em.find(Plantation.class, id, properties);
 	}
 
+	// Dentro de este metodo se comento la parte que filtraba los plantios por edad de maduracion
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Plantation> findAllReadyForCuttingByEstate(Long idEstate) {
 		return em.createNativeQuery("SELECT * FROM plantation p INNER JOIN maguey m "
 				+ "ON m.id = p.idMaguey INNER JOIN estate e "
-				+ "ON e.id = p.idEstate WHERE DATE_PART('year',AGE(now(), "
-				+ "p.plantingDate)) >= m.ageOfMaturation "
-				+ "AND p.idEstate = :idEstate AND p.stock > 0", Plantation.class)
+				+ "ON e.id = p.idEstate WHERE "
+				//+ "DATE_PART('year',AGE(now(), "
+				//+ "p.plantingDate)) >= m.ageOfMaturation AND "
+				+ "p.idEstate = :idEstate AND p.stock > 0", Plantation.class)
 				.setParameter("idEstate", idEstate)
 				.getResultList();
 	}
@@ -54,4 +57,14 @@ public class PlantationDaoImpl extends GenericDaoImpl<Plantation, Long> implemen
 		return found;
 	}
 
+	// Metodo agregado
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Plantation> findByEstate(Estate estate) {
+		return em.createNativeQuery("SELECT * FROM plantation p INNER JOIN maguey m "
+				+ "ON m.id = p.idMaguey INNER JOIN estate e "
+				+ "ON e.id = p.idEstate WHERE "
+				+ "p.idEstate = :idEstate AND p.stock > 0", Plantation.class)
+				.setParameter("idEstate", estate.getId()).getResultList();
+	}
 }
