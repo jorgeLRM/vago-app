@@ -14,10 +14,10 @@ import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
 
 @Named
 @Transactional(rollbackOn = Exception.class)
-public class TailServiceImpl extends GenericServiceImpl<Tail, Long> implements TailService, Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class TailServiceImpl extends GenericServiceImpl<Tail, Long> implements TailService, Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	@EJB
 	private TailDao dao;
 	

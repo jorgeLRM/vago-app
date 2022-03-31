@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="production")
-public abstract class Production extends AbstractEntity {
+public class Production extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -45,6 +45,9 @@ public abstract class Production extends AbstractEntity {
 	private Double volumeDistillation2 = 0.0;
 	
 	@Enumerated(EnumType.STRING)
+	private TypeProduction typeProduction = TypeProduction.NORMAL;
+	
+	@Enumerated(EnumType.STRING)
 	private PaymentStatus paymentStatus;
 	
 	@Enumerated(EnumType.STRING)
@@ -66,10 +69,6 @@ public abstract class Production extends AbstractEntity {
 	
 	@OneToMany(mappedBy="production")
 	private Set<Formulation> formulations = new HashSet<Formulation>();
-	
-	public abstract void nextStatus();
-	
-	public abstract void previousStatus();
 	
 	public String getLot() {
 		return lot;
@@ -221,5 +220,13 @@ public abstract class Production extends AbstractEntity {
 
 	public void setStock(Double stock) {
 		this.stock = stock;
+	}
+
+	public TypeProduction getTypeProduction() {
+		return typeProduction;
+	}
+
+	public void setTypeProduction(TypeProduction typeProduction) {
+		this.typeProduction = typeProduction;
 	}
 }

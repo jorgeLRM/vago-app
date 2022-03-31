@@ -36,6 +36,12 @@ public class AnalysisBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Analysis analysis;
+	private Production production;
+	private List<Assay> assays;
+	private List<Parameter> parameters;
+	private List<ParameterForTable> parametersForTable;
+	
 	@Inject
 	private AnalysisService analysisService;
 	@Inject
@@ -43,12 +49,6 @@ public class AnalysisBean implements Serializable {
 	@Inject
 	private AssayService assayService;
 
-	private Analysis analysis;
-	private Production production;
-	private List<Assay> assays;
-	private List<Parameter> parameters;
-	private List<ParameterForTable> parametersForTable;
-	
 	public void openNew(String idProduction, String typeAnalysis) {
 		if (idProduction != null && idProduction.length() > 0 
 				&& typeAnalysis != null && typeAnalysis.length() > 0) {
@@ -103,18 +103,15 @@ public class AnalysisBean implements Serializable {
 	public void changeStatusProduction() {
 		if (analysis.getTypeAnalysis() == TypeAnalysis.PRELIMINARY_BODY) {
 			if (analysis.isPositive()) {
-				production.setProductionStatus(ProductionStatus.PRELIMINARYBODYPOSITIVE);
+				production.setProductionStatus(ProductionStatus.PRELIMINARYPOSITIVE);
 			} else {
-				production.setProductionStatus(ProductionStatus.PRELIMINARYBODYNEGATIVE);
+				production.setProductionStatus(ProductionStatus.PRELIMINARY);
 			}
-		} else if (analysis.getTypeAnalysis() == TypeAnalysis.PRELIMINARY_TAIL) {
-			if (analysis.isPositive()) {
-				production.setProductionStatus(ProductionStatus.PRELIMINARYTAILPOSITIVE);
-			} else {
-				production.setProductionStatus(ProductionStatus.PRELIMINARYTAILNEGATIVE);
-			}
+				
 		} else if (analysis.getTypeAnalysis() == TypeAnalysis.OFFICIAL) {
-			production.setProductionStatus(ProductionStatus.OFFICIALANALYSIS);
+			if (analysis.isPositive()) {
+				production.setProductionStatus(ProductionStatus.OFFICIALANALYSIS);
+			}
 		}
 	}
 	
@@ -195,6 +192,7 @@ public class AnalysisBean implements Serializable {
 		return resultClass;
 	}
 
+	
 	public Analysis getAnalysis() {
 		return analysis;
 	}

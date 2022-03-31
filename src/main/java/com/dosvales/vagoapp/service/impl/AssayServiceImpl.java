@@ -15,7 +15,7 @@ import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
 @Named
 @Transactional(rollbackOn = Exception.class)
 public class AssayServiceImpl extends GenericServiceImpl<Assay, Long> implements AssayService, Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@EJB

@@ -11,15 +11,15 @@ import com.dosvales.vagoapp.model.Transfer;
 
 @Stateless
 public class TransferDaoImpl extends GenericDaoImpl<Transfer, Long> implements TransferDao, Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Transfer findByNumTransfer(Integer numTransfer) {
+	public Transfer findByNumTransfer(String numTransfer) {
 		Transfer found = null;
 		try {
-			found = em.createQuery("FROM Transfer t WHERE t.numTransfer = :numTransfer",Transfer.class)
-					.setParameter("numTransfer", numTransfer)
+			found = em.createQuery("FROM Transfer t WHERE UPPER(t.numTransfer) = :numTransfer",Transfer.class)
+					.setParameter("numTransfer", numTransfer.toUpperCase())
 					.getSingleResult();
 		}catch(NoResultException ex) {}
 		return found;

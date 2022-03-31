@@ -92,11 +92,12 @@
 									</div>
 
 									<div class="mt-3">
-										<p:commandButton value="Regresar"
-											icon="fas fa-arrow-circle-left"
-											action="/protected/production/tails.xhtml?faces-redirect=true"
+										<p:linkButton value="Regresar" icon="fas fa-arrow-circle-left"
+											outcome="/protected/production/production-panel.xhtml?faces-redirect=true"
 											process="@this"
-											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" />
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto" >
+											<f:param name="id" value="#{tailBean.production.id}"/>	
+										</p:linkButton>
 									</div>
 
 								</p:outputPanel>

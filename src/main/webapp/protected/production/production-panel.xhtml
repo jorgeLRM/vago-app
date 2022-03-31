@@ -32,933 +32,425 @@
 							</p:growl>
 
 							<div class="grid">
-								<div class="col-12 md:col-4">
-									<p:fieldset legend="Resumen">
-										<div class="formgrid grid">
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Lote de corte</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.lotDetail.cutting.lot}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Volumen de la primera destilación</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.calculateVolumeOfFirstDistillation()}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Lote de producción</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.lot}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Grado alcohólico de la primera destilación</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.alcoholicGradeDist1}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Ingreso a fabrica</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.admissionDate}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Volumen de la segunda destilación</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.volumeDistillation2}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Fin de cocción</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.endCoocking}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Volumen total del lote</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.totalVolume}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Volumen de mosto fermentado</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.calculateTotalVolumeFermentedWort()}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Rendimiento</p:outputLabel>
-												<h:outputText
-													value="#{productionPanelBean.calculatePerformance()}">
-													<f:convertNumber pattern="#0.00" />
-												</h:outputText>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Estatus de pago</p:outputLabel>
-												<p:tag
-													value="#{productionPanelBean.production.paymentStatus.type}" />
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Mermas</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.wastage}</p:outputLabel>
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Estatus de producción</p:outputLabel>
-												<p:tag
-													value="#{productionPanelBean.production.productionStatus.type}" />
-											</div>
-
-											<div class="field col-12">
-												<p:outputLabel styleClass="font-bold w-full">Ubicación del lote</p:outputLabel>
-												<p:outputLabel>#{productionPanelBean.production.location}</p:outputLabel>
-											</div>
-										</div>
-									</p:fieldset>
+								<div class="col-12 md:col-3">
+									<div class="col-12">
+										<p:panel header="COMPOSICIÓN" id="chart">
+											<p:donutChart model="#{productionPanelBean.donutModel}"
+												style="width: 100%; height: 500px;" />
+										</p:panel>
+									</div>
+									<div class="col-12">
+										<p:panel header="DETALLE">
+											<ul class="widget-image-list">
+												<li><span>Maguey</span> <span>Piñas</span></li>
+												<p:repeat var="cutting"
+													value="#{productionPanelBean.productionSummary.quantities}">
+													<li><span> <span>#{cutting.key.name}</span>
+													</span> <span class="listitem-value"><p:badge
+																value="#{cutting.value}" /></span></li>
+												</p:repeat>
+											</ul>
+										</p:panel>
+									</div>
 								</div>
+								<div class="col-12 md:col-9">
+									<div class="col-12">
+										<p:toolbar>
+											<p:toolbarGroup>
+												<p:commandButton value="Granel" styleClass="ui-button-raised ui-button-info mr-2" />
+												<p:commandButton value="Muestrear oficial" styleClass="ui-button-raised ui-button-info mr-2" />
+												<p:commandButton value="Reprobar" styleClass="ui-button-raised ui-button-danger mr-2" 
+													process="@this" oncomplete="PF('reprobateDialog').show();"
+													disabled="#{productionPanelBean.production.productionStatus == 'REPROBATE' or productionPanelBean.production.typeProduction == 'MIXTURE'}"/> 
+												<p:linkButton value="Reformular" styleClass="ui-button-raised ui-button-success mr-2"
+													outcome="/protected/production/reformulate.xhtml?faces-redirect=true" rendered="#{productionPanelBean.production.productionStatus == 'REPROBATE'}">
+													<f:param name="idProduction" value="#{productionPanelBean.production.id}" />	
+												</p:linkButton>
+												<p:commandButton value="Cancelar" styleClass="ui-button-raised ui-button-danger" />
+											</p:toolbarGroup>
+										</p:toolbar>
+									</div>
+									<div class="col-12">
+										<p:panel header="INFORMACIÓN GENERAL">
+											<div class="formgrid grid">
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Lote de corte</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.lotDetail.cutting.lot}</p:outputLabel>
+												</div>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Vol. 1ra destilación</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.calculateVolumeOfFirstDistillation()}</p:outputLabel>
+												</div>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Lote de producción</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.lot}</p:outputLabel>
+												</div>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">% Alc. Vol de la 1ra destilación</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.alcoholicGradeDist1}</p:outputLabel>
+												</div>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Ingreso a fabrica</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.admissionDate}</p:outputLabel>
+												</div>
 
-								<div class="col-12 md:col-8">
-									<p:tabView id="tabview-production">
-										<p:tab title="Corte">
-											<div style="min-height: 500px"
-												class="border-2 border-dashed surface-border">
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Vol. 2da destilación</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.volumeDistillation2}</p:outputLabel>
+												</div>
 
-												<p:panelGrid columns="4"
-													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-													layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-													style="border:0px none; background-color:transparent;">
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Fin de cocción</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.endCoocking}</p:outputLabel>
+												</div>
 
-													<p:row styleClass="my-heading-row">
-														Información general
-													</p:row>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Volumen total del lote</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.totalVolume}</p:outputLabel>
+												</div>
 
-													<p:outputLabel value="Fecha de corte:" />
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Volumen de mosto fermentado</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.calculateTotalVolumeFermentedWort()}</p:outputLabel>
+												</div>
+
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Rendimiento</p:outputLabel>
 													<h:outputText
-														value="#{productionPanelBean.production.lotDetail.cutting.cutoffDate}"
-														styleClass="outputLabel" />
+														value="#{productionPanelBean.calculatePerformance()}">
+														<f:convertNumber pattern="#0.00" />
+													</h:outputText>
+												</div>
 
-													<p:outputLabel value="Documento:" />
-													<h:outputLink
-														value="#{productionPanelBean.getCuttingsPath(productionPanelBean.production.lotDetail.cutting.guideLink)}"
-														target="_blank">
-														#{productionPanelBean.production.lotDetail.cutting.guideLink}
-													</h:outputLink>
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Estatus de pago</p:outputLabel>
+													<p:tag
+														value="#{productionPanelBean.production.paymentStatus.type}" />
+												</div>
 
-													<p:outputLabel value="Palenque:" />
-													<h:outputText
-														value="#{productionPanelBean.production.lotDetail.palenque.name}"
-														styleClass="outputLabel" />
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Mermas</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.wastage}</p:outputLabel>
+												</div>
 
-													<p:outputLabel value="Predio:" />
-													<h:outputText
-														value="#{productionPanelBean.cuttingDetails.get(0).plantation.estate.name}"
-														styleClass="outputLabel" />
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Estatus de producción</p:outputLabel>
+													<p:tag
+														value="#{productionPanelBean.production.productionStatus.type}" />
+												</div>
 
-													<p:outputLabel value="Número de guía:" />
-													<h:outputText
-														value="#{productionPanelBean.production.lotDetail.cutting.guideNumber}"
-														styleClass="outputLabel" />
-
-													<p:row styleClass="my-heading-row">
-														Detalle de corte
-													</p:row>
-												</p:panelGrid>
-
-												<p:dataTable var="cd" reflow="true" showGridlines="true"
-													value="#{productionPanelBean.cuttingDetails}">
-													<p:column headerText="Maguey">
-														<h:outputText value="#{cd.plantation.maguey.name}" />
-													</p:column>
-
-													<p:column headerText="Edad">
-														<h:outputText
-															value="#{productionPanelBean.getYears(cd.plantation.plantingDate)}" />
-													</p:column>
-
-													<p:column headerText="Cantidad">
-														<h:outputText value="#{cd.numberPinneapples}" />
-													</p:column>
-
-													<p:column headerText="Peso (Kg)">
-														<h:outputText value="#{cd.weight}" />
-													</p:column>
-												</p:dataTable>
-
+												<div class="field col-12 md:col-3 lg:col-4">
+													<p:outputLabel styleClass="font-bold w-full">Ubicación del lote</p:outputLabel>
+													<p:outputLabel>#{productionPanelBean.production.location}</p:outputLabel>
+												</div>
 											</div>
-										</p:tab>
-										<p:tab title="Formulaciones">
-											<div style="min-height: 500px"
-												class="border-2 border-dashed surface-border">
-												<p:outputPanel
-													class="h-full flex align-items-center flex-wrap justify-content-center"
-													rendered="#{productionPanelBean.formulations.size() == 0}">
+										</p:panel>
+									</div>
+									<div class="col-12">
+										<p:panel header="ESTUDIO" id="studioproduction">
+											<p:tabView id="tabviewproduction" effect="fade">
+												<p:tab title="Corte">
+													<p:panel header="General">
+														<div class="formgrid grid">
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Fecha de corte</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.lotDetail.cutting.cutoffDate}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Documento</p:outputLabel>
+																<h:outputLink
+																	value="#{productionPanelBean.getCuttingsPath(productionPanelBean.production.lotDetail.cutting.guideLink)}"
+																	target="_blank">
+																		Link
+																	</h:outputLink>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Palenque</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.lotDetail.palenque.name}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Predio</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.cuttingDetails.get(0).plantation.estate.name}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Número de guía</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.lotDetail.cutting.guideNumber}</p:outputLabel>
+															</div>
+														</div>
+													</p:panel>
+													<p:panel header="Detalles" class="mt-3">
+														<p:dataTable var="cd" reflow="true" showGridlines="true"
+															value="#{productionPanelBean.cuttingDetails}">
+															<p:column headerText="Maguey">
+																<h:outputText value="#{cd.plantation.maguey.name}" />
+															</p:column>
 
-													<p:outputLabel
-														class="text-2xl w-full text-center mb-3 mt-3">Sin formulaciones</p:outputLabel>
-													<p:commandButton value="Agregar formulación"
-														styleClass="rounded-button"
-														action="#{productionPanelBean.checkCooking()}"
-														process="@this" />
+															<p:column headerText="Edad">
+																<h:outputText
+																	value="#{productionPanelBean.getYears(cd.plantation.plantingDate)}" />
+															</p:column>
 
-												</p:outputPanel>
-												<p:outputPanel
-													rendered="#{productionPanelBean.formulations.size() > 0}">
+															<p:column headerText="Cantidad">
+																<h:outputText value="#{cd.numberPinneapples}" />
+															</p:column>
 
-													<p:toolbar class="mt-3">
-														<p:toolbarGroup>
-															<p:linkButton value="Nueva formulación" icon="pi pi-plus"
-																styleClass="ui-button-success ui-button-raised w-full md:w-auto"
-																outcome="/protected/production/new-formulation.xhtml?faces-redirect=true"
-																disabled="#{productionPanelBean.production.productionStatus != 'FORMULATION'}">
-																<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-															</p:linkButton>
-														</p:toolbarGroup>
-													</p:toolbar>
+															<p:column headerText="Peso (Kg)">
+																<h:outputText value="#{cd.weight}" />
+															</p:column>
+														</p:dataTable>
+													</p:panel>
+												</p:tab>
+												<p:tab title="Formulaciones" id="tabformulations">
+													<p:outputPanel style="height: 100px;"
+														class="h-full flex align-items-center flex-wrap justify-content-center"
+														rendered="#{productionPanelBean.formulations.size() == 0}">
 
-													<p:dataTable id="dt-formulations"
-														widgetVar="dtFormulations" var="formulation"
-														value="#{productionPanelBean.formulations}" reflow="true"
-														styleClass="products-table" paginator="true" rows="10"
-														paginatorPosition="bottom" showGridlines="true"
-														size="small" style="text-align:center"
-														rowKey="#{formulation.id}">
-														
-														<p:column headerText="Número de tina"
-															style="text-align:center" width="1">
-															<h:outputText value="#{formulation.tub.numberTub}" />
-														</p:column>
-														<p:column headerText="Fecha de molienda"
-															sortBy="#{formulation.gridingDate}"
-															style="text-align:center" width="1">
-															<h:outputText value="#{formulation.gridingDate}" />
-														</p:column>
-														<p:column headerText="Fecha de destilación"
-															sortBy="#{formulation.destilationDate}"
-															style="text-align:center" width="1">
-															<h:outputText value="#{formulation.destilationDate}" />
-														</p:column>
+														<p:outputLabel
+															class="text-2xl w-full text-center mb-3 mt-3">Sin formulaciones</p:outputLabel>
+														<p:commandButton value="Agregar formulación" icon="pi pi-plus"
+															styleClass="ui-button-raised ui-button-success"
+															action="#{productionPanelBean.checkCooking()}"
+															process="@this" />
 
-														<p:column headerText="Acciones" style="text-align:center"
-															width="1">
+													</p:outputPanel>
+													<p:panel header="Detalles" id="detailsformulation"
+														rendered="#{productionPanelBean.formulations.size() > 0}">
 
-															<p:linkButton icon="pi pi-eye" id="viewButton"
-																outcome="/protected/production/view-formulation.xhtml?faces-redirect=true"
-																styleClass="edit-button rounded-button ui-button-raised ui-button-help">
-																<f:param name="id" value="#{formulation.id}" />
-																<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-															</p:linkButton>
-															<p:tooltip for="viewButton" value="Ver registro"
-																position="bottom" />
+														<p:toolbar class="mt-3">
+															<p:toolbarGroup>
+																<p:linkButton value="Nueva formulación"
+																	icon="pi pi-plus"
+																	styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+																	outcome="/protected/production/new-formulation.xhtml?faces-redirect=true">
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																</p:linkButton>
+															</p:toolbarGroup>
+														</p:toolbar>
 
-															<p:commandButton
-																styleClass="ui-button-danger rounded-button ui-button-raised"
-																icon="pi pi-trash" process="@this"
-																oncomplete="PF('deleteFormulationDialog').show()">
-																<f:setPropertyActionListener value="#{formulation}"
-																	target="#{productionPanelBean.formulation}" />
-															</p:commandButton>
-														</p:column>
-													</p:dataTable>
-												</p:outputPanel>
-											</div>
-										</p:tab>
-										<p:tab title="Análisis">
-											<div style="min-height: 500px"
-												class="border-2 border-dashed surface-border">
-												
-												<p:outputPanel
-													class="h-full flex align-items-center flex-wrap justify-content-center"
-													rendered="#{productionPanelBean.analyzes.size() == 0}">
-													<p:outputLabel
-														class="text-2xl w-full text-center mb-3 mt-3">Sin análisis</p:outputLabel>
-														<p:linkButton value="Preliminar cuerpo" styleClass="rounded-button" process="@this"
-															outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
-															rendered="#{productionPanelBean.production.productionStatus == 'FORMULATION'}">
-															<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-															<f:param name="typeAnalysis" value="1"/>
-														</p:linkButton>
-												</p:outputPanel>
-												
-												<p:outputPanel
-													class="h-full flex align-items-center flex-wrap justify-content-center"
-													rendered="#{productionPanelBean.analyzes.size() > 0}">
-													
-													<p:toolbar class="mt-3">
-														<p:toolbarGroup>
-															<p:linkButton value="Preliminar cola" styleClass="ui-button-raised mr-3" process="@this"
-																outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
-																rendered="#{productionPanelBean.production.productionStatus == 'PRELIMINARYBODYPOSITIVE' || productionPanelBean.production.productionStatus == 'PRELIMINARYBODYNEGATIVE'}">
-																<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-																<f:param name="typeAnalysis" value="2"/>
-															</p:linkButton>
-															<p:linkButton value="Oficial" styleClass="ui-button-raised mr-3" process="@this"
-																outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
-																rendered="#{productionPanelBean.production.productionStatus == 'PRELIMINARYTAILPOSITIVE' || productionPanelBean.production.productionStatus == 'PRELIMINARYTAILNEGATIVE' || productionPanelBean.production.productionStatus == 'PRELIMINARYBODYPOSITIVE' || productionPanelBean.production.productionStatus == 'PRELIMINARYBODYNEGATIVE'}">
-																<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-																<f:param name="typeAnalysis" value="3"/>
-															</p:linkButton>
-														</p:toolbarGroup>
-													</p:toolbar>
-													
-													<p:dataTable id="dt-analyzes"
-														widgetVar="dtAnalyzes" var="analysis"
-														value="#{productionPanelBean.analyzes}" reflow="true"
-														styleClass="products-table" paginator="true" rows="10"
-														paginatorPosition="bottom" showGridlines="true"
-														size="small" style="text-align:center"
-														rowKey="#{analysis.id}">
-														
-														<p:column headerText="Código" sortBy="#{analysis.id}"
-															style="text-align:center" width="1">
-															<h:outputText value="#{analysis.id}" />
-														</p:column>
-														<p:column headerText="FQ" filterBy="#{analysis.fq}"
-															style="text-align:center" width="1">
-															<h:outputText value="#{analysis.fq}" />
-														</p:column>
-														<p:column headerText="Documento" style="text-align:center"
-															width="1">
-															<h:outputText value="Sin documento"
-																rendered="#{analysis.document == null}" />
-															<h:outputLink
-																value="#{productionPanelBean.getAnalysisPath(analysis.document)}"
-																target="_blank" rendered="#{analysis.document != null}">
+														<p:dataTable id="dt-formulations"
+															widgetVar="dtFormulations" var="formulation"
+															value="#{productionPanelBean.formulations}" reflow="true"
+															styleClass="products-table" paginator="true" rows="10"
+															paginatorPosition="bottom" showGridlines="true"
+															size="small" style="text-align:center"
+															rowKey="#{formulation.id}">
+
+															<p:column headerText="Número de tina"
+																style="text-align:center" width="1">
+																<h:outputText value="#{formulation.tub.numberTub}" />
+															</p:column>
+															<p:column headerText="Fecha de molienda"
+																sortBy="#{formulation.gridingDate}"
+																style="text-align:center" width="1">
+																<h:outputText value="#{formulation.gridingDate}" />
+															</p:column>
+															<p:column headerText="Fecha de destilación"
+																sortBy="#{formulation.destilationDate}"
+																style="text-align:center" width="1">
+																<h:outputText value="#{formulation.destilationDate}" />
+															</p:column>
+
+															<p:column headerText="Acciones" style="text-align:center"
+																width="1">
+
+																<p:linkButton icon="pi pi-eye" id="viewButton"
+																	outcome="/protected/production/view-formulation.xhtml?faces-redirect=true"
+																	styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+																	<f:param name="id" value="#{formulation.id}" />
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																</p:linkButton>
+																<p:tooltip for="viewButton" value="Ver registro"
+																	position="bottom" />
+
+																<p:commandButton
+																	styleClass="ui-button-danger rounded-button ui-button-raised"
+																	icon="pi pi-trash" process="@this"
+																	oncomplete="PF('deleteFormulationDialog').show()">
+																	<f:setPropertyActionListener value="#{formulation}"
+																		target="#{productionPanelBean.formulation}" />
+																</p:commandButton>
+															</p:column>
+														</p:dataTable>
+													</p:panel>
+												</p:tab>
+												<p:tab title="Análisis">
+													<p:panel header="Detalles">
+														<p:toolbar class="mt-3">
+															<p:toolbarGroup>
+																<p:linkButton value="Preliminar cuerpo"
+																	styleClass="ui-button-raised ui-button-success mr-2" process="@this"
+																	outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
+																	disabled="#{productionPanelBean.production.productionStatus != 'FORMULATION' and 
+																	productionPanelBean.production.productionStatus != 'PREPARATIONREFORMULATION'}">
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																	<f:param name="typeAnalysis" value="1" />
+																</p:linkButton>
+																<p:linkButton value="Preliminar cola"
+																	styleClass="ui-button-raised ui-button-success mr-2" process="@this"
+																	outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
+																	disabled="#{productionPanelBean.production.productionStatus != 'PRELIMINARYPOSITIVE' and
+																		productionPanelBean.production.productionStatus != 'PRELIMINARY'}">
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																	<f:param name="typeAnalysis" value="2" />
+																</p:linkButton>
+																<p:linkButton value="Oficial"
+																	styleClass="ui-button-raised ui-button-success" process="@this"
+																	outcome="/protected/production/new-analysis.xhtml?faces-redirect=true"
+																	disabled="#{productionPanelBean.production.productionStatus != 'FORMULATION' and
+																		productionPanelBean.production.productionStatus != 'PRELIMINARYPOSITIVE' and
+																		productionPanelBean.production.productionStatus != 'PRELIMINARY'}">
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																	<f:param name="typeAnalysis" value="3" />
+																</p:linkButton>
+															</p:toolbarGroup>
+														</p:toolbar>
+
+														<p:dataTable id="dt-analyzes" widgetVar="dtAnalyzes"
+															var="analysis" value="#{productionPanelBean.analyzes}"
+															reflow="true" styleClass="products-table"
+															paginator="true" rows="10" paginatorPosition="bottom"
+															showGridlines="true" size="small"
+															style="text-align:center" rowKey="#{analysis.id}">
+
+															<p:column headerText="Código" sortBy="#{analysis.id}"
+																style="text-align:center" width="1">
+																<h:outputText value="#{analysis.id}" />
+															</p:column>
+															<p:column headerText="FQ" filterBy="#{analysis.fq}"
+																style="text-align:center" width="1">
+																<h:outputText value="#{analysis.fq}" />
+															</p:column>
+															<p:column headerText="Documento"
+																style="text-align:center" width="1">
+																<h:outputText value="Sin documento"
+																	rendered="#{analysis.document == null}" />
+																<h:outputLink
+																	value="#{productionPanelBean.getAnalysisPath(analysis.document)}"
+																	target="_blank" rendered="#{analysis.document != null}">
 																Documento
 															</h:outputLink>
-														</p:column>
-														<p:column headerText="Acciones" width="1"
-															style="text-align:center">
-															<p:linkButton icon="pi pi-eye" id="viewButton"
-																styleClass="rounded-button ui-button-help ui-button-raised mr-2"
-																outcome="/protected/production/view-analysis.xhtml?faces-redirect=true">
-																<f:param name="id" value="#{analysis.id}" />
-																<f:param name="idProduction" value="#{productionPanelBean.production.id}" />
-															</p:linkButton>
-															<p:tooltip for="viewButton" value="Ver registro"
-																position="bottom" />
-						
-															<p:commandButton id="deleteButton"
-																styleClass="ui-button-danger rounded-button ui-button-raised"
-																icon="pi pi-trash" process="@this"
-																oncomplete="PF('deleteAnalysisDialog').show()">
-																<f:setPropertyActionListener value="#{analysis}"
-																	target="#{productionPanelBean.analysis}" />
-															</p:commandButton>
-															<p:tooltip for="deleteButton" value="Eliminar registro"
-																position="bottom" />
-														</p:column>
+															</p:column>
+															<p:column headerText="Acciones" width="1"
+																style="text-align:center">
+																<p:linkButton icon="pi pi-eye" id="viewButton"
+																	styleClass="rounded-button ui-button-help ui-button-raised mr-2"
+																	outcome="/protected/production/view-analysis.xhtml?faces-redirect=true">
+																	<f:param name="id" value="#{analysis.id}" />
+																	<f:param name="idProduction"
+																		value="#{productionPanelBean.production.id}" />
+																</p:linkButton>
+																<p:tooltip for="viewButton" value="Ver registro"
+																	position="bottom" />
+
+																<p:commandButton id="deleteButton"
+																	styleClass="ui-button-danger rounded-button ui-button-raised"
+																	icon="pi pi-trash" process="@this"
+																	oncomplete="PF('deleteAnalysisDialog').show()">
+																	<f:setPropertyActionListener value="#{analysis}"
+																		target="#{productionPanelBean.analysis}" />
+																</p:commandButton>
+																<p:tooltip for="deleteButton" value="Eliminar registro"
+																	position="bottom" />
+															</p:column>
+														</p:dataTable>
+													</p:panel>
+												</p:tab>
+												<p:tab title="Cola">
+													<p:outputPanel
+															class="h-full flex align-items-center flex-wrap justify-content-center"
+															rendered="#{productionPanelBean.production.tail == null}">
 														
-													</p:dataTable>
-												</p:outputPanel>
+														<p:outputLabel
+														class="text-2xl w-full text-center mb-3 mt-3">Sin cola</p:outputLabel>
+														<p:linkButton value="Nueva cola" styleClass="ui-button-raised ui-button-success" process="@this"
+															outcome="/protected/production/new-tail.xhtml?faces-redirect=true">
+															<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
+														</p:linkButton>
 														
-											</div>
-										</p:tab>
-										<p:tab title="Cola">
-											<div style="min-height: 500px"
-												class="border-2 border-dashed surface-border">
-												<p:outputPanel
-														class="h-full flex align-items-center flex-wrap justify-content-center"
-														rendered="#{productionPanelBean.production.tail == null}">
+													</p:outputPanel>
+													<p:panel header="General" rendered="#{productionPanelBean.production.tail != null}">
+														<div class="formgrid grid">
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Inicio de la maduración</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.startRipening}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Volumen de agua</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.volumeWater}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Fin de la maduración</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.endRipening}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Volumen de agua + colas</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.volumeWaterTail}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Grado alcoholico del mezcal</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.alcoholicGradeMezcal}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Grado alcoholico de agua + colas</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.tail.alcoholicGradeWaterTail}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:commandButton value="Eliminar" styleClass="ui-button-raised ui-button-danger" 
+																	process="@this" oncomplete="PF('deleteTailDialog').show()" />
+															</div>
+														</div>
+													</p:panel>
 													
-													<p:outputLabel
-													class="text-2xl w-full text-center mb-3 mt-3">Sin mezcla</p:outputLabel>
-													<p:linkButton value="Nueva cola" styleClass="rounded-button" process="@this"
-														outcome="/protected/production/new-tail.xhtml?faces-redirect=true"
-														rendered="#{productionPanelBean.production.productionStatus == 'PRELIMINARYTAILNEGATIVE' || productionPanelBean.production.productionStatus == 'PRELIMINARYTAILPOSITIVE'}">
-														<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-													</p:linkButton>
+												</p:tab>
+												<p:tab title="Traslado">
 													
-												</p:outputPanel>
-												<p:outputPanel
-														class="h-full flex align-items-center flex-wrap justify-content-center"
-														rendered="#{productionPanelBean.production.tail != null}">
+													<p:outputPanel
+															class="h-full flex align-items-center flex-wrap justify-content-center"
+															rendered="#{productionPanelBean.production.transfer == null}">
+														<p:outputLabel
+														class="text-2xl w-full text-center mb-3 mt-3">Sin traslado</p:outputLabel>
+														<p:linkButton value="Nuevo traslado" styleClass="ui-button-raised ui-button-success" process="@this"
+															outcome="/protected/production/new-transfer.xhtml?faces-redirect=true">
+															<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
+														</p:linkButton>	
+													</p:outputPanel>
 													
-													<p:panelGrid columns="4"
-														columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-														layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-														style="border:0px none; background-color:transparent;"
-														rendered="#{productionPanelBean.production.tail != null}">
-				
-														<p:outputLabel value="Inicio de la maduración:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.startRipening}"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Volumen de agua:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.volumeWater} litros"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Fin de la maduración:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.endRipening}"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Volumen de mezcal:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.volumeMezcal}"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Volumen de agua + colas:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.volumeWaterTail}"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Grado alcoholico del mezcal:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.alcoholicGradeMezcal} °"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Grado alcoholico de agua + colas:" />
-														<h:outputText
-															value="#{productionPanelBean.production.tail.alcoholicGradeWaterTail} °"
-															styleClass="outputLabel" />
-				
-													</p:panelGrid>		
-												</p:outputPanel>
-											</div>
-										</p:tab>
-										<p:tab title="Traslado">
-											<div style="min-height: 500px"
-												class="border-2 border-dashed surface-border">
-											
-												<p:outputPanel
-														class="h-full flex align-items-center flex-wrap justify-content-center"
-														rendered="#{productionPanelBean.production.tail == null}">
+													<p:panel header="General" rendered="#{productionPanelBean.production.transfer != null}">
+														<div class="formgrid grid">
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Número de traslado</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.transfer.numTransfer}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Documento</p:outputLabel>
+																<h:outputLink
+																	value="#{productionPanelBean.getTransferPath(productionPanelBean.production.transfer.document)}"
+																	target="_blank">
+																	#{productionPanelBean.production.transfer.document}
+																</h:outputLink>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:outputLabel styleClass="font-bold w-full">Destino</p:outputLabel>
+																<p:outputLabel>#{productionPanelBean.production.transfer.destination}</p:outputLabel>
+															</div>
+															<div class="field col-12 md:col-3 lg:col-4">
+																<p:commandButton value="Eliminar" styleClass="ui-button-raised ui-button-danger" 
+																	process="@this" oncomplete="PF('deleteTransferDialog').show()" />
+															</div>
+														</div>
+													</p:panel>
 													
-													<p:outputLabel
-													class="text-2xl w-full text-center mb-3 mt-3">Sin traslado</p:outputLabel>
-													<p:linkButton value="Nueva cola" styleClass="rounded-button" process="@this"
-														outcome="/protected/production/new-transfer.xhtml?faces-redirect=true"
-														rendered="#{productionPanelBean.production.productionStatus == 'OFFICIALANALYSIS' || productionPanelBean.production.productionStatus == 'OFFICIALANALYSIS'}">
-														<f:param name="idProduction" value="#{productionPanelBean.production.id}"/>
-													</p:linkButton>
-													
-												</p:outputPanel>
-												
-												<p:outputPanel
-														class="h-full flex align-items-center flex-wrap justify-content-center"
-														rendered="#{productionPanelBean.production.tail != null}">
-														
-													<p:panelGrid columns="4"
-														columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-														layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-														style="border:0px none; background-color:transparent;"
-														rendered="#{productionPanelBean.production.transfer != null}">
-				
-														<p:outputLabel value="Número de traslado:" />
-														<h:outputText
-															value="#{productionPanelBean.production.transfer.numTransfer}"
-															styleClass="outputLabel" />
-				
-														<p:outputLabel value="Número de traslado:" />
-														<h:outputLink
-															value="#{productionPanelBean.getTransferPath(productionPanelBean.production.transfer.document)}"
-															target="_blank">
-															#{productionPanelBean.production.transfer.document}
-														</h:outputLink>
-				
-														<p:outputLabel value="Destino:" />
-														<h:outputText
-															value="#{productionPanelBean.production.transfer.destination}"
-															styleClass="outputLabel" />
-				
-													</p:panelGrid>
-													
-												</p:outputPanel>
-											
-											</div>
-										</p:tab>
-									</p:tabView>
+												</p:tab>
+											</p:tabView>
+										</p:panel>
+									</div>
 								</div>
 							</div>
-							
-							<p:confirmDialog widgetVar="deleteAnalysisDialog" showEffect="fade"
-								width="300" message="¿Estás seguro de eliminar este registro?"
-								header="Confirmar" severity="warn" hideEffect="fade">
-								<p:blockUI block="main-template" trigger="yesButton" />
-								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
-									actionListener="#{productionPanelBean.deleteAnalysis()}" process="@this"
-									oncomplete="PF('deleteAnalysisDialog').hide()"
-									update=":form:tabview-production:dt-analyzes"
-									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('deleteAnalysisDialog').hide()" />
-							</p:confirmDialog>
-
-							<!-- <p:toolbar>
-								<p:toolbarGroup>
-									<p:commandButton value="Reprobar"
-										styleClass="ui-button-raised ui-button-secondary mr-0 md:mr-3 w-full md:w-auto" 
-										oncomplete="PF('reprobateDialog').show()" process="@this"
-										rendered="#{productionPanelBean.production.productionStatus != 'INBULK' and productionPanelBean.production.productionStatus != 'CANCELED' and productionPanelBean.production.productionStatus != 'REPROBATE'}"/>
-									<p:commandButton value="Cancelar"
-										styleClass="ui-button-raised ui-button-danger mr-0 md:mr-3 w-full md:w-auto mt-3 md:mt-0" 
-										oncomplete="PF('canceledDialog').show()" process="@this" 
-										rendered="#{productionPanelBean.production.productionStatus != 'INBULK' and productionPanelBean.production.productionStatus != 'CANCELED' and productionPanelBean.production.productionStatus != 'REPROBATE'}"/>
-									<p:commandButton value="A granel"
-										styleClass="ui-button-raised ui-button-success w-full md:w-auto mt-3 md:mt-0"
-										rendered="#{productionPanelBean.production.productionStatus == 'OFFICIALANALYSIS' or productionPanelBean.production.productionStatus == 'PRELIMINARYANALYSIS'}"
-										oncomplete="PF('inbulkDialog').show()" process="@this" />
-								</p:toolbarGroup>
-							</p:toolbar>
-
-							<p:tabView>
-								<p:tab title="General">
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;">
-
-										<p:outputLabel value="Lote de corte:" />
-										<h:outputText
-											value="#{productionPanelBean.production.lotDetail.cutting.lot}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen 1er destilación (l):" />
-										<h:outputText
-											value="#{productionPanelBean.calculateVolumeOfFirstDistillation()}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Lote de producción:" />
-										<h:outputText value="#{productionPanelBean.production.lot}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel
-											value="Grado alcohólico de la primera destilación:" />
-										<h:outputText
-											value="#{productionPanelBean.production.alcoholicGradeDist1} °"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Ingreso a fábrica:" />
-										<h:outputText
-											value="#{productionPanelBean.production.admissionDate}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de la segunda destilación (l):" />
-										<h:outputText
-											value="#{productionPanelBean.production.volumeDistillation2}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Inicio de cocción:" />
-										<h:outputText
-											value="#{productionPanelBean.production.startCoocking}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel
-											value="Grado alcohólico de la segunda destilación:" />
-										<h:outputText
-											value="#{productionPanelBean.production.alcoholicGradeDist2} °"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Fin de cocción:" />
-										<h:outputText
-											value="#{productionPanelBean.production.endCoocking}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen total del lote:" />
-										<h:outputText
-											value="#{productionPanelBean.production.totalVolume}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de mosto fermentado:" />
-										<h:outputText
-											value="#{productionPanelBean.calculateTotalVolumeFermentedWort()}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Rendimiento:" />
-										<h:outputText
-											value="#{productionPanelBean.calculatePerformance()} kg/l"
-											styleClass="outputLabel">
-											<f:convertNumber pattern="#0.00" />
-										</h:outputText>
-
-										<p:outputLabel value="Estatus de pago:" />
-										<h:outputText
-											value="#{productionPanelBean.production.paymentStatus.type}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Mermas:" />
-										<h:outputText
-											value="#{productionPanelBean.production.wastage} litros"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Estatus de producción:" />
-										<h:outputText
-											value="#{productionPanelBean.production.productionStatus.type}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Ubicación del lote:" />
-										<h:outputText
-											value="#{productionPanelBean.production.location}"
-											styleClass="outputLabel" />
-
-									</p:panelGrid>
-								</p:tab>
-
-								<p:tab title="Corte">
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;">
-
-										<p:row styleClass="my-heading-row">
-											Información general
-										</p:row>
-
-										<p:outputLabel value="Fecha de corte:" />
-										<h:outputText
-											value="#{productionPanelBean.production.lotDetail.cutting.cutoffDate}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Documento:" />
-										<h:outputLink
-											value="#{productionPanelBean.getCuttingsPath(productionPanelBean.production.lotDetail.cutting.guideLink)}"
-											target="_blank">
-											#{productionPanelBean.production.lotDetail.cutting.guideLink}
-										</h:outputLink>
-
-										<p:outputLabel value="Palenque:" />
-										<h:outputText
-											value="#{productionPanelBean.production.lotDetail.palenque.name}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Predio:" />
-										<h:outputText
-											value="#{productionPanelBean.cuttingDetails.get(0).plantation.estate.name}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Número de guía:" />
-										<h:outputText
-											value="#{productionPanelBean.production.lotDetail.cutting.guideNumber}"
-											styleClass="outputLabel" />
-
-
-										<p:row styleClass="my-heading-row">
-											Detalle de corte
-										</p:row>
-									</p:panelGrid>
-
-									<p:dataTable var="cd" reflow="true" showGridlines="true"
-										value="#{productionPanelBean.cuttingDetails}">
-										<p:column headerText="Maguey">
-											<h:outputText value="#{cd.plantation.maguey.name}" />
-										</p:column>
-
-										<p:column headerText="Edad">
-											<h:outputText
-												value="#{productionPanelBean.getYears(cd.plantation.plantingDate)}" />
-										</p:column>
-
-										<p:column headerText="Cantidad">
-											<h:outputText value="#{cd.numberPinneapples}" />
-										</p:column>
-
-										<p:column headerText="Peso (Kg)">
-											<h:outputText value="#{cd.weight}" />
-										</p:column>
-									</p:dataTable>
-								</p:tab>
-
-								<p:tab title="Análisis">
-
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;"
-										rendered="#{productionPanelBean.preliminaryAnalysis != null}">
-
-										<p:row styleClass="my-heading-row">
-											Análisis preliminar
-										</p:row>
-
-										<p:outputLabel value="FQ:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.fq}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Metanol:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.methanol}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Documento:" />
-										<h:outputLink
-											value="#{productionPanelBean.getAnalysisPath(productionPanelBean.preliminaryAnalysis.document)}"
-											target="_blank">
-											#{productionPanelBean.preliminaryAnalysis.document}
-										</h:outputLink>
-
-										<p:outputLabel value="Furfural:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.furfural}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de la muestra:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.volume}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Grado alcoholico a 20°:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.alcohol}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Status:" />
-										<h:outputText
-											value="#{productionPanelBean.preliminaryAnalysis.analysisStatus.text}"
-											styleClass="outputLabel" />
-
-									</p:panelGrid>
-
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;"
-										rendered="#{productionPanelBean.officialAnalysis != null}">
-
-										<p:row styleClass="my-heading-row">
-											Análisis oficial
-										</p:row>
-
-										<p:outputLabel value="FQ:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.fq}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Metanol:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.methanol}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Documento:" />
-										<h:outputLink
-											value="#{productionPanelBean.getAnalysisPath(productionPanelBean.officialAnalysis.document)}"
-											target="_blank">
-											#{productionPanelBean.preliminaryAnalysis.document}
-										</h:outputLink>
-
-										<p:outputLabel value="Furfural:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.furfural}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de la muestra:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.volume}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Grado alcoholico a 20°:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.alcohol}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Status:" />
-										<h:outputText
-											value="#{productionPanelBean.officialAnalysis.analysisStatus.text}"
-											styleClass="outputLabel" />
-
-									</p:panelGrid>
-
-								</p:tab>
-
-								<p:tab title="Formulaciones">
-									<p:repeat
-										value="#{productionPanelBean.production.formulations}"
-										var="formulation" varStatus="status">
-										<p:panelGrid columns="4"
-											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-											layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-											style="border:0px none; background-color:transparent;">
-
-											<p:row styleClass="my-heading-row">
-												Formulación #{status.index + 1}
-											</p:row>
-
-											<p:outputLabel value="Número de tina:" />
-											<h:outputText value="#{formulation.tub.numberTub}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Brix inicial:" />
-											<h:outputText value="#{formulation.initialBrix}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Fecha de molienda:" />
-											<h:outputText value="#{formulation.gridingDate}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Brix final:" />
-											<h:outputText value="#{formulation.ultimateBrix}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Fecha de formulación:" />
-											<h:outputText value="#{formulation.formulationDate}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Volumen de jugo con bagazo:" />
-											<h:outputText
-												value="#{formulation.volumeJuiceBagasse} litros"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Fecha de destilación:" />
-											<h:outputText value="#{formulation.destilationDate}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Volumen de mosto fermentado:" />
-											<h:outputText
-												value="#{formulation.volumeFermentedWort} litros"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Primer vacío:" />
-											<h:outputText value="#{formulation.firstVacuum}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Volumen de agua:" />
-											<h:outputText value="#{formulation.volumeWater}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Segundo vacío:" />
-											<h:outputText value="#{formulation.secondVaccum}"
-												styleClass="outputLabel" />
-
-											<p:outputLabel value="Ordinario:" />
-											<h:outputText value="#{formulation.ordinary}"
-												styleClass="outputLabel" />
-
-
-										</p:panelGrid>
-									</p:repeat>
-								</p:tab>
-
-								<p:tab title="Cola">
-
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;"
-										rendered="#{productionPanelBean.production.tail != null}">
-
-										<p:outputLabel value="Inicio de la maduración:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.startRipening}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de agua:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.volumeWater} litros"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Fin de la maduración:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.endRipening}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de mezcal:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.volumeMezcal}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Volumen de agua + colas:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.volumeWaterTail}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Grado alcoholico del mezcal:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.alcoholicGradeMezcal} °"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Grado alcoholico de agua + colas:" />
-										<h:outputText
-											value="#{productionPanelBean.production.tail.alcoholicGradeWaterTail} °"
-											styleClass="outputLabel" />
-
-									</p:panelGrid>
-
-								</p:tab>
-
-								<p:tab title="Traslado">
-
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
-										style="border:0px none; background-color:transparent;"
-										rendered="#{productionPanelBean.production.transfer != null}">
-
-										<p:outputLabel value="Número de traslado:" />
-										<h:outputText
-											value="#{productionPanelBean.production.transfer.numTransfer}"
-											styleClass="outputLabel" />
-
-										<p:outputLabel value="Número de traslado:" />
-										<h:outputLink
-											value="#{productionPanelBean.getTransferPath(productionPanelBean.production.transfer.document)}"
-											target="_blank">
-											#{productionPanelBean.production.transfer.document}
-										</h:outputLink>
-
-										<p:outputLabel value="Destino:" />
-										<h:outputText
-											value="#{productionPanelBean.production.transfer.destination}"
-											styleClass="outputLabel" />
-
-									</p:panelGrid>
-
-								</p:tab>
-							</p:tabView>
-
-							<p:dialog header="Confirmar" widgetVar="dlg3" minHeight="40" width="350" showEffect="fade">
-								<p>¿Estás seguro de poner esta producción a granel?</p>
-								<ul>
-									<li>No se podrán revertir los cambios</li>
-								</ul>
-							    <f:facet name="footer">
-							        <p:commandButton value="No" styleClass="ui-button-flat ui-button-raised p-mr-2" style="width: 6rem" />
-							        <p:commandButton value="Si" style="width: 5rem" styleClass="ui-button-raised" />
-							    </f:facet>
-							</p:dialog>
-							
-							<p:confirmDialog widgetVar="inbulkDialog" showEffect="fade"
-								width="300" message="¿Estás seguro de poner esta producción a granel?"
-								header="Confirmar" severity="warn" hideEffect="fade">
-								<ul>
-									<li>No se podrán revertir los cambios.</li>
-								</ul>
-								<p:commandButton value="Si" icon="pi pi-check"
-									action="#{productionPanelBean.cheangeInbulkStatus()}" process="@this"
-									oncomplete="PF('inbulkDialog').hide()"
-									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('inbulkDialog').hide()" />
-							</p:confirmDialog>
-							
-							<p:confirmDialog widgetVar="canceledDialog" showEffect="fade"
-								width="300" message="¿Estás seguro de cancelar esta producción?"
-								header="Confirmar" severity="warn" hideEffect="fade">
-								<ul>
-									<li>No se podrán revertir los cambios.</li>
-								</ul>
-								<p:commandButton value="Si" icon="pi pi-check"
-									action="#{productionPanelBean.cheangeCanceledStatus()}" process="@this"
-									oncomplete="PF('canceledDialog').hide()"
-									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('canceledDialog').hide()" />
-							</p:confirmDialog>
-							
-							<p:confirmDialog widgetVar="reprobateDialog" showEffect="fade"
-								width="300" message="¿Estás seguro de reprobar esta producción?"
-								header="Confirmar" severity="warn" hideEffect="fade">
-								<ul>
-									<li>No se podrán revertir los cambios.</li>
-								</ul>
-								<p:commandButton value="Si" icon="pi pi-check"
-									action="#{productionPanelBean.cheangeReprobateStatus()}" process="@this"
-									oncomplete="PF('reprobateDialog').hide()"
-									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('reprobateDialog').hide()" />
-							</p:confirmDialog>-->
 
 							<p:confirmDialog widgetVar="deleteFormulationDialog"
 								showEffect="fade" width="300"
@@ -966,8 +458,9 @@
 								header="Confirmar" severity="warn" hideEffect="fade">
 								<p:blockUI block="main-template" trigger="@next" />
 								<p:commandButton value="Si" id="yesDeleteButton"
-									icon="pi pi-check" actionListener="#{productionPanelBean.deleteFormulation()}"
-									process="@this"
+									icon="pi pi-check"
+									actionListener="#{productionPanelBean.deleteFormulation()}"
+									process="@this" update=":form:tabviewproduction"
 									oncomplete="PF('deleteFormulationDialog').hide()"
 									styleClass="ui-butto-raised" />
 								<p:blockUI block="main-template" trigger="yesDeleteButton" />
@@ -976,10 +469,69 @@
 									icon="pi pi-times"
 									onclick="PF('deleteFormulationDialog').hide()" />
 							</p:confirmDialog>
+							
+							<p:confirmDialog widgetVar="deleteTailDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" id="yesDeleteTailButton"
+									icon="pi pi-check"
+									actionListener="#{productionPanelBean.deleteTail()}"
+									process="@this" update=":form:tabviewproduction"
+									oncomplete="PF('deleteTailDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:blockUI block="main-template" trigger="yesDeleteTailButton" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times"
+									onclick="PF('deleteTailDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="deleteAnalysisDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="yesButton" />
+								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
+									actionListener="#{productionPanelBean.deleteAnalysis()}"
+									process="@this" oncomplete="PF('deleteAnalysisDialog').hide()"
+									update=":form:tabviewproduction" styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteAnalysisDialog').hide()" />
+							</p:confirmDialog>
+							
+							<p:confirmDialog widgetVar="deleteTransferDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="yesDeleteTransferButton" />
+								<p:commandButton value="Si" icon="pi pi-check" id="yesDeleteTransferButton"
+									actionListener="#{productionPanelBean.deleteTransfer()}"
+									process="@this" oncomplete="PF('deleteTransferDialog').hide()"
+									update=":form:tabviewproduction" styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteTransferDialog').hide()" />
+							</p:confirmDialog>
+							
+							<p:confirmDialog widgetVar="reprobateDialog"
+								showEffect="fade" width="300"
+								message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="yesReprobateButton" />
+								<p:commandButton value="Si" icon="pi pi-check" id="yesReprobateButton"
+									actionListener="#{productionPanelBean.reprobate()}"
+									process="@this" oncomplete="PF('reprobateDialog').hide()"
+									update="@form" styleClass="ui-butto-raised" />
+								<p:commandButton value="No"
+									styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('reprobateDialog').hide()" />
+							</p:confirmDialog>
 
 						</h:form>
 					</div>
-
 				</div>
 			</div>
 		</h:panelGroup>

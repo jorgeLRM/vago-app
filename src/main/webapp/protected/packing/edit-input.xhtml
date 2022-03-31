@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{inputBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="INSUMOS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{inputBean.input == null}" />
+		<h:panelGroup layout="block"
+			rendered="#{inputBean.input != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Editar insumo">
+								<p:outputPanel id="edit-input-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-4">
+											<p:outputLabel for="code">Código</p:outputLabel>
+											<p:inputText id="code" value="#{inputBean.input.code}"
+												disabled="true" maxlength="50" />
+										</div>
+										<div class="field col-12 md:col-4">
+											<p:outputLabel for="name">Nombre</p:outputLabel>
+											<p:inputText id="name"
+												value="#{inputBean.input.name}"
+												disabled="true" maxlength="70"/>
+										</div>
+										<div class="field col-12 md:col-4">
+											<p:outputLabel for="specification">Especificaciones</p:outputLabel>
+											<p:inputText id="specification"
+												value="#{inputBean.input.specifications}"
+												required="true" maxlength="70"/>
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="category">Categoría</p:outputLabel>
+											<p:selectOneMenu id="category" value="#{inputBean.input.category}"
+												required="true" converter="omnifaces.SelectItemsConverter">
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
+												<f:selectItems value="#{inputBean.categories}" var="category" 
+													itemLabel="#{category.name}" itemValue="#{category}"/>
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="unit">Unidad</p:outputLabel>
+											<p:inputText id="unit"
+												value="#{inputBean.input.unit}"
+												required="true" maxlength="50"/>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="minimum">Stock mínimo</p:outputLabel>
+											<p:spinner id="minimum"
+												value="#{inputBean.input.minimumStock}"
+												required="true" min="0"/>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="maximum">Stock máximo</p:outputLabel>
+											<p:spinner id="maximum"
+												value="#{inputBean.input.maximumStock}"
+												required="true" min="0"/>
+										</div>
+									</div>
+									
+									<p:fieldset legend="Proveedores" class="mt-3">
+										<p:commandButton value="Agregar fila"
+											styleClass="ui-button-raised w-full md:w-auto" rows="80" paginator="true"
+											process="@this :form:edit-input-content"
+											update=":form:edit-input-content"
+											actionListener="#{inputBean.onAddRow()}"
+											style="text-align:center" />
+											
+										<p:dataTable var="providerinput" id="dt-newproviderinputs"
+											widgetVar="dtnewproviderinputs" reflow="true"
+											value="#{inputBean.providerInputs}" showGridlines="true"
+											size="small" rowIndexVar="rowIndex">
+											
+											<p:column headerText="#" width="1">
+												<p:outputLabel value="#{rowIndex+1}" />
+											</p:column>
+											
+											<p:column headerText="Proveedor" width="25"
+												style="text-align:center">
+												<p:selectOneMenu id="provider" value="#{providerinput.provider}"
+													required="true" converter="omnifaces.SelectItemsConverter">
+													<f:selectItems value="#{inputBean.providers}"
+														var="provider" itemValue="#{provider}"
+														itemLabel="#{provider.name}" />
+												</p:selectOneMenu>
+											</p:column>
+											
+											<p:column headerText="Precio unitario" width="25"
+												style="text-align:center">
+												<p:inputNumber required="true" value="#{providerinput.unitPrice}" modifyValueOnWheel="false" />
+											</p:column>
+											
+											<p:column headerText="Días de entrega" width="25"
+												style="text-align:center">
+												<p:inputText value="#{providerinput.deliveryTime}" required="true">
+										            <p:keyFilter mask="num" />
+										        </p:inputText>
+											</p:column>
+											
+											<p:column headerText="Acciones" width="1"
+												style="text-align:center">
+												<p:commandButton id="deleteButton"
+													class="ui-button-danger rounded-button ui-button-raised"
+													icon="pi pi-trash"
+													process="@this :form:edit-input-content"
+													update=":form:edit-input-content"
+													actionListener="#{inputBean.onDeleteRow(rowIndex)}" />
+											</p:column>
+										</p:dataTable>
+									</p:fieldset>
+									
+									<div class="grid mt-3">
+										<p:outputLabel class="font-bold" value="* Valores obligatorios" />
+									</div>
+									<div class="mt-3">
+										<p:commandButton value="Editar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{inputBean.update()}"
+											process="edit-input-content @this" update="edit-input-content" />
+										<p:commandButton value="Cancelar"
+											icon="fas fa-arrow-circle-left"
+											action="/protected/packing/inputs.xhtml?faces-redirect=true"
+											immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

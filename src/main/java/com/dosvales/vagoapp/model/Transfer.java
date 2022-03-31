@@ -13,7 +13,7 @@ public class Transfer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Integer numTransfer;
+	private String numTransfer;
 	
 	private String document;
 	
@@ -24,12 +24,12 @@ public class Transfer extends AbstractEntity {
 	@OneToOne
 	@JoinColumn(name="idProduction")
 	private Production production;
-	
-	public Integer getNumTransfer() {
+
+	public String getNumTransfer() {
 		return numTransfer;
 	}
 
-	public void setNumTransfer(Integer numTransfer) {
+	public void setNumTransfer(String numTransfer) {
 		this.numTransfer = numTransfer;
 	}
 

@@ -10,8 +10,7 @@ import com.dosvales.vagoapp.model.Assay;
 
 @Stateless
 public class AssayDaoImpl extends GenericDaoImpl<Assay, Long> implements AssayDao, Serializable {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
 	
 }

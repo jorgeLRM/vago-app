@@ -13,9 +13,9 @@ import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
 
-import com.dosvales.vagoapp.model.StandardProduction;
+import com.dosvales.vagoapp.model.Production;
 import com.dosvales.vagoapp.model.Transfer;
-import com.dosvales.vagoapp.service.StandardProductionService;
+import com.dosvales.vagoapp.service.ProductionService;
 import com.dosvales.vagoapp.service.TransferService;
 import com.dosvales.vagoapp.util.FacesUtil;
 import com.dosvales.vagoapp.util.FilePath;
@@ -27,39 +27,50 @@ public class TransferBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Transfer transfer;
-	private StandardProduction production;
+	private Production production;
 	
 	@Inject
 	private TransferService transferService;
 	@Inject
-	private StandardProductionService productionService;
+	private ProductionService productionService;
 	
 	public void openNew(String idProduction) {
 		if (idProduction != null && idProduction.length() > 0) {
 			try {
 				production = productionService.findById(Long.valueOf(idProduction));
-				transfer = new Transfer();
-			} catch (Exception ex) {}
+				if (production.getTransfer() == null) {
+					transfer = new Transfer();
+					transfer.setProduction(production);
+				} else {
+					throw new Exception();
+				}
+			} catch (Exception ex) {
+				production = null;
+			}
 		}
 	}
 	
 	public String save() {
 		String page = "";
 		try {
-			Transfer found = transferService.findByNumTransfer(transfer.getNumTransfer());
-			if (found != null) {
-				transferService.save(transfer);
-				addMessage("Operación exitosa", "Traslado guardado exitosamente", FacesMessage.SEVERITY_INFO);
-				page = "/protected/production/production-panel.xhtml?faces-redirect=true&id="+production.getId();
+			if (transfer.getDocument() != null) {
+				Transfer found = transferService.findByNumTransfer(transfer.getNumTransfer());
+				if (found == null) {
+					transferService.save(transfer);
+					addMessage("Operación exitosa", "Traslado guardado exitosamente", FacesMessage.SEVERITY_INFO);
+					page = "/protected/production/production-panel.xhtml?faces-redirect=true&id="+production.getId();
+				} else {
+					showMessage("Cuidado", "El número de transferencia ya está registrado", FacesMessage.SEVERITY_WARN);
+				}
 			} else {
-				showMessage("Cuidado", "El número de transferencia ya está registrado", FacesMessage.SEVERITY_WARN);
+				showMessage("Cuidado", "Ingresa el documento de traslado", FacesMessage.SEVERITY_WARN);
 			}
 		} catch (Exception ex) {
 			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
 		}
 		return page;
 	}
-
+	
 	public void handleFileUpload(FileUploadEvent event) {
 		String fileName = event.getFile().getFileName();
 		String newFile = FilePath.TRANSFERS_PATH + File.separator + fileName;
@@ -83,11 +94,11 @@ public class TransferBean implements Serializable {
 		this.transfer = transfer;
 	}
 
-	public StandardProduction getProduction() {
+	public Production getProduction() {
 		return production;
 	}
 
-	public void setProduction(StandardProduction production) {
+	public void setProduction(Production production) {
 		this.production = production;
 	}
 }

@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 
 import com.dosvales.vagoapp.dao.ProductionDao;
 import com.dosvales.vagoapp.dao.generic.GenericDao;
+import com.dosvales.vagoapp.filter.ProductionFilter;
+import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.Production;
 import com.dosvales.vagoapp.service.ProductionService;
 import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
@@ -16,35 +18,29 @@ import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
 @Named
 @Transactional(rollbackOn = Exception.class)
 public class ProductionServiceImpl extends GenericServiceImpl<Production, Long> implements ProductionService, Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private ProductionDao dao;
-
+	
 	@Override
-	public List<Production> findAllWithoutOfficialAnalysis() {
-		return dao.findAllWithoutOfficialAnalysis();
+	public Production findByLot(String lot) {
+		return dao.findByLot(lot);
 	}
 
 	@Override
-	public List<Production> findAllWithoutTransfer() {
-		return dao.findAllWithoutTransfer();
+	public List<Production> findAllByFilter(ProductionFilter filter) {
+		return dao.findAllByFilter(filter);
 	}
-
+	
 	@Override
 	public GenericDao<Production, Long> getDao() {
 		return dao;
 	}
 
 	@Override
-	public List<Production> findAllWithoutPreliminaryBodyAnalysis() {
-		return dao.findAllWithoutPreliminaryBodyAnalysis();
+	public List<Production> findAllAvailable(Producer producer) {
+		return dao.findAllAvailable(producer);
 	}
-
-	@Override
-	public List<Production> findAllWithoutPreliminaryTailAnalysis() {
-		return dao.findAllWithoutPreliminaryTailAnalysis();
-	}
-
 }

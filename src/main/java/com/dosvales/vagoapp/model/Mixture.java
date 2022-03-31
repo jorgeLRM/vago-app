@@ -11,7 +11,7 @@ public class Mixture extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Double volume;
+	private Double volume = 1.0;
 	
 	@ManyToOne
 	@JoinColumn(name="idBaseProduction")

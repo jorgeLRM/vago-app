@@ -9,9 +9,6 @@ import com.dosvales.vagoapp.service.generic.GenericService;
 public interface AnalysisService extends GenericService<Analysis, Long>{
 	
 	Analysis findByFq(String fq);
-	List<Analysis> findAllPreliminaryBodyAnalysis();
-	List<Analysis> findAllPreliminaryTailAnalysis();
-	List<Analysis> findAllOfficialAnalysis();
 	List<Analysis> findAllByProduction(Production production);
 	Analysis findWithParameters(Long id);
 	

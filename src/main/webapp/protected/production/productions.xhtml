@@ -32,7 +32,7 @@
 								<p:toolbarGroup align="right" class="w-full md:w-auto">
 									<p:commandButton value="Nueva producción" icon="pi pi-plus"
 										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
-										action="/protected/production/new-production.xhtml?faces-redirect=true" 
+										action="/protected/production/new-production.xhtml?faces-redirect=true"
 										process="@this"/>
 								</p:toolbarGroup>
 							</p:toolbar>
@@ -58,7 +58,7 @@
 												converter="omnifaces.SelectItemsConverter">
 												<p:ajax value="change" listener="#{productionBean.refreshTable()}" 
 													update="dt-productions"/>
-												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"/>
+												<f:selectItem itemLabel="Todos" itemValue="#{null}"/>
 												<f:selectItems value="#{productionBean.producers}"
 													var="producer" itemLabel="#{producer.name}"
 													itemValue="#{producer}" />
@@ -78,16 +78,7 @@
 
 								<f:facet name="header">
 									<div class="products-table-header">
-										<span style="font-weight: bold"> <!--<p:selectOneMenu
-												id="changeFilter" value="#{productionBean.status}"
-												styleClass="w-full md:w-auto">
-												<p:ajax listener="#{productionBean.refreshTable()}"
-													update="dt-productions" />
-												<f:selectItem itemLabel="TODOS" itemValue="ALL" />
-												<f:selectItem itemLabel="EN PROCESO" itemValue="IN PROCESS" />
-												<f:selectItem itemLabel="TERMINADOS" itemValue="TERMINATED" />
-												<f:selectItem itemLabel="CANCELADOS" itemValue="CANCELED" />
-											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />-->
+										<span style="font-weight: bold"> 
 										</span> <span class="filter-container ui-input-icon-left"> <i
 											class="pi pi-search"></i> <p:inputText id="globalFilter"
 												onkeyup="PF('dtProductions').filter()" placeholder="Buscar" />
@@ -111,9 +102,9 @@
 									<h:outputText value="#{production.admissionDate}" />
 								</p:column>
 
-								<p:column headerText="Volumen total" style="text-align:center"
+								<p:column headerText="Stock (litros)" style="text-align:center"
 									width="2">
-									<h:outputText value="#{production.totalVolume}" />
+									<p:chip label="#{production.stock}" />
 								</p:column>
 
 								<p:column headerText="Estatus" style="text-align:center"
@@ -131,44 +122,16 @@
 									<p:tooltip for="panelButton" value="Ver panel de producción"
 										position="bottom" />
 
-									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+									<!--<p:linkButton icon="fas fa-pencil-alt" id="editButton"
 										outcome="/protected/production/edit-production.xhtml?faces-redirect=true"
 										styleClass="edit-button rounded-button ui-button-raised ui-button-warning"
 										rendered="#{production.productionStatus != 'INBULK' and production.productionStatus != 'CANCELED' and production.productionStatus != 'REPROBATE'}">
 										<f:param name="id" value="#{production.id}" />
 									</p:linkButton>
 									<p:tooltip for="editButton" value="Editar registro"
-										position="bottom" />
-
-									<!-- <p:commandButton id="deleteButton"
-										class="ui-button-danger rounded-button ui-button-raised"
-										icon="pi pi-trash" process="@this"
-										action="#{productionController.tryToDelete()}">
-										<f:setPropertyActionListener value="#{production}"
-											target="#{productionController.production}" />
-									</p:commandButton>
-									<p:tooltip for="deleteButton" value="Eliminar registro"
 										position="bottom" />-->
 								</p:column>
 							</p:dataTable>
-
-							<!--<p:confirmDialog widgetVar="cancelCuttingDialog"
-								showEffect="fade" width="300"
-								message="¿Estás seguro de cancelar este Corte?"
-								header="Confirmar" severity="warn">
-								<div style="text-align: left">
-									<ul>
-										<li>No se podrán revertir los cambios.</li>
-									</ul>
-								</div>
-								<p:commandButton value="Si" icon="pi pi-check"
-									actionListener="#{cuttingBean.tryToCancel()}" process="@this"
-									update="messages, dt-cuttings"
-									oncomplete="PF('cancelCuttingDialog').hide()" />
-								<p:commandButton value="No" type="button"
-									styleClass="ui-button-secondary" icon="pi pi-times"
-									onclick="PF('cancelCuttingDialog').hide()" />
-							</p:confirmDialog>-->
 						</h:form>
 					</div>
 				</div>

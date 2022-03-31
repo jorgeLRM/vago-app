@@ -110,7 +110,8 @@
 									            
 									            <p:column headerText="RESULTADO" width="15">
 									                <p:inputNumber id="result" value="#{parameter.result}" required="#{parameter.editable}" 
-									                	modifyValueOnWheel="false" disabled="#{!parameter.editable}">		
+									                	modifyValueOnWheel="false" disabled="#{!parameter.editable}" 
+									                	maxlength="9">		
 									                	<p:ajax event="change" update=":form:dt-parameters"/>
 									                </p:inputNumber>
 									            </p:column>

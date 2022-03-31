@@ -5,17 +5,16 @@ public enum ProductionStatus {
 	PREPARATION("Corte, cocción, molienda", "yellow-row"),
 	PREPARATIONREFORMULATION("Mezcla de producciones", "yellow-row"),
 	FORMULATION("Formulación", "yellow-row"),
-	PRELIMINARYBODYPOSITIVE("Preliminar cuerpo positivo", "green-row"),
-	PRELIMINARYBODYNEGATIVE("Preliminar cuerpo negativo", "yellow-row"),
-	PRELIMINARYTAILPOSITIVE("Preliminar cola positivo", "green-row"),
-	PRELIMINARYTAILNEGATIVE("Preliminar cola negativo", "yellow-row"),
+	PRELIMINARY("Análisis preliminar", "yellow-row"),
+	PRELIMINARYPOSITIVE("Preliminar positivo", "green-row"),
 	MIXTURE("Homegenización/Mezcla", "yellow-row"),
 	OFFICIALANALYSIS("Análisis oficial","yellow-row"),
 	INBULK("A granel", "white-row"),
 	REPROBATE("Reprobado", "red-row"),
 	CANCELED("Cancelado", "red-row"),
 	FORPALENQUEMIXING("Para mezcla en palenque", "white-row"),
-	FOROFFICEMIXING("Para mezcla en oficina", "white-row");
+	FOROFFICEMIXING("Para mezcla en oficina", "white-row"),
+	FORSAMPLEOFFICIAL("Para muestrear oficial", "white-row");
 	
 	private String type;
 	

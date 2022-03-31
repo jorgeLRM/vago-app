@@ -1,0 +1,253 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="idProduction" />
+		<f:viewAction action="#{reformulationBean.load(idProduction)}" />
+	</f:metadata>
+
+	<ui:define name="title">Producción</ui:define>
+	<ui:param name="viewname" value="COLAS" />
+
+	<ui:define name="content">
+
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{reformulationBean.production == null}" />
+
+		<h:panelGroup layout="block"
+			rendered="#{reformulationBean.production != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+
+							<p:wizard flowListener="#{reformulationBean.onFlowProcess}">
+								<p:tab id="tabGeneral" title="General">
+									<p:panel header="Información general">
+										<p:outputPanel id="general-reformulation" class="ui-fluid">
+											<p:outputPanel
+												rendered="#{not empty reformulationBean.production}">
+
+												<div class="formgrid grid">
+													<div class="field col-12 md:col-6">
+														<p:outputLabel>Producción</p:outputLabel>
+														<p:inputText value="#{reformulationBean.production.lot}"
+															readonly="true" />
+													</div>
+													<div class="field col-12 md:col-6">
+														<p:outputLabel>Productor</p:outputLabel>
+														<p:inputText value="#{reformulationBean.producer.name}"
+															readonly="true" />
+													</div>
+												</div>
+												<div class="formgrid grid">
+													<div class="field col-12 md:col-4">
+														<p:outputLabel>Producción disponible</p:outputLabel>
+														<p:selectOneMenu
+															value="#{reformulationBean.availableProduction}"
+															required="true"
+															converter="omnifaces.SelectItemsConverter" filter="true"
+															filterMatchMode="content">
+															<p:ajax event="change"
+																update="volume, newVolume" />
+															<f:selectItem itemLabel="- Seleccionar -" itemValue=""
+																noSelectionOption="true" />
+															<f:selectItems
+																value="#{reformulationBean.productionsAvailables}"
+																var="production" itemValue="#{production}"
+																itemLabel="#{production.lot}" />
+														</p:selectOneMenu>
+													</div>
+													<div class="field col-12 md:col-4">
+														<p:outputLabel>Stock (Litros)</p:outputLabel>
+														<p:spinner id="volume"
+															value="#{reformulationBean.availableProduction.stock}"
+															disabled="true" />
+													</div>
+													<div class="field col-12 md:col-4">
+														<p:outputLabel>Volumen a utilizar (Litros)</p:outputLabel>
+														<p:spinner id="newVolume"
+															value="#{reformulationBean.volume}" min="1"
+															max="#{reformulationBean.availableProduction.stock}"
+															required="true" />
+													</div>
+												</div>
+												<div class="formgrid grid">
+													<div class="field col-12">
+														<p:selectBooleanCheckbox value="#{reformulationBean.newLot}"
+															itemLabel="Crear nuevo lote"/>
+													</div>
+												</div>
+											</p:outputPanel>
+										</p:outputPanel>
+									</p:panel>
+								</p:tab>
+								
+								<p:tab id="tabNewLot" title="Detalles">
+									<p:panel header="Nuevo lote">
+										<p:outputPanel id="newLot-reformulation" class="ui-fluid">
+											<p:outputPanel rendered="#{not empty reformulationBean.production}">
+												<!--<div class="formgrid grid">
+													<div class="field col-12">
+														<p:blockUI block="main-template" trigger="checknewlot"/>
+														<p:selectBooleanCheckbox id="checknewlot" value="#{reformulationBean.newLot}" 
+															itemLabel="Crear nuevo lote">
+															<p:ajax update="wrappernewlot, preview" listener="#{reformulationBean.onLotChange()}"/>
+														</p:selectBooleanCheckbox>
+													</div>
+												</div>-->
+												<div class="formgrid grid">
+													<div class="field col-12 md:col-6">
+														<p:outputLabel>Lote de producción</p:outputLabel>
+														<p:outputPanel styleClass="grid mt-1">
+															<div class="col-12 md:col-3">
+																<p:inputText id="productionLot"
+																	value="#{reformulationBean.firstPartLot}" disabled="true" />
+															</div>
+															<div class="col-12 md:col-9">
+																<p:inputText id="productionLot2"
+																	value="#{reformulationBean.secondPartLot}" maxlength="40"
+																	required="true">
+																	<p:ajax event="keyup" update="preview"
+																		listener="#{reformulationBean.buildLotPreview()}" />
+																</p:inputText>
+															</div>
+														</p:outputPanel>
+														<small class="p-d-block">Vista previa del lote: <p:outputLabel
+																id="preview">#{reformulationBean.lotPreview}</p:outputLabel></small>
+													</div>
+												</div>
+											</p:outputPanel>
+										</p:outputPanel>
+									</p:panel>
+								</p:tab>
+								
+								<p:tab id="confirm" title="Confirmar">
+									<p:panel header="Revisa los datos que vas a ingresar">
+										<p:outputPanel id="confirm-reformulation" class="ui-fluid">
+											<p:outputPanel
+												rendered="#{not empty reformulationBean.production}">
+												
+												<div class="formgrid grid">	
+													<div class="field col-12 md:col-6">
+														<p:outputLabel styleClass="font-bold w-full">Lote a reformular</p:outputLabel>
+														<p:outputLabel>#{reformulationBean.production.lot}</p:outputLabel>
+													</div>
+													
+													<div class="field col-12 md:col-6">
+														<p:outputLabel styleClass="font-bold w-full">Productor</p:outputLabel>
+														<p:outputLabel>#{reformulationBean.producer.name}</p:outputLabel>
+													</div>
+													
+													<div class="field col-12 md:col-6">
+														<p:outputLabel styleClass="font-bold w-full">Producción a utilizar</p:outputLabel>
+														<p:outputLabel>#{reformulationBean.availableProduction.lot}</p:outputLabel>
+													</div>
+													
+													<div class="field col-12 md:col-6">
+														<p:outputLabel styleClass="font-bold w-full">Litros a utilizar</p:outputLabel>
+														<p:outputLabel>#{reformulationBean.volume}</p:outputLabel>
+													</div>
+													
+													<div class="field col-12 md:col-6">
+														<p:fieldset legend="Nuevo lote" rendered="#{reformulationBean.newLot}"> 
+															<p:chip label="#{reformulationBean.lotPreview}"/>
+														</p:fieldset>
+													</div>
+												</div>
+											</p:outputPanel>
+										</p:outputPanel>
+									</p:panel>
+								</p:tab>
+							</p:wizard>
+
+							<!--<p:panel header="Mezclar producción">
+								<p:outputPanel id="manage-reformulation-content" class="ui-fluid">
+									<p:outputPanel rendered="#{not empty reformulationBean.production}">
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Producción</p:outputLabel>
+												<p:inputText value="#{reformulationBean.production.lot}" 
+													readonly="true"/>
+											</div>
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Productor</p:outputLabel>
+												<p:inputText value="#{reformulationBean.producer.name}" 
+													readonly="true"/>
+											</div>
+										</div>
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-4">
+												<p:outputLabel>Producción disponible</p:outputLabel>
+												<p:selectOneMenu
+														value="#{reformulationBean.availableProduction}"
+														required="true" converter="omnifaces.SelectItemsConverter"
+														filter="true" filterMatchMode="content">
+														<p:ajax event="change" listener="#{reformulationBean.onAvailableProductionChange()}"
+															update="volume, newVolume" />
+														<f:selectItem itemLabel="- Seleccionar -" itemValue="" noSelectionOption="true"/>
+														<f:selectItems value="#{reformulationBean.productionsAvailables}"
+															var="production" itemValue="#{production}"
+															itemLabel="#{production.lot}" />
+													</p:selectOneMenu>
+											</div>
+											<div class="field col-12 md:col-4">
+												<p:outputLabel>Volumen total (Litros)</p:outputLabel>
+												<p:spinner id="volume" value="#{reformulationBean.availableProduction.stock}" 
+													disabled="true"/>
+											</div>
+											<div class="field col-12 md:col-4">
+												<p:outputLabel>Volumen a utilizar (Litros)</p:outputLabel>
+												<p:spinner id="newVolume" value="#{reformulationBean.volume}" min="1"
+												 max="#{reformulationBean.availableProduction.stock}" required="true"/>
+											</div>
+										</div>
+										<div class="formgrid grid">
+											<div class="field col-12">
+												<p:selectBooleanCheckbox value="#{reformulationBean.newLot}" 
+													itemLabel="Crear nuevo lote">
+													<p:ajax update="msg" listener="#{reformulationBean.onLotChange()}"/>
+												</p:selectBooleanCheckbox>
+											</div>
+										</div>
+										<div class="formgrid grid">
+											<div class="field col-12 md:col-6">
+												<p:outputLabel>Lote de producción</p:outputLabel>
+												<p:outputPanel styleClass="grid mt-1">
+													<div class="col-12 md:col-3">
+														<p:inputText id="productionLot"
+															value="#{reformulationBean.firstPartLot}" disabled="true" />
+													</div>
+													<div class="col-12 md:col-9">
+														<p:inputText id="productionLot2"
+															value="#{reformulationBean.secondPartLot}" maxlength="40"
+															required="true">
+															<p:ajax event="keyup" update="preview"
+																listener="#{reformulationBean.buildLotPreview()}" />
+														</p:inputText>
+													</div>
+												</p:outputPanel>
+												<small class="p-d-block">Vista previa del lote: <p:outputLabel
+														id="preview">#{reformulationBean.lotPreview}</p:outputLabel></small>
+											</div>
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+							</p:panel>-->
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

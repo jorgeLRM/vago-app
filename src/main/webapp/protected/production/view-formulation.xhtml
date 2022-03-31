@@ -18,9 +18,9 @@
 	<ui:define name="content">
 		<p:staticMessage severity="error" summary="ERROR"
 			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
-			rendered="#{formulationBean.formulation == null}" />
+			rendered="#{formulationBean.production == null}" />
 		<h:panelGroup layout="block"
-			rendered="#{formulationBean.formulation != null}">
+			rendered="#{formulationBean.production != null}">
 			<div class="p-grid crud-demo">
 				<div class="p-col-12">
 					<div class="card">

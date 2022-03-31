@@ -6,14 +6,20 @@
 	template="/WEB-INF/template/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{transferBean.openNew()}" />
+		<f:viewParam name="idProduction" />
+		<f:viewAction action="#{transferBean.openNew(idProduction)}" />
 	</f:metadata>
 
 	<ui:define name="title">Producción</ui:define>
 	<ui:param name="viewname" value="TRASLADOS" />
 
 	<ui:define name="content">
-		<h:panelGroup layout="block">
+		
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{transferBean.production == null}" />
+	
+		<h:panelGroup layout="block" rendered="#{analysisBean.production != null}" >
 			<div class="p-grid crud-demo">
 				<div class="p-col-12">
 					<div class="card">
@@ -41,24 +47,32 @@
 											</div>
 										</div>
 										<div class="formgrid grid">
-											<div class="field col-12 md:col-6">
+											<div class="field col-12 md:col-4">
 												<p:outputLabel for="numberTransfer">Número de traslado</p:outputLabel>
 												<p:inputText id="numberTransfer"
 													value="#{transferBean.transfer.numTransfer}"
-													required="true" length="5">
-													<p:keyFilter regEx="/[0-9_]/i" />
+													required="true" maxlength="10">
+													<p:keyFilter mask="num" />
 												</p:inputText>
 											</div>
-											<div class="field col-12 md:col-6">
+											<div class="field col-12 md:col-4">
 												<p:outputLabel for="destination">Destino</p:outputLabel>
 												<p:inputText id="destination"
 													value="#{transferBean.transfer.destination}"
 													required="true" maxlength="70" />
 											</div>
+											<div class="field col-12 md:col-4">
+												<p:outputLabel for="transferDate">Fecha de traslado</p:outputLabel>
+												<p:datePicker id="transferDate"
+														value="#{transferBean.transfer.transferDate}"
+														monthNavigator="true" yearNavigator="true" showWeek="true"
+														yearRange="1990:2070" mask="true" pattern="dd/MM/yyyy"
+														required="true" />
+											</div>
 										</div>
 										<div class="formgrid grid">
 											<div class="field col-12">
-												<p:outputLabel>Documento</p:outputLabel>
+												<p:outputLabel>Documento *</p:outputLabel>
 												<div class="flex flex-wrap align-items-center">
 													<p:fileUpload mode="simple" skinSimple="true" auto="true"
 														process="@this" update="set-file-transfer"

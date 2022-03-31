@@ -78,10 +78,11 @@ INSERT INTO Tub(bottomDiameter1, bottomDiameter2, bottomDiameter3, bottomDiamete
 INSERT INTO Tub(bottomDiameter1, bottomDiameter2, bottomDiameter3, bottomDiameter4, height1, height2, height3, height4, numberTub, topDiameter1, topDiameter2, topDiameter3, topDiameter4, idPalenque, status) VALUES (150, 149, 150, 150, 83, 83, 83, 83, 7, 145, 145, 145, 145, 1, 'ACTIVE');
 INSERT INTO Tub(bottomDiameter1, bottomDiameter2, bottomDiameter3, bottomDiameter4, height1, height2, height3, height4, numberTub, topDiameter1, topDiameter2, topDiameter3, topDiameter4, idPalenque, status) VALUES (139, 140, 139, 139, 88, 88, 88, 88, 8, 135, 137, 135, 137, 1, 'ACTIVE');
 
-INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-01', '2022-02-02', 1.25, 1, 1200, 1200, 'J-01-TBCS-22', 1, '2022-02-09', 'Tinas', 0, 'APPROBAL', 'PREPARATION', 'StandardProduction', 'ACTIVE');
-INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-03', '2022-02-04', 2.75, 1.25, 1120, 1120, 'TR-01-SN-22', 2, '2022-02-10', 'Tinas', 0, 'APPROBAL', 'PREPARATION', 'StandardProduction', 'ACTIVE');
-INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-04', '2022-02-05', 1.75, 2, 1115, 1115, 'J-02-MC-22', 3, '2022-02-11', 'Tinas', 0, 'INPROCESS', 'PREPARATION', 'StandardProduction', 'ACTIVE');
-INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-06', '2022-02-07', 1, 1, 1005, 1005, 'TR-02-CY-22', 4, '2022-02-13', 'Tinas', 0, 'INPROCESS', 'PREPARATION', 'StandardProduction', 'ACTIVE');
+INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, stock, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-01', '2022-02-02', 1.25, 1, 1200, 1200, 1200, 'J-01-TBCS-22', 1, '2022-02-09', 'Tinas', 0, 'APPROBAL', 'INBULK', 'NORMAL', 'ACTIVE');
+INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, stock, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-01', '2022-02-02', 1.25, 2, 1200, 1200, 1200, 'J-02-MC-22', 3, '2022-02-09', 'Tinas', 0, 'APPROBAL', 'PREPARATION', 'NORMAL', 'ACTIVE');
+--INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-03', '2022-02-04', 2.75, 1.25, 1120, 1120, 'TR-01-SN-22', 2, '2022-02-10', 'Tinas', 0, 'APPROBAL', 'PREPARATION', 'StandardProduction', 'ACTIVE');
+--INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-04', '2022-02-05', 1.75, 2, 1115, 1115, 'J-02-MC-22', 3, '2022-02-11', 'Tinas', 0, 'INPROCESS', 'PREPARATION', 'StandardProduction', 'ACTIVE');
+--INSERT INTO Production (startCoocking, endCoocking, alcoholicGradeDist1, alcoholicGradeDist2, volumeDistillation2, totalVolume, lot, idLotDetail, admissionDate, location, wastage, paymentStatus, productionStatus, typeProduction, status) VALUES ('2022-02-06', '2022-02-07', 1, 1, 1005, 1005, 'TR-02-CY-22', 4, '2022-02-13', 'Tinas', 0, 'INPROCESS', 'PREPARATION', 'StandardProduction', 'ACTIVE');
 
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Alcohol Volumen a 20 °C', 35.0, 55.0, '% Alc. Vol.', true, 'ACTIVE');
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Extracto seco', 0.0, 10.0, 'g/L', false, 'ACTIVE');
@@ -92,22 +93,36 @@ INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, sta
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Plomo (Pb)', 0.0, 0.5, 'mg/L', false, 'ACTIVE');
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Arsénico (As)', 0.0, 0.5, 'mg/L', false, 'ACTIVE');
 
-INSERT INTO Provider (name, telephone, email, status) VALUES ('Nisl Arcu Ltd','tempus.non@yahoo.couk','(723) 225-0166', 'ACTIVE');
-INSERT INTO Provider (name, telephone, email, status) VALUES ('Vitae Diam LLC','vitae.risus.duis@outlook.net','(644) 654-9171', 'ACTIVE');
-INSERT INTO Provider (name, telephone, email, status) VALUES ('Ac Libero Nec LLC','amet.faucibus.ut@outlook.couk','(611) 107-7778', 'ACTIVE');
-INSERT INTO Provider (name, telephone, email, status) VALUES ('Velit Institute','eros@aol.couk','(278) 466-8506', 'ACTIVE');
-INSERT INTO Provider (name, telephone, email, status) VALUES ('Risus Institute','auctor.non@protonmail.ca','1-332-497-6882', 'ACTIVE');
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Nisl Arcu Ltd','tempus.non@yahoo.couk','(723) 225-0166', 'no_image.png', 'ACTIVE');
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Vitae Diam LLC','vitae.risus.duis@outlook.net','(644) 654-9171', 'no_image.png', 'ACTIVE');
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Ac Libero Nec LLC','amet.faucibus.ut@outlook.couk','(611) 107-7778', 'no_image.png', 'ACTIVE');
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Velit Institute','eros@aol.couk','(278) 466-8506', 'no_image.png', 'ACTIVE');
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Risus Institute','auctor.non@protonmail.ca','1-332-497-6882', 'no_image.png', 'ACTIVE');
 
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Congue Incorporated','suspendisse.dui@hotmail.edu','1-685-314-3156','XinAn','Ben Tre','South Africa', 'ACTIVE');
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Mauris Sit Associates','vivamus.non@google.net','(218) 743-6943','Van','Yunnan','Netherlands', 'ACTIVE');
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Aliquam Ltd','elit@aol.com','(766) 866-9395','Azad Kashmir','Cairns','Austria', 'ACTIVE');
 
+INSERT INTO InputCategory (name, status) VALUES ('Vidrio','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Plastico','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Tapones','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Empaque','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Codigos','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Filtros','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Etiquetas','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Carton','ACTIVE');
+INSERT INTO InputCategory (name, status) VALUES ('Celocil','ACTIVE');
 
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
 
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, 10, 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, 10, 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (3, 3, 10, 100);
 
-
-
-
+INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (1, 1, 10, 1000);
+INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (2, 2, 5, 500);
 
 
 

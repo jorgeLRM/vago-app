@@ -17,7 +17,7 @@ import com.dosvales.vagoapp.model.Tub;
 public class FormulationDaoImpl extends GenericDaoImpl<Formulation, Long> implements FormulationDao, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public List<Formulation> findAllByProduction(Production production) {
 		return em.createQuery("FROM Formulation f WHERE f.production = :production", Formulation.class)

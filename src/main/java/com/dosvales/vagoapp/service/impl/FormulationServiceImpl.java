@@ -50,5 +50,4 @@ public class FormulationServiceImpl extends GenericServiceImpl<Formulation, Long
 	public GenericDao<Formulation, Long> getDao() {
 		return dao;
 	}
-
 }

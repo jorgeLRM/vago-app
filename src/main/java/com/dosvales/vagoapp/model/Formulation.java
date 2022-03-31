@@ -123,6 +123,14 @@ public class Formulation extends AbstractEntity {
 		this.tub = tub;
 	}
 
+	public Production getProduction() {
+		return production;
+	}
+
+	public void setProduction(Production production) {
+		this.production = production;
+	}
+
 	public Double getVolumeJuiceBagasse() {
 		volumeJuiceBagasse = (tub.getAverageHeight() - firstVacuum) * tub.getFactor();
 		return volumeJuiceBagasse;

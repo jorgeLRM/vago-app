@@ -13,7 +13,6 @@ import com.dosvales.vagoapp.dao.AnalysisDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
 import com.dosvales.vagoapp.model.Analysis;
 import com.dosvales.vagoapp.model.Production;
-import com.dosvales.vagoapp.model.TypeAnalysis;
 
 @Stateless
 public class AnalysisDaoImpl extends GenericDaoImpl<Analysis, Long> implements AnalysisDao, Serializable {
@@ -33,11 +32,11 @@ public class AnalysisDaoImpl extends GenericDaoImpl<Analysis, Long> implements A
 	}
 
 	@Override
-	public List<Analysis> findAllByTypeAnalysis(TypeAnalysis type) {
-		return em.createQuery("FROM Analysis a WHERE a.typeAnalysis  = :typeAnalysis", 
-				Analysis.class)
-				.setParameter("typeAnalysis", type)
-				.getResultList();
+	public Analysis findWithParameters(Long id) {
+		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Analysis.parameters");
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		return em.find(Analysis.class, id, properties);
 	}
 
 	@Override
@@ -46,14 +45,6 @@ public class AnalysisDaoImpl extends GenericDaoImpl<Analysis, Long> implements A
 				Analysis.class)
 				.setParameter("production", production)
 				.getResultList();
-	}
-
-	@Override
-	public Analysis findWithParameters(Long id) {
-		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Analysis.parameters");
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("javax.persistence.fetchgraph", entityGraph);
-		return em.find(Analysis.class, id, properties);
 	}
 
 }

@@ -18,12 +18,12 @@ import org.primefaces.PrimeFaces;
 import com.dosvales.vagoapp.model.AvailableTub;
 import com.dosvales.vagoapp.model.Formulation;
 import com.dosvales.vagoapp.model.Palenque;
+import com.dosvales.vagoapp.model.Production;
 import com.dosvales.vagoapp.model.ProductionStatus;
-import com.dosvales.vagoapp.model.StandardProduction;
 import com.dosvales.vagoapp.model.Tub;
 import com.dosvales.vagoapp.service.FormulationService;
 import com.dosvales.vagoapp.service.PalenqueService;
-import com.dosvales.vagoapp.service.StandardProductionService;
+import com.dosvales.vagoapp.service.ProductionService;
 import com.dosvales.vagoapp.service.TubService;
 
 @Named
@@ -32,7 +32,7 @@ public class FormulationBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private StandardProduction production;
+	private Production production;
 	private Formulation formulation;
 	private Palenque palenque;
 	private List<Formulation> newFormulations;
@@ -41,7 +41,7 @@ public class FormulationBean implements Serializable {
 	private List<Palenque> palenques;
 
 	@Inject
-	private StandardProductionService productionService;
+	private ProductionService productionService;
 	@Inject
 	private FormulationService formulationService;
 	@Inject
@@ -61,9 +61,11 @@ public class FormulationBean implements Serializable {
 		if (idProduction != null && idProduction.length() > 0 
 				&& id != null && id.length() > 0) {
 			try {
-				production = productionService.findWithAssociations(Long.valueOf(id));
+				production = productionService.findById(Long.valueOf(id));
 				formulation = formulationService.findById(Long.valueOf(id));
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+				production =  null;
+			}
 		}
 	}
 	
@@ -133,13 +135,10 @@ public class FormulationBean implements Serializable {
 				(f.getFormulationDate().isAfter(f.getGridingDate()) || f.getGridingDate().equals(f.getFormulationDate()));
 	}
 	
-	private void changeStatusProduction(StandardProduction p) {
-		if (p.getProductionStatus() == ProductionStatus.PREPARATION) {
-			p.setProductionStatus(ProductionStatus.FORMULATION);
-			productionService.update(p);
-		}
+	private void changeStatusProduction(Production p) {
+		p.setProductionStatus(ProductionStatus.FORMULATION);
+		productionService.update(p);
 	}
-
 	
 	private void resetProduction() {
 		this.palenque = production.getLotDetail().getPalenque();
@@ -149,25 +148,6 @@ public class FormulationBean implements Serializable {
 		tubsByPalenque.forEach(tub -> {
 			availableTubs.add(new AvailableTub(tub, false));
 		});
-	}
-
-	public void delete() {
-		try {
-			if (isValidToDelete(formulation)) {
-				formulationService.delete(formulation);
-				//formulations.remove(formulation);
-				addMessage("Operación exitosa", "Formulación eliminada exitosamente", FacesMessage.SEVERITY_INFO);
-				PrimeFaces.current().ajax().update(":form:dt-formulations");
-			} else {
-				showMessage("Cuidado", "Esta formulación no se puede eliminar porque la producción a la que pertenece se encuentra en otra etapa.", FacesMessage.SEVERITY_WARN);
-			}
-		} catch (Exception ex) {
-			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
-		}
-	}
-	
-	public boolean isValidToDelete(Formulation f) {
-		return f.getProduction().getProductionStatus() == ProductionStatus.FORMULATION;
 	}
 	
 	public List<AvailableTub> getAvailableTubs() {
@@ -198,7 +178,7 @@ public class FormulationBean implements Serializable {
 		}
 	}
 	
-	public StandardProduction getProduction() {
+	public Production getProduction() {
 		return production;
 	}
 

@@ -22,7 +22,7 @@ public class TransferServiceImpl extends GenericServiceImpl<Transfer, Long> impl
 	private TransferDao dao;
 	
 	@Override
-	public Transfer findByNumTransfer(Integer numTransfer) {
+	public Transfer findByNumTransfer(String numTransfer) {
 		return dao.findByNumTransfer(numTransfer);
 	}
 
@@ -30,6 +30,5 @@ public class TransferServiceImpl extends GenericServiceImpl<Transfer, Long> impl
 	public GenericDao<Transfer, Long> getDao() {
 		return dao;
 	}
-
 
 }

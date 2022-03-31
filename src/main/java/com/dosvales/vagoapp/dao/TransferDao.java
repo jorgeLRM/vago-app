@@ -8,6 +8,6 @@ import com.dosvales.vagoapp.model.Transfer;
 @Local
 public interface TransferDao extends GenericDao<Transfer, Long>{
 	
-	Transfer findByNumTransfer(Integer numTransfer);
+	Transfer findByNumTransfer(String numTransfer);
 	
 }
