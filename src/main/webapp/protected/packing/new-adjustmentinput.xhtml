@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{adjustmentInputBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="AJUSTES DE INSUMOS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Nuevo ajuste">
+								<p:outputPanel id="new-adjustment-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="input">Insumo</p:outputLabel>
+											<p:selectOneMenu id="input" value="#{adjustmentInputBean.adjustmentInput.input}"
+												required="true" converter="omnifaces.SelectItemsConverter">
+												<p:ajax event="change" update="description, provider, unitcost" listener="#{adjustmentInputBean.refreshProviders()}"/>
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
+												<f:selectItems value="#{adjustmentInputBean.inputs}" var="input" 
+													itemLabel="#{input.name}" itemValue="#{input}"/>
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="description">Descripción del insumo</p:outputLabel>
+											<p:inputText id="description" disabled="true"
+												value="#{adjustmentInputBean.adjustmentInput.input.specifications}" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="provider">Proveedor</p:outputLabel>
+											<p:selectOneMenu id="provider" value="#{adjustmentInputBean.providerInput}"
+												required="true" converter="omnifaces.SelectItemsConverter">
+												<p:ajax event="change" update="unitcost" listener="#{adjustmentInputBean.refreshProviders()}"/>
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
+												<f:selectItems value="#{adjustmentInputBean.providerInputs}" var="provider" 
+													itemLabel="#{provider.provider.name}" itemValue="#{provider}"/>
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="unitcost">Costo unitario</p:outputLabel>
+											<p:inputText id="unitcost" value="#{adjustmentInputBean.providerInput.unitPrice}"
+												disabled="true" maxlength="50" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="typeAdjustment">Tipo de movimiento</p:outputLabel>
+											<p:selectOneMenu id="typeAdjustment"
+												value="#{adjustmentInputBean.adjustmentInput.typeAdjustment}" required="true"
+												converter="omnifaces.SelectItemsConverter" filter="true"
+												filterMatchMode="contains" styleClass="w-full">
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{adjustmentInputBean.typesAdjustment}"
+													var="tAdj" itemValue="#{tAdj}" itemLabel="#{tAdj.type}" />
+												<p:ajax update=":form:new-adjustment-content" event="change" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="amount">Cantidad</p:outputLabel>
+											<p:spinner id="amount"
+												value="#{adjustmentInputBean.adjustmentInput.amount}"
+												required="true" min="0">
+												<p:ajax event="change" update=":form:new-adjustment-content"/>
+											</p:spinner>
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="totalCost">Costo total</p:outputLabel>
+											<p:inputText id="totalCost" disabled="true"
+												value="#{adjustmentInputBean.totalCost}"/>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="adjustmentDate">Fecha de ingreso</p:outputLabel>
+											<p:datePicker id="adjustmentDate"
+												value="#{adjustmentInputBean.adjustmentInput.dateOfAdjustment}"
+												monthNavigator="true" yearNavigator="true"
+												showWeek="true" yearRange="1990:2060" mask="true"
+												pattern="dd/MM/yyyy" required="true" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="reason">Razón</p:outputLabel>
+											<p:inputText id="reason"
+												value="#{adjustmentInputBean.adjustmentInput.reason}" maxlength="50" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="observations">Observaciones</p:outputLabel>
+											<p:inputTextarea id="observations"
+												value="#{adjustmentInputBean.adjustmentInput.observations}" maxlength="100" />
+										</div>
+									</div>
+									<div class="grid mt-2">
+										<p:outputLabel class="font-bold" value="* Valores obligatorios" />
+									</div>
+									<div class="mt-3">
+										<p:commandButton value="Guardar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{adjustmentInputBean.save()}"
+											process="new-adjustment-content @this" update="new-adjustment-content" />
+										<p:commandButton value="Cancelar"
+											icon="fas fa-arrow-circle-left"
+											action="/protected/packing/inputadjustments.xhtml?faces-redirect=true"
+											immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

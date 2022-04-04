@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{purchaseInputBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="INGRESO DE INSUMOS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{purchaseInputBean.purchaseInput == null}" />
+		<h:panelGroup layout="block" rendered="#{purchaseInputBean.purchaseInput != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<p:panel header="Detalles del ingreso de insumos">
+							<p:outputPanel id="purchaseInput" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty purchaseInputBean.purchaseInput}">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent;">
+
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="Código del insumo:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.input.code}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Insumo:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.input.name.toUpperCase()}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Descripción:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.input.specifications.toUpperCase()}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Proveedor:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.provider.name.toUpperCase()}"
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Costo unitario:" />
+										<h:outputText value="$ #{(purchaseInputBean.purchaseInput.totalPrice - purchaseInputBean.purchaseInput.costPerParcel)/purchaseInputBean.purchaseInput.amount}"
+											styleClass="outputLabel">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+										
+										<p:outputLabel value="Cantidad:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.amount}"
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Costo de la paqueteria:" />
+										<h:outputText value="$ #{purchaseInputBean.purchaseInput.costPerParcel}"
+											styleClass="outputLabel">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+										
+										<p:outputLabel value="Costo total:" />
+										<h:outputText value="$ #{purchaseInputBean.purchaseInput.totalPrice}"
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Fecha de ingreso:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.dateOfAdmission}"
+											styleClass="outputLabel"/>
+											
+										<p:outputLabel value="Factura:" />
+										<h:outputText value="#{purchaseInputBean.purchaseInput.invoice}"
+											styleClass="outputLabel" rendered="#{purchaseInputBean.purchaseInput.invoice == 'NO HAY FACTURA'}"/>
+										<h:outputLink rendered="#{purchaseInputBean.purchaseInput.invoice != 'NO HAY FACTURA'}"
+											value="#{purchaseInputBean.getPurchaseInvoicePath(purchaseInputBean.purchaseInput.invoice)}" target="_blank">
+											#{purchaseInputBean.purchaseInput.invoice}	
+										</h:outputLink>	
+									</p:panelGrid>
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+									styleClass="ui-button-secondary ui-button-raised"
+									action="/protected/packing/inputpurchases.xhtml?faces-redirect=true"
+									process="@this" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -116,6 +116,14 @@ public class InputBean implements Serializable {
 		String page = "";
 		try {
 			inputService.update(input);
+			// Agregue el siguiente ciclo para contemplar cuando se agregan nuevos proveedores hacia un insumo
+			providerInputs.forEach(pi -> {
+				if (pi.getId() == null) {
+					providerInputService.save(pi);
+				} else {
+					providerInputService.update(pi);
+				}
+			});
 			addMessage("Operación exitosa", "Insumo actualizado exitosamente", FacesMessage.SEVERITY_INFO);
 			page = "/protected/packing/inputs.xhtml?faces-redirect=true";
 		} catch (Exception ex) {

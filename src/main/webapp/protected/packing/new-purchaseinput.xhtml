@@ -49,7 +49,8 @@
 												<p:ajax event="change" update="unitcost" listener="#{purchaseInputBean.refreshProviders()}"/>
 												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
 												<f:selectItems value="#{purchaseInputBean.providerInputs}" var="provider" 
-													itemLabel="#{provider.provider.name}" itemValue="#{provider.provider}"/>
+													itemLabel="#{provider.provider.name}" itemValue="#{provider}"/>
+													<!-- Corregi el item value -->
 											</p:selectOneMenu>
 										</div>
 										<div class="field col-12 md:col-6">
@@ -60,25 +61,30 @@
 										</div>
 									</div>
 									<div class="formgrid grid mt-2">
-										<div class="field col-12 md:col-6">
+										<div class="field col-12 md:col-4">
 											<p:outputLabel for="amount">Cantidad</p:outputLabel>
 											<p:spinner id="amount"
 												value="#{purchaseInputBean.purchaseInput.amount}"
-												required="true" min="0"/>
+												required="true" min="0">
+												<p:ajax event="change" update=":form:new-purchase-content"/>
+											</p:spinner>
 										</div>
-										<div class="field col-12 md:col-6">
+										<div class="field col-12 md:col-4">
 											<p:outputLabel for="costPerParcel">Costo de paquetería</p:outputLabel>
 											<p:spinner id="costPerParcel"
 												value="#{purchaseInputBean.purchaseInput.costPerParcel}"
-												required="true" min="0"/>
+												required="true" min="0">
+												<p:ajax event="change" update=":form:new-purchase-content"/>
+											</p:spinner>
+										</div>
+										<div class="field col-12 md:col-4">
+											<p:outputLabel for="totalCost">Costo total</p:outputLabel>
+											<p:inputText id="totalCost" disabled="true"
+												value="#{(purchaseInputBean.purchaseInput.amount * purchaseInputBean.providerInput.unitPrice) + purchaseInputBean.purchaseInput.costPerParcel}"/>
 										</div>
 									</div>
 									<div class="formgrid grid mt-2">
-										<div class="field col-12 md:col-6">
-											<p:outputLabel for="totalCost">Costo total</p:outputLabel>
-											<p:inputText id="totalCost" value="#{purchaseInputBean.purchaseInput.amount * purchaseInputBean.providerInput.unitPrice}"
-												disabled="true"/>
-										</div>
+										
 										<div class="field col-12 md:col-6">
 											<p:outputLabel for="admissionDate">Fecha de ingreso</p:outputLabel>
 											<p:datePicker id="admissionDate"
@@ -86,6 +92,28 @@
 												monthNavigator="true" yearNavigator="true"
 												showWeek="true" yearRange="1990:2060" mask="true"
 												pattern="dd/MM/yyyy" required="true" />
+										</div>
+										
+										<div class="field col-12 md:col-6">
+											<p:outputLabel>Factura</p:outputLabel>
+											<div class="flex flex-wrap align-items-center">
+												<p:selectBooleanCheckbox value="#{purchaseInputBean.flagInvoice}" itemLabel="No existe factura">
+													<p:ajax event="change" update=":form:new-purchase-content"/>
+												</p:selectBooleanCheckbox>
+												
+												<p:fileUpload mode="simple" skinSimple="true" auto="true"
+							                      	process="@this" update="set-file-provider" styleClass="ui-button-raised ui-button-info w-auto"
+							                      	listener="#{purchaseInputBean.handleFileUploadDocument}"
+							                      	sizeLimit="5000000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
+							                      	accept=".pdf"
+							                     	invalidSizeMessage="Tamaño máximo 5MB"
+													invalidFileMessage="Sólo es permitido el formato pdf"
+												  	label="Elegir documento" disabled="#{purchaseInputBean.flagInvoice}"/>
+												<h:outputLink id="set-file-provider"
+													value="#{purchaseInputBean.getPurchaseInvoicePath(purchaseInputBean.purchaseInput.invoice)}" target="_blank">
+													#{purchaseInputBean.purchaseInput.invoice}	
+												</h:outputLink>			
+											</div>
 										</div>
 									</div>
 									<div class="formgrid grid mt-2">

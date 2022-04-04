@@ -113,18 +113,18 @@ INSERT INTO InputCategory (name, status) VALUES ('Etiquetas','ACTIVE');
 INSERT INTO InputCategory (name, status) VALUES ('Carton','ACTIVE');
 INSERT INTO InputCategory (name, status) VALUES ('Celocil','ACTIVE');
 
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 170, 100, 200, 'Pieza', 1, 'ACTIVE');
 INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
 INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
 
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, 10, 100);
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, 10, 100);
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (3, 3, 10, 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, '10 dias habiles', 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, 'Maximo dos meses', 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (3, 3, 'Si hay en existencia, entrega inmediata', 100);
 
 INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (1, 1, 10, 1000);
 INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (2, 2, 5, 500);
 
-
+INSERT INTO adjustmentinput (status, dateofadjustment, amount, observations, reason, totalPrice, typeAdjustment, idInput, idProvider) VALUES ('ACTIVE', '2022-03-25', 8, 'El material se recibio en mal estado y no se reporto', 'Botellas rotas', 800, 'POSITIVE', 1, 1);
 
 
 

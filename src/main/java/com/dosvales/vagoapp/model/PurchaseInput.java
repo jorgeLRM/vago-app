@@ -15,7 +15,7 @@ public class PurchaseInput extends AbstractEntity {
 	
 	private Integer amount;
 	
-	private Integer totalPrice;
+	private Double totalPrice;
 	
 	private String invoice;
 	
@@ -41,11 +41,11 @@ public class PurchaseInput extends AbstractEntity {
 		this.amount = amount;
 	}
 
-	public Integer getTotalPrice() {
+	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(Integer totalPrice) {
+	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 

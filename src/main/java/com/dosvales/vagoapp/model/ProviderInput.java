@@ -11,9 +11,9 @@ public class ProviderInput extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Integer deliveryTime;
+	private String deliveryTime;
 	
-	private Double unitPrice;
+	private Double unitPrice;	// Se cambio el tipo de dato
 	
 	@ManyToOne
 	@JoinColumn(name="idProvider")
@@ -23,11 +23,11 @@ public class ProviderInput extends AbstractEntity {
 	@JoinColumn(name="idInput")
 	private Input input;
 
-	public Integer getDeliveryTime() {
+	public String getDeliveryTime() {
 		return deliveryTime;
 	}
 
-	public void setDeliveryTime(Integer deliveryTime) {
+	public void setDeliveryTime(String deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 

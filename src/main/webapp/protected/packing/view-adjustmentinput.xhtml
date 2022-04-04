@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{adjustmentInputBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="AJUSTES DE INSUMOS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR" detail="¡Oops! Algo ha ocurrido" 
+			style="width: 100%" rendered="#{adjustmentInputBean.adjustmentInput == null}" />
+			
+		<h:panelGroup layout="block" rendered="#{adjustmentInputBean.adjustmentInput != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:panel header="Detalles del ajuste de insumos">
+							<p:outputPanel id="adjustmentInput" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty adjustmentInputBean.adjustmentInput}">
+									<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent;">
+
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="Código del insumo:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.input.code}"
+											styleClass="outputLabel" />
+										
+										<p:outputLabel value="Insumo:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.input.name.toUpperCase()}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Descripción:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.input.specifications.toUpperCase()}"
+											styleClass="outputLabel" />
+
+										<p:outputLabel value="Proveedor:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.provider.name.toUpperCase()}"
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Costo unitario:" />
+										<h:outputText value="$ #{adjustmentInputBean.adjustmentInput.totalPrice/adjustmentInputBean.adjustmentInput.amount}"
+											styleClass="outputLabel">
+											<f:convertNumber pattern="#0.00" />
+										</h:outputText>
+										
+										<p:outputLabel value="Cantidad:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.amount}"
+											styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Costo total:" />
+										<h:outputText value="$ #{adjustmentInputBean.adjustmentInput.totalPrice}"
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Fecha de registro:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.dateOfAdjustment}"
+											styleClass="outputLabel"/>
+											
+										<p:outputLabel value="Razón:" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.reason}"
+											styleClass="outputLabel"/>
+											
+										<p:outputLabel value="Observaciones" />
+										<h:outputText value="#{adjustmentInputBean.adjustmentInput.observations}"
+											styleClass="outputLabel"/>
+									</p:panelGrid>
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+									styleClass="ui-button-secondary ui-button-raised"
+									action="/protected/packing/inputadjustments.xhtml?faces-redirect=true"
+									process="@this" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

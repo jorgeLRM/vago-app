@@ -75,35 +75,45 @@
 
 								<p:column headerText="Acciones" width="1"
 									style="text-align:center">
-									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										styleClass="rounded-button ui-button-help ui-button-raised mr-2"
+										outcome="/protected/packing/view-purchaseinput.xhtml?faces-redirect=true">
+										<f:param name="id" value="#{purchase.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewButton" value="Ver registro"
+										position="bottom" />
+										
+									<!-- p:linkButton icon="fas fa-pencil-alt" id="editButton"
 										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
 										outcome="/protected/packing/edit-customer.xhtml?faces-redirect=true">
 										<f:param name="id" value="#{purchase.id}" />
 									</p:linkButton>
 									<p:tooltip for="editButton" value="Editar registro"
-										position="bottom" />
-
-									<p:commandButton id="deleteButton"
-										styleClass="ui-button-danger rounded-button ui-button-raised"
-										icon="pi pi-trash" process="@this">
+										position="bottom" /-->
+										
+										
+									<p:commandButton id="deleteButton" icon="pi pi-trash"
+										process="@this" styleClass="ui-button-raised ui-button-danger rounded-button"
+										oncomplete="PF('deletePurchaseInputDialog').show()">
+										<f:setPropertyActionListener value="#{purchase}"
+											target="#{purchaseInputBean.purchaseInput}" />
 									</p:commandButton>
 									<p:tooltip for="deleteButton" value="Eliminar registro"
 										position="bottom" />
 								</p:column>
 							</p:dataTable>
 
-							<!-- <p:confirmDialog widgetVar="deleteAnalysisDialog" showEffect="fade"
+							<p:confirmDialog widgetVar="deletePurchaseInputDialog" showEffect="fade"
 								width="300" message="¿Estás seguro de eliminar este registro?"
 								header="Confirmar" severity="warn" hideEffect="fade">
 								<p:blockUI block="main-template" trigger="yesButton" />
 								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
-									actionListener="#{analysisBean.delete()}" process="@this"
-									oncomplete="PF('deleteAnalysisDialog').hide()"
+									actionListener="#{purchaseInputBean.delete()}" process="@this"
+									oncomplete="PF('deletePurchaseInputDialog').hide()"
 									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('deleteAnalysisDialog').hide()" />
-							</p:confirmDialog>-->
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deletePurchaseInputDialog').hide()" />
+							</p:confirmDialog>
 						</h:form>
 					</div>
 				</div>
