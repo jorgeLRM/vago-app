@@ -73,8 +73,8 @@ public class AdjustmentInputBean implements Serializable {
 				adjustmentInput.setTotalPrice((providerInput.getUnitPrice() * adjustmentInput.getAmount()) * -1);
 				adjustmentInput.getInput().setStock(adjustmentInput.getInput().getStock() - adjustmentInput.getAmount());
 			}
-			adjustmentService.save(adjustmentInput);
 			inputService.update(adjustmentInput.getInput());
+			adjustmentService.save(adjustmentInput);
 			addMessage("Operacion exitosa", "Ajuste de insumos guardado exitosamente", FacesMessage.SEVERITY_INFO);
 			page = "/protected/packing/inputadjustments.xhtml?faces-redirect=true";
 		} catch (Exception ex) {
@@ -157,12 +157,10 @@ public class AdjustmentInputBean implements Serializable {
 
 	public Double getTotalCost() {
 		totalCost = 0d;
-		if (adjustmentInput != null && providerInput != null) {
-			if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.POSITIVE)
-				totalCost = adjustmentInput.getAmount() * providerInput.getUnitPrice();
-			else if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.NEGATIVE)
-				totalCost = (-1) * (adjustmentInput.getAmount() * providerInput.getUnitPrice());
-		}
+		if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.POSITIVE)
+			totalCost = adjustmentInput.getAmount() * providerInput.getUnitPrice();
+		else if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.NEGATIVE)
+			totalCost = (-1) * (adjustmentInput.getAmount() * providerInput.getUnitPrice());
 		return totalCost;
 	}
 }

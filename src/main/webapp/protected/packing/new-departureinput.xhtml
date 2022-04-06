@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{departureInputBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="SALIDAS DE INSUMOS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Nueva salida">
+								<p:outputPanel id="new-departure-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="input">Insumo</p:outputLabel>
+											<p:selectOneMenu id="input" value="#{departureInputBean.departureInput.input}"
+												required="true" converter="omnifaces.SelectItemsConverter">
+												<p:ajax event="change" update="description, provider, unitcost, textAmount" listener="#{departureInputBean.refreshProviders()}"/>
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
+												<f:selectItems value="#{departureInputBean.inputs}" var="input" 
+													itemLabel="#{input.name}" itemValue="#{input}"/>
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="description">Descripción del insumo</p:outputLabel>
+											<p:inputText id="description" disabled="true"
+												value="#{departureInputBean.departureInput.input.specifications}" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="provider">Proveedor</p:outputLabel>
+											<p:selectOneMenu id="provider" value="#{departureInputBean.providerInput}"
+												required="true" converter="omnifaces.SelectItemsConverter">
+												<p:ajax event="change" update="textAmount, unitcost" listener="#{departureInputBean.refreshProviders()}"/>
+												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
+												<f:selectItems value="#{departureInputBean.providerInputs}" var="provider" 
+													itemLabel="#{provider.provider.name}" itemValue="#{provider}"/>
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="unitcost">Costo unitario</p:outputLabel>
+											<p:inputText id="unitcost" value="#{departureInputBean.providerInput.unitPrice}"
+												disabled="true" maxlength="50" />
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel id="textAmount" for="amount">Cantidad (Máximo #{departureInputBean.departureInput.input.stock} unidades)</p:outputLabel>
+											<p:spinner id="amount" value="#{departureInputBean.departureInput.amount}" required="true" min="0"
+												max="#{departureInputBean.departureInput.input.stock}">
+												<p:ajax event="change" update=":form:new-departure-content"/>
+											</p:spinner>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="totalCost">Costo total</p:outputLabel>
+											<p:inputText id="totalCost" disabled="true"
+												value="#{departureInputBean.departureInput.amount * departureInputBean.providerInput.unitPrice}"/>
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="departureDate">Fecha de salida</p:outputLabel>
+											<p:datePicker id="departureDate"
+												value="#{departureInputBean.departureInput.dateOfDeparture}"
+												monthNavigator="true" yearNavigator="true" showWeek="true" yearRange="1990:2060" mask="true"
+												pattern="dd/MM/yyyy" required="true" />
+										</div>
+										
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="note">Número de nota</p:outputLabel>
+											<p:inputText id="note" value="#{departureInputBean.departureInput.note}" required="true"/>
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="observations">Observaciones</p:outputLabel>
+											<p:inputTextarea id="observations" value="#{departureInputBean.departureInput.observations}" maxlength="100" />
+										</div>
+									</div>
+									<div class="grid mt-2">
+										<p:outputLabel class="font-bold" value="* Valores obligatorios" />
+									</div>
+									<div class="mt-3">
+										<p:commandButton value="Guardar" icon="pi pi-check" styleClass="ui-button-raised mr-3 w-full md:w-auto"
+											action="#{departureInputBean.save()}" process="new-departure-content @this" update="new-departure-content" />
+										<p:commandButton value="Cancelar" icon="fas fa-arrow-circle-left"
+											action="/protected/packing/inputdeparture.xhtml?faces-redirect=true" immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0" />
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

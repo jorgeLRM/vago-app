@@ -126,8 +126,7 @@ INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (2, 2
 
 INSERT INTO adjustmentinput (status, dateofadjustment, amount, observations, reason, totalPrice, typeAdjustment, idInput, idProvider) VALUES ('ACTIVE', '2022-03-25', 8, 'El material se recibio en mal estado y no se reporto', 'Botellas rotas', 800, 'POSITIVE', 1, 1);
 
-
-
+INSERT INTO departureinput (status, amount, dateOfDeparture, note, totalPrice, observations, idInput, idProvider) VALUES ('ACTIVE', 1200, '2022-03-31', 'N-035', 1200000, 'Salida para envasar el lote A-03-EL-22', 1, 1);
 
 
 
