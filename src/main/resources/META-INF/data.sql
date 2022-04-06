@@ -128,6 +128,17 @@ INSERT INTO adjustmentinput (status, dateofadjustment, amount, observations, rea
 
 INSERT INTO departureinput (status, amount, dateOfDeparture, note, totalPrice, observations, idInput, idProvider) VALUES ('ACTIVE', 1200, '2022-03-31', 'N-035', 1200000, 'Salida para envasar el lote A-03-EL-22', 1, 1);
 
+INSERT INTO calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 50.2, 1);
+INSERT INTO calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 49.32, 2);
+
+INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 53.24, 20, 2.44, 424, 146, 'J-01-TBCS-22 Cuerpo', NULL, 0, 1200, 1);
+INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 8.24, 12.32, 0.23, 173, 244, 'Agua + Colas', NULL, 0, 50, 1);
+INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 57.24, 13, 2, 320, 40, 'TR-01-SN-22 Cuerpo', NULL, 0, 1120, 2);
+INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 150, 2);
+INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 50, 2);
+
+
+
 
 
 

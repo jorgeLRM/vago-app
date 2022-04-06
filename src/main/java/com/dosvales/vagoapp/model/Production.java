@@ -69,6 +69,10 @@ public class Production extends AbstractEntity {
 	
 	@OneToMany(mappedBy="production")
 	private Set<Formulation> formulations = new HashSet<Formulation>();
+
+	// Se agrego este atributo y sus respectivos get y set
+	@OneToMany(mappedBy = "production")
+	private Set<Calculation> calculations = new HashSet<Calculation>();
 	
 	public String getLot() {
 		return lot;
@@ -228,5 +232,13 @@ public class Production extends AbstractEntity {
 
 	public void setTypeProduction(TypeProduction typeProduction) {
 		this.typeProduction = typeProduction;
+	}
+
+	public Set<Calculation> getCalculations() {
+		return calculations;
+	}
+
+	public void setCalculations(Set<Calculation> calculations) {
+		this.calculations = calculations;
 	}
 }
