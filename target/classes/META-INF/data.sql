@@ -137,6 +137,9 @@ INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols
 INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 150, 2);
 INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 50, 2);
 
+INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal proveniente de mas de un tipo de maguey', 'Ensamble Emigdio', 4);
+INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal destilado con maiz tostado', 'Elote Aquilino', 1);
+
 
 
 
