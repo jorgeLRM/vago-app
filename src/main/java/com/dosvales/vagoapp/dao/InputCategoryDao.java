@@ -11,7 +11,7 @@ import com.dosvales.vagoapp.model.InputCategory;
 @Local
 public interface InputCategoryDao extends GenericDao<InputCategory, Long>{
 	
-	InputCategory findByName(String name);
+	InputCategory findByNameAndNomenclature(String name, String nomenclature);
 	
 	List<InputCategory> findAllByStatus(EntityStatus status);
 	

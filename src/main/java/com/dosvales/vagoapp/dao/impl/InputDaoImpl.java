@@ -10,6 +10,7 @@ import com.dosvales.vagoapp.dao.InputDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.Input;
+import com.dosvales.vagoapp.model.InputCategory;
 
 @Stateless
 public class InputDaoImpl extends GenericDaoImpl<Input, Long> implements InputDao, Serializable {
@@ -36,4 +37,19 @@ public class InputDaoImpl extends GenericDaoImpl<Input, Long> implements InputDa
 				.getResultList();
 	}
 
+	@Override
+	public List<Input> findByCategory(InputCategory category) {
+		return em.createQuery("FROM Input i WHERE i.category  = :category", Input.class)
+				.setParameter("category", category)
+				.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Input> findWhitoutBottles() {
+		String jpql = "SELECT * FROM input AS i INNER JOIN inputcategory AS ic ON i.idCategory = ic.id "
+				+ "WHERE UPPER(ic.name) NOT LIKE '%BOTELLA%' AND i.status = 'ACTIVE'";
+		return em.createNativeQuery(jpql, Input.class)
+				.getResultList();
+	}
 }

@@ -38,6 +38,11 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 	}
 
 	@Override
+	public Product findWithInputs(Long id) {
+		return dao.findWithInputs(id);
+	}
+
+	@Override
 	public List<Product> findAllActive() {
 		return dao.findAllByStatus(EntityStatus.ACTIVE);
 	}

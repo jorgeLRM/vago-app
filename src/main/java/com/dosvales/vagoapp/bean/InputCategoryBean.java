@@ -58,13 +58,13 @@ public class InputCategoryBean implements Serializable {
 	}
 	
 	public InputCategory checkAvailability(InputCategory ic) throws DataFoundException, AppException{
-		InputCategory found = categoryService.findByName(ic.getName());
+		InputCategory found = categoryService.findByNameAndNomenclature(ic.getName(), ic.getNomenclature());
 		if (found != null) {
 			if (found.getStatus() == EntityStatus.INACTIVE) {
 				// Se cambio el mensaje
 				throw new AppException("El nombre de la categoría que ingresaste ya se encuentra registrada pero está deshabilitada. Consulta las categorias deshabilitadas para volverla a habilitar.");
 			} else {
-				throw new DataFoundException("El nombre de la categoría ya se encuentra registrada");
+				throw new DataFoundException("El nombre y/o nomenclatura de la categoría ya se encuentra registrada");
 			}
 		}
 		return found;

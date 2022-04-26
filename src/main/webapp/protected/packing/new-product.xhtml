@@ -1,0 +1,231 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{productBean.openNew()}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="PRODUCTO" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Nuevo producto">
+								<p:wizard flowListener="#{productBean.onFlowProcess}">
+									<p:tab id="cdGeneral" title="General">
+										<p:panel header="Información general">
+											<p:outputPanel id="general-product" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty productBean.product}">
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="name">Nombre del producto:</p:outputLabel>
+															<p:inputText id="name" value="#{productBean.product.name}"
+																required="true" maxlength="50"/>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="description">Descripción:</p:outputLabel>
+															<p:inputText id="description" value="#{productBean.product.description}"
+																required="true" maxlength="70"/>
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="capacity">Capacidad (ml):</p:outputLabel>
+															<p:spinner id="capacity" value="#{productBean.product.capacity}"
+																required="true" min="0"/>
+														</div>
+														
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="tradeMark">Marca del producto:</p:outputLabel>
+															<p:inputText id="tradeMark" value="#{productBean.product.trademark}"
+																required="true" maxlength="50"/>
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-4">
+															<p:outputLabel for="productCategory">Categoría del producto:</p:outputLabel>
+															<p:selectOneMenu id="productCategory" value="#{productBean.product.category}"
+																required="true" converter="omnifaces.SelectItemsConverter" filter="true"
+																filterMatchMode="startsWith">
+																<f:selectItem itemLabel="CATEGORÍA DEL PRODUCTO" itemValue="#{null}"  noSelectionOption="true"/>
+																<f:selectItems value="#{productBean.categories}" var="category" itemValue="#{category}"
+																	itemLabel="#{category.name}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-4">
+															<p:outputLabel for="mezcalCategory">Categoría del mezcal:</p:outputLabel>
+															<p:selectOneMenu id="mezcalCategory" value="#{productBean.product.mezcalCategory}" 
+																required="true" converter="omnifaces.GenericEnumConverter">
+																<f:selectItem itemLabel="CATEGORÍA DEL MEZCAL" itemValue="#{null}"  noSelectionOption="true"/>
+																<f:selectItems value="#{productBean.mezcalCategories}" var="mezcalCategory" 
+																	itemValue="#{mezcalCategory}" itemLabel="#{mezcalCategory.category}" />
+															</p:selectOneMenu>
+														</div>
+														<div class="field col-12 md:col-4">
+															<p:outputLabel for="mezcalClass">Clase del mezcal:</p:outputLabel>
+															<p:selectOneMenu id="mezcalClass" value="#{productBean.product.mezcalClass}" 
+																required="true" converter="omnifaces.GenericEnumConverter">
+																<f:selectItem itemLabel="CLASE DEL MEZCAL" itemValue="#{null}"  noSelectionOption="true"/>
+																<f:selectItems value="#{productBean.mezcalClasses}" var="mezcalClass" 
+																	itemValue="#{mezcalClass}" itemLabel="#{mezcalClass.text}" />
+															</p:selectOneMenu>
+														</div>
+													</div>
+													<div class="formgrid grid mt-2">
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="salePrice">Precio de venta:</p:outputLabel>
+															<p:spinner id="salePrice" value="#{productBean.product.salePrice}"
+																required="true" min="0" stepFactor=".01"/>
+														</div>
+														<div class="field col-12 md:col-6">
+															<p:outputLabel for="productionCost">Costo de producción:</p:outputLabel>
+															<p:spinner id="productionCost" value="#{productBean.product.productionCost}"
+																required="true" min="0" stepFactor=".01"/>
+														</div>
+													</div>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+									
+									<p:tab id="cdInputs" title="Insumos">
+										<p:panel header="Arrastre los insumos que se necesitarán para el envasado">
+											<p:outputPanel id="product-productInput" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty productBean.product}">
+													<p:pickList id="productPicklist" value="#{productBean.dualListInput}" var="input"
+														itemValue="#{input}" required="true" itemLabel="#{input.name}" responsive="true"
+														showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
+														<o:converter converterId="omnifaces.ListConverter"
+															list="#{productBean.dualListInput.source}" />
+														<f:facet name="sourceCaption">Insumos disponibles</f:facet>
+														<f:facet name="targetCaption">Insumos que se ocuparán</f:facet>
+														<p:column style="width:94%">
+															<div class="p-d-flex p-ai-center">
+																<h:outputText value="#{input.code} - #{input.name}"/>
+															</div>
+														</p:column>
+													</p:pickList>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+									<p:tab id="cdQuantity" title="Cantidades">
+										<p:panel header="Cantidades de insumos">
+											<p:outputPanel id="quantity-productInput" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty productBean.product}">
+													<p:dataTable id="dt-productInput" var="pi" widgetVar="dtProductInput" reflow="true"
+														value="#{productBean.productInputWrapper}" size="small"
+														stripedRows="true" showGridlines="true">
+
+														<p:column headerText="Insumo">
+															<h:outputText value="#{pi.input.name}" />
+														</p:column>
+
+														<p:column headerText="Detalles del insumo">
+															<h:outputText value="#{pi.input.specifications}" />
+														</p:column>
+
+														<p:column headerText="Cantidad">
+															<p:spinner value="#{pi.quantity}" min="1"/>
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+											</p:outputPanel>
+										</p:panel>
+									</p:tab>
+									<p:tab id="cdConfirm" title="Confirmación">
+										<p:panel header="Confirmación">
+											<p:outputPanel id="confirmation-productInput" class="ui-fluid">
+												<p:outputPanel rendered="#{not empty productBean.product}">
+													<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+														columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+														style="border:0px none; background-color:transparent;">
+														<p:row styleClass="my-heading-row">
+															Información general
+														</p:row>
+														<p:outputLabel value="Nombre del producto:" />
+														<h:outputText value="#{productBean.product.name}" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Descripción del producto:" />
+														<h:outputText value="#{productBean.product.description}" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Categoría del producto:" />
+														<h:outputText value="#{productBean.product.category.name}" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Capacidad del producto:" />
+														<h:outputText value="#{productBean.product.capacity} ml" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Categoria del mezcal:" />
+														<h:outputText value="#{productBean.product.mezcalCategory.category}" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Clase del mezcal:" />
+														<h:outputText value="#{productBean.product.mezcalClass.text}" 
+															styleClass="outputLabel"/>
+				
+														<p:outputLabel value="Precio de venta:" />
+														<h:outputText value="$#{productBean.product.salePrice}" 
+															styleClass="outputLabel"/>
+														
+														<p:outputLabel value="Costo de producción:" />
+														<h:outputText value="$#{productBean.product.productionCost}" 
+															styleClass="outputLabel"/>
+				
+														<p:outputLabel value="Marca:" />
+														<h:outputText value="#{productBean.product.trademark}" 
+															styleClass="outputLabel"/>
+
+														<p:row styleClass="my-heading-row">
+														Detalle de corte
+														</p:row>
+													</p:panelGrid>
+	
+													<p:dataTable var="pi" reflow="true" showGridlines="true" 
+														value="#{productBean.productInputWrapper}">
+														<p:column headerText="Código" style="text-align:center">
+															<h:outputText value="#{pi.input.code}" />
+														</p:column>
+				
+														<p:column headerText="Nombre" style="text-align:center">
+															<h:outputText value="#{pi.input.name}" />
+														</p:column>
+				
+														<p:column headerText="Cantidad" style="text-align:center">
+															<h:outputText value="#{pi.quantity}" />
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+											</p:outputPanel>
+											<p:commandButton value="Confirmar" action="#{productBean.confirm()}" process="@this"
+												styleClass="mt-3 ui-button-raised" />
+										</p:panel>
+									</p:tab>
+								</p:wizard>
+								<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar" style="margin-left: .5em" 
+									styleClass="ui-button-secondary ui-button-raised mt-3 w-full md:w-auto"
+									action="/protected/packing/products?faces-redirect=true" process="@this" />
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

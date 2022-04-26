@@ -24,8 +24,8 @@ public class InputCategoryServiceImpl extends GenericServiceImpl<InputCategory, 
 	private InputCategoryDao dao;
 	
 	@Override
-	public InputCategory findByName(String name) {
-		return dao.findByName(name);
+	public InputCategory findByNameAndNomenclature(String name, String nomenclature) {
+		return dao.findByNameAndNomenclature(name, nomenclature);
 	}
 
 	@Override

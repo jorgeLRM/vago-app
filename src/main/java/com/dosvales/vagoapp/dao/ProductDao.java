@@ -14,6 +14,8 @@ public interface ProductDao extends GenericDao<Product, Long> {
 
 	Product findByName(String name);
 
+	Product findWithInputs(Long id);
+
 	List<Product> findAllByStatus(EntityStatus status);
 
 	List<Product> findByProducer(Producer producer);

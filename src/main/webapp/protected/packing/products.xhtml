@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewAction action="#{productBean.refreshTable()}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="PRODUCTOS" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:toolbar styleClass="p-mb-4 w-full">
+								<p:toolbarGroup class="w-full md:w-auto">
+									<p:outputLabel style="font-weight:bold"
+										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR PRODUCTOS
+									</p:outputLabel>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right" class="w-full md:w-auto">
+									<p:commandButton value="Nuevo producto" icon="pi pi-plus"
+										styleClass="ui-button-success ui-button-raised w-full md:w-auto"
+										action="/protected/packing/new-product.xhtml?faces-redirect=true" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="dt-products" widgetVar="dtProducts" var="product" 
+								value="#{productBean.products}" reflow="true" styleClass="products-table" 
+								paginator="true" rows="10" paginatorPosition="bottom" showGridlines="true" 
+								size="small" style="text-align:center">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold"> 
+											<p:selectOneMenu id="changeFilter" value="#{productBean.status}"
+												styleClass="w-full md:w-auto">
+												<p:ajax listener="#{productBean.refreshTable()}" update="dt-products" />
+												<f:selectItem itemLabel="TODOS" itemValue="#{null}"
+													styleClass="product-badge status-lowstock" />
+												<f:selectItems value="#{productCategoryBean.entityStatus}"
+													var="status" itemLabel="#{status.text.toUpperCase()}"
+													itemValue="#{status}"/>
+											</p:selectOneMenu> 
+											<p:blockUI block="main-template" trigger="changeFilter"/>
+										</span> 
+										<span class="filter-container ui-input-icon-left"> 
+											<i class="pi pi-search"/>
+											<p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{product.id}" width="1" style="text-align:center">
+									<h:outputText value="#{product.id}" />
+								</p:column>
+								<p:column headerText="Nombre del producto" filterBy="#{product.name}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{product.name}" />
+								</p:column>
+								<p:column headerText="Categoria" filterBy="#{product.category.name}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{product.category.name}" />
+								</p:column>
+								<p:column headerText="Precio de venta" style="text-align:center" width="1">
+									<h:outputText value="$#{product.salePrice}" />
+								</p:column>
+								<p:column headerText="Costo de producción" style="text-align:center" width="2">
+									<h:outputText value="$#{product.productionCost}" />
+								</p:column>
+								<p:column headerText="Estatus" style="text-align:center" width="1">
+									<h:outputText styleClass="product-badge status-#{product.status.badge}"
+										value="#{product.status.text}" />
+								</p:column>
+								<p:column headerText="Acciones" width="1" style="text-align:center">
+									<p:commandButton id="disableButton" icon="fas fa-toggle-off"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-secondary"
+										oncomplete="PF('inactiveProductDialog').show()" process="@this"
+										rendered="#{product.status == 'ACTIVE'}">
+										<f:setPropertyActionListener value="#{product}" target="#{productBean.product}" />
+									</p:commandButton>
+									<p:tooltip for="disableButton" value="Deshabilitar registro" position="bottom" />
+
+									<p:commandButton id="enableButton" icon="fas fa-toggle-on"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-success"
+										oncomplete="PF('activeProductDialog').show()" process="@this"
+										rendered="#{product.status == 'INACTIVE'}">
+										<f:setPropertyActionListener value="#{product}" target="#{productBean.product}" />
+									</p:commandButton>
+									<p:tooltip for="enableButton" value="Habilitar registro" position="bottom" />
+									
+									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
+										outcome="/protected/packing/edit-product.xhtml?faces-redirect=true"
+										rendered="#{product.status == 'ACTIVE'}">
+										<f:param name="id" value="#{product.id}" />
+									</p:linkButton>
+									<p:tooltip for="editButton" value="Editar registro" position="bottom" />
+									
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										outcome="/protected/packing/view-product.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+										<f:param name="id" value="#{product.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewButton" value="Ver registro" position="bottom" />
+								</p:column>
+							</p:dataTable>
+
+							<p:confirmDialog widgetVar="activeProductDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de habilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{productBean.enabledDisabledProduct()}"
+									process="@this" oncomplete="PF('activeProductDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('activeProductDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="inactiveProductDialog" showEffect="fade" width="300"
+								message="¿Estás seguro de deshabilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{productBean.enabledDisabledProduct()}"
+									process="@this" oncomplete="PF('inactiveProductDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('inactiveProductDialog').hide()" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

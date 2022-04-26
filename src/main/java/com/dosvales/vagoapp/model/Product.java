@@ -4,14 +4,20 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product")
+@NamedEntityGraph(name = "graph.Product.productInputs",
+		attributeNodes = @NamedAttributeNode("productInputs"))
 public class Product extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -26,6 +32,18 @@ public class Product extends AbstractEntity {
 
 	@NotNull
 	private Double productionCost;
+
+	@NotNull
+	private String trademark;
+
+	@NotNull
+	private Integer capacity;
+
+	@Enumerated(EnumType.STRING)
+	private MezcalCategory mezcalCategory;
+
+	@Enumerated(EnumType.STRING)
+	private MezcalClass mezcalClass;
 
 	@ManyToOne
 	@JoinColumn(name = "idCategory")
@@ -66,6 +84,38 @@ public class Product extends AbstractEntity {
 		this.productionCost = productionCost;
 	}
 
+	public String getTrademark() {
+		return trademark;
+	}
+
+	public void setTrademark(String trademark) {
+		this.trademark = trademark;
+	}
+
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
+	public MezcalCategory getMezcalCategory() {
+		return mezcalCategory;
+	}
+
+	public void setMezcalCategory(MezcalCategory mezcalCategory) {
+		this.mezcalCategory = mezcalCategory;
+	}
+
+	public MezcalClass getMezcalClass() {
+		return mezcalClass;
+	}
+
+	public void setMezcalClass(MezcalClass mezcalClass) {
+		this.mezcalClass = mezcalClass;
+	}
+
 	public ProductCategory getCategory() {
 		return category;
 	}
@@ -80,5 +130,5 @@ public class Product extends AbstractEntity {
 
 	public void setProductInputs(List<ProductInput> productInputs) {
 		this.productInputs = productInputs;
-	}	
+	}
 }

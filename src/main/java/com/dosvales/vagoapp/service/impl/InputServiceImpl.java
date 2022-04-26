@@ -11,6 +11,7 @@ import com.dosvales.vagoapp.dao.InputDao;
 import com.dosvales.vagoapp.dao.generic.GenericDao;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.Input;
+import com.dosvales.vagoapp.model.InputCategory;
 import com.dosvales.vagoapp.service.InputService;
 import com.dosvales.vagoapp.service.generic.GenericServiceImpl;
 
@@ -51,4 +52,13 @@ public class InputServiceImpl extends GenericServiceImpl<Input, Long> implements
 		return dao.findAllByStatus(EntityStatus.INACTIVE);
 	}
 
+	@Override
+	public List<Input> findByCategory(InputCategory category) {
+		return dao.findByCategory(category);
+	}
+
+	@Override
+	public List<Input> findWhitoutBottles() {
+		return dao.findWhitoutBottles();
+	}
 }

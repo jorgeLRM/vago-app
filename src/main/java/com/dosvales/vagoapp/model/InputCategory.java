@@ -17,7 +17,9 @@ public class InputCategory extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	
+
+	private String nomenclature;
+
 	private String description;
 	
 	@OneToMany(mappedBy="category")
@@ -31,6 +33,14 @@ public class InputCategory extends AbstractEntity {
 		this.name = name;
 	}
 
+	public String getNomenclature() {
+		return nomenclature;
+	}
+
+	public void setNomenclature(String nomenclature) {
+		this.nomenclature = nomenclature;
+	}
+	
 	public String getDescription() {
 		return description;
 	}

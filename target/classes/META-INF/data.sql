@@ -103,19 +103,25 @@ INSERT INTO Customer (name, email, telephone, locality, municipality, state, sta
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Mauris Sit Associates','vivamus.non@google.net','(218) 743-6943','Van','Yunnan','Netherlands', 'ACTIVE');
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Aliquam Ltd','elit@aol.com','(766) 866-9395','Azad Kashmir','Cairns','Austria', 'ACTIVE');
 
-INSERT INTO InputCategory (name, status) VALUES ('Vidrio','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Plastico','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Tapones','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Empaque','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Codigos','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Filtros','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Etiquetas','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Carton','ACTIVE');
-INSERT INTO InputCategory (name, status) VALUES ('Celocil','ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Botellas de vidrio', 'BOTEV', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Botellas de plastico', 'BOTEP', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Tapones', 'TAPON', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Empaque', 'EMPAQ', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Codigos', 'CODIG', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Filtros', 'FILTR', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Etiquetas', 'ETIQU', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Cajas de carton', 'CAJAS', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Carton en general', 'CARTO', 'ACTIVE');
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Celocil', 'CELOC', 'ACTIVE');
 
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 170, 100, 200, 'Pieza', 1, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'Pieza', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 170, 100, 200, 'MILLILITER', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'MILLILITER', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'MILLILITER', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('TAPON-0001', 'TAPON BEIGE 31*10*20.5', 'TAPON ENBLOCK BEIGE 31X10X20.5', 200, 100, 200, 'PIECE', 3, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CELOC-0001', 'CELOCIL 5x9cm', 'CELOCIL TRANSPARENTE 5x9cm', 0, 100, 200, 'PIECE', 2, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CODIG-0001', 'CODIGO DE BARRA EL750MX', 'CÓDIGO DE BARRAS PARA ELOTE DE 750 ML NACIONAL', 300, 100, 200, 'PIECE', 7, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CARTO-0001', 'ESQUINEROS 1.82m', 'ESQUINEROS DE 1.82 METROS DE LARGO PARA TARIMA NACIONAL', 300, 100, 200, 'PIECE', 8, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('FILTR-0001', 'FILTRO POLYESPUM', 'FILTRO POLYESPUM', 300, 100, 200, 'PIECE', 6, 'ACTIVE');
 
 INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, '10 dias habiles', 100);
 INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, 'Maximo dos meses', 100);
@@ -140,6 +146,11 @@ INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols
 INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal proveniente de mas de un tipo de maguey', 'Ensamble Emigdio', 4);
 INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal destilado con maiz tostado', 'Elote Aquilino', 1);
 
+INSERT INTO product(status, capacity, description, mezcalCategory, mezcalClass, name, productionCost, salePrice, trademark, idCategory) VALUES ('ACTIVE', 750, 'Elote 750ml nacional', 'CRAFT', 'YOUNG', 'Elote 750ml MX', 350.56, 750.50, 'VAGO', 2);
+
+INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 4, 1);
+--INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 5, 1);
+INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 6, 1);
 
 
 

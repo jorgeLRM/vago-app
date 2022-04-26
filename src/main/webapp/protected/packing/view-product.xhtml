@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{productBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="PRODUCTOS" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR" detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{productBean.product == null}" />
+		<h:panelGroup layout="block" rendered="#{productBean.product != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:panel header="Detalles del producto">
+							<p:outputPanel id="productDetail" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty productBean.product}">
+									<p:panelGrid columns="4" 
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+										style="border:0px none; background-color:transparent;">
+
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="Nombre del producto:" />
+										<h:outputText value="#{productBean.product.name}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Descripción del producto:" />
+										<h:outputText value="#{productBean.product.description}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Categoría del producto:" />
+										<h:outputText value="#{productBean.product.category.name}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Capacidad del producto:" />
+										<h:outputText value="#{productBean.product.capacity} ml" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Categoria del mezcal:" />
+										<h:outputText value="#{productBean.product.mezcalCategory.category}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Clase del mezcal:" />
+										<h:outputText value="#{productBean.product.mezcalClass.text}" styleClass="outputLabel"/>
+
+										<p:outputLabel value="Precio de venta:" />
+										<h:outputText value="$#{productBean.product.salePrice}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Costo de producción:" />
+										<h:outputText value="$#{productBean.product.productionCost}" styleClass="outputLabel"/>
+
+										<p:outputLabel value="Marca:" />
+										<h:outputText value="#{productBean.product.trademark}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Estatus:" />
+										<h:outputText value="#{productBean.product.status == 'ACTIVE' ? 'Activo' : 'Descontinuado'}"
+											styleClass="#{productBean.product.status == 'ACTIVE' ? 'text-green' : 'text-red'}" />
+									</p:panelGrid>
+									
+									<p:panelGrid columns="1" columnClasses="ui-grid-col-12 " layout="grid" 
+										styleClass="ui-panelgrid-blank ui-fluid" style="border:0px none; background-color:transparent;">
+										<p:row styleClass="my-heading-row">
+											Insumos necesarios para el envasado del producto
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable var="pi" reflow="true" showGridlines="true" 
+										value="#{productBean.product.productInputs}">
+										<p:column headerText="Código" style="text-align:center">
+											<h:outputText value="#{pi.input.code}" />
+										</p:column>
+
+										<p:column headerText="Nombre" style="text-align:center">
+											<h:outputText value="#{pi.input.name}" />
+										</p:column>
+
+										<p:column headerText="Cantidad" style="text-align:center">
+											<h:outputText value="#{pi.quantity}" />
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton value="Regresar" icon="fas fa-arrow-circle-left"
+								action="/protected/packing/products.xhtml?faces-redirect=true"
+								process="@this" styleClass="ui-button-raised ui-button-secondary  w-full md:w-auto mt-3 md:mt-0" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

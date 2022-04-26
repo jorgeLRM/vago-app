@@ -9,7 +9,7 @@ public interface InputCategoryService extends GenericService<InputCategory, Long
 	
 	InputCategory blockUnblockAgave(Long id);
 	
-	InputCategory findByName(String name);
+	InputCategory findByNameAndNomenclature(String name, String nomenclature);
 	
 	List<InputCategory> findAllActive();
 	

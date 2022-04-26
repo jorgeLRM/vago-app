@@ -12,6 +12,8 @@ public interface ProductService extends GenericService<Product, Long> {
 
 	Product blockUnblockProduct(Long id);
 
+	Product findWithInputs(Long id);
+
 	List<Product> findAllActive();
 
 	List<Product> findAllInactive();

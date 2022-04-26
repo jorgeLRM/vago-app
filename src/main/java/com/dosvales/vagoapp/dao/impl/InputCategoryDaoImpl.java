@@ -17,12 +17,13 @@ public class InputCategoryDaoImpl extends GenericDaoImpl<InputCategory, Long> im
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public InputCategory findByName(String name) {
+	public InputCategory findByNameAndNomenclature(String name, String nomenclature) {
 		InputCategory insumoCategory = null;
 		try {
-			insumoCategory = em.createQuery("FROM InputCategory i WHERE UPPER(i.name) = :name", 
+			insumoCategory = em.createQuery("FROM InputCategory i WHERE UPPER(i.name) = :name OR UPPER(i.nomenclature) = :nomenclature", 
 					InputCategory.class)
 					.setParameter("name", name.toUpperCase())
+					.setParameter("nomenclature", nomenclature)
 					.getSingleResult();
 		} catch (NoResultException ex) {}
 		return insumoCategory;

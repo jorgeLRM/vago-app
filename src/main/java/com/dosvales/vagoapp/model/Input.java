@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,8 +28,11 @@ public class Input extends AbstractEntity {
 	private Integer minimumStock;
 	
 	private Integer maximumStock;
-	
-	private String unit;
+
+	private Integer capacity;
+
+	@Enumerated(EnumType.STRING)
+	private InputUnit unit;
 	
 	@ManyToOne
 	@JoinColumn(name="idCategory")
@@ -80,11 +85,11 @@ public class Input extends AbstractEntity {
 		this.maximumStock = maximumStock;
 	}
 
-	public String getUnit() {
+	public InputUnit getUnit() {
 		return unit;
 	}
 
-	public void setUnit(String unit) {
+	public void setUnit(InputUnit unit) {
 		this.unit = unit;
 	}
 
@@ -118,5 +123,13 @@ public class Input extends AbstractEntity {
 
 	public void setSpecifications(String specifications) {
 		this.specifications = specifications;
+	}
+
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
 	}
 }

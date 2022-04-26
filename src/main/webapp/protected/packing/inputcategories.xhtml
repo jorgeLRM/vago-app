@@ -44,7 +44,8 @@
 
 								<f:facet name="header">
 									<div class="products-table-header">
-										<span style="font-weight: bold"> <p:selectOneMenu
+										<span style="font-weight: bold"> 
+											<p:selectOneMenu
 												id="changeFilter" value="#{inputCategoryBean.status}"
 												styleClass="w-full md:w-auto"
 												converter="omnifaces.GenericEnumConverter">
@@ -56,10 +57,12 @@
 													var="status" itemLabel="#{status.text.toUpperCase()}"
 													itemValue="#{status}"
 													styleClass="product-badge status-#{status.badge}" />
-											</p:selectOneMenu> <p:blockUI block="main-template" trigger="changeFilter" />
-										</span> <span class="filter-container ui-input-icon-left"> <i
-											class="pi pi-search"></i> <p:inputText id="globalFilter"
-												onkeyup="PF('dtCategories').filter()" placeholder="Buscar" />
+											</p:selectOneMenu>
+											<p:blockUI block="main-template" trigger="changeFilter" />
+										</span> 
+										<span class="filter-container ui-input-icon-left"> 
+											<i class="pi pi-search"/> 
+											<p:inputText id="globalFilter" onkeyup="PF('dtCategories').filter()" placeholder="Buscar" />
 										</span>
 									</div>
 								</f:facet>
@@ -71,6 +74,10 @@
 								<p:column headerText="Nombre" filterBy="#{category.name}" width="2"
 									style="text-align:center">
 									<h:outputText value="#{category.name}" />
+								</p:column>
+								<p:column headerText="Nomenclatura" filterBy="#{category.nomenclature}" width="2"
+									style="text-align:center">
+									<h:outputText value="#{category.nomenclature}" />
 								</p:column>
 								<p:column headerText="Estado" width="1"
 									style="text-align:center">

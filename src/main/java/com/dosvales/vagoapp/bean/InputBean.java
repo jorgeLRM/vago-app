@@ -19,6 +19,7 @@ import com.dosvales.vagoapp.exception.DataFoundException;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.Input;
 import com.dosvales.vagoapp.model.InputCategory;
+import com.dosvales.vagoapp.model.InputUnit;
 import com.dosvales.vagoapp.model.Provider;
 import com.dosvales.vagoapp.model.ProviderInput;
 import com.dosvales.vagoapp.service.InputCategoryService;
@@ -153,9 +154,30 @@ public class InputBean implements Serializable {
 			inputs = inputService.findAll();
 		}
 	}
+
+	public void calculateCode() {
+		if (input.getCategory() != null) {
+			int number = inputService.findByCategory(input.getCategory()).size() + 1;
+			String code = input.getCategory().getNomenclature() + "-";
+			if (number < 10)
+				code += "000" + number;
+			else if (number >=10 && number < 100)
+				code += "00" + number;
+			else if (number >= 100 && number < 1000)
+				code += "0" + number;
+			else
+				code += number;
+			input.setCode(code);
+		} else
+			input.setCode(null);
+	}
 	
 	public EntityStatus[] getEntityStatus() {
 		return EntityStatus.values();
+	}
+
+	public InputUnit[] getInputUnits() {
+		return InputUnit.values();
 	}
 	
 	public Input getInput() {
