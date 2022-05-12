@@ -13,10 +13,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 
 import com.dosvales.vagoapp.exception.AppException;
 import com.dosvales.vagoapp.exception.DataFoundException;
+import com.dosvales.vagoapp.exception.RelatedRecordException;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.Provider;
 import com.dosvales.vagoapp.service.ProviderService;
@@ -79,6 +81,27 @@ public class ProviderBean implements Serializable {
 		return "/protected/packing/providers.xhtml?faces-redirect=true";
 	}
 	
+	public void delete() {
+		try {
+			checkHasAssociations(provider);
+			providerService.delete(provider);
+			providers.remove(provider);
+			showMessage("Operación exitosa", "El proveedor ha sido eliminado correctamente", FacesMessage.SEVERITY_INFO);
+			PrimeFaces.current().ajax().update(":form:dt-providers");
+		} catch(RelatedRecordException ex) {
+			showMessage("Cuidado", ex.getMessage(), FacesMessage.SEVERITY_WARN);
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+		}
+	}
+
+	public Provider checkHasAssociations(Provider p) throws RelatedRecordException {
+		Provider found = providerService.findWithProviderInputs(p.getId());
+		if (found.getProviderInputs().isEmpty())
+			return found;
+		throw new RelatedRecordException("El proveedor no se puede eliminar porque ya ha sido utilizado anteriormente. Intente deshabilitarlo si ya no lo necesita.");
+	}
+	
 	public String update() {
 		String page = "";
 		try {
@@ -118,6 +141,18 @@ public class ProviderBean implements Serializable {
 	
 	public String getProvidersPath(String name) {
 		return FilePath.DOMAIN + File.separator + FilePath.PROVIDER_DIRECTORY + File.separator + name;
+	}
+
+	public void enabledDisabledProvider() {
+		try {
+			String operation = provider.getStatus() == EntityStatus.ACTIVE ? "deshabilitado" : "habilitado" ;
+			provider = providerService.blockUnblockProvider(provider.getId());
+			showMessage("Operación exitosa", "El proveedor ha sido " + operation + " exitosamente", FacesMessage.SEVERITY_INFO);
+			providers.remove(provider);
+			PrimeFaces.current().ajax().update(":form:dt-providers");
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+		}
 	}
 	
 	public void refreshTable() {

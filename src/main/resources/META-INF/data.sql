@@ -93,6 +93,7 @@ INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, sta
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Plomo (Pb)', 0.0, 0.5, 'mg/L', false, 'ACTIVE');
 INSERT INTO Assay(name, allowableMinimum, maximumAllowable, unit, byDefault, status) VALUES ('Arsénico (As)', 0.0, 0.5, 'mg/L', false, 'ACTIVE');
 
+INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Consejo regulador del mezcal','administracion@crm.gob.mx','(723) 225-0166', 'no_image.png', 'ACTIVE');
 INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Nisl Arcu Ltd','tempus.non@yahoo.couk','(723) 225-0166', 'no_image.png', 'ACTIVE');
 INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Vitae Diam LLC','vitae.risus.duis@outlook.net','(644) 654-9171', 'no_image.png', 'ACTIVE');
 INSERT INTO Provider (name, telephone, email, logo, status) VALUES ('Ac Libero Nec LLC','amet.faucibus.ut@outlook.couk','(611) 107-7778', 'no_image.png', 'ACTIVE');
@@ -103,6 +104,7 @@ INSERT INTO Customer (name, email, telephone, locality, municipality, state, sta
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Mauris Sit Associates','vivamus.non@google.net','(218) 743-6943','Van','Yunnan','Netherlands', 'ACTIVE');
 INSERT INTO Customer (name, email, telephone, locality, municipality, state, status) VALUES ('Aliquam Ltd','elit@aol.com','(766) 866-9395','Azad Kashmir','Cairns','Austria', 'ACTIVE');
 
+INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Holograma', 'HOLOG', 'ACTIVE');
 INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Botellas de vidrio', 'BOTEV', 'ACTIVE');
 INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Botellas de plastico', 'BOTEP', 'ACTIVE');
 INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Tapones', 'TAPON', 'ACTIVE');
@@ -114,45 +116,49 @@ INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Cajas de carton'
 INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Carton en general', 'CARTO', 'ACTIVE');
 INSERT INTO InputCategory (name, nomenclature, status) VALUES ('Celocil', 'CELOC', 'ACTIVE');
 
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 170, 100, 200, 'MILLILITER', 1, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'MILLILITER', 1, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'MILLILITER', 1, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('TAPON-0001', 'TAPON BEIGE 31*10*20.5', 'TAPON ENBLOCK BEIGE 31X10X20.5', 200, 100, 200, 'PIECE', 3, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CELOC-0001', 'CELOCIL 5x9cm', 'CELOCIL TRANSPARENTE 5x9cm', 0, 100, 200, 'PIECE', 2, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CODIG-0001', 'CODIGO DE BARRA EL750MX', 'CÓDIGO DE BARRAS PARA ELOTE DE 750 ML NACIONAL', 300, 100, 200, 'PIECE', 7, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CARTO-0001', 'ESQUINEROS 1.82m', 'ESQUINEROS DE 1.82 METROS DE LARGO PARA TARIMA NACIONAL', 300, 100, 200, 'PIECE', 8, 'ACTIVE');
-INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('FILTR-0001', 'FILTRO POLYESPUM', 'FILTRO POLYESPUM', 300, 100, 200, 'PIECE', 6, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('HOLOG-0001', 'HOLOGRAMA', 'HOLOGRAMA', 1700, 100, 20000, 'PIECE', 1, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0001', 'BOTELLA BORDALESA 750ML', 'BORDALESA DELGADA 750 ML', 170, 100, 200, 'MILLILITER', 2, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0002', 'BOTELLA BORDALESA 700ML', 'BOTELLA BORDALESA 700 ML', 0, 100, 200, 'MILLILITER', 2, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('BOTEL-0003', 'BOTELLA EUROPEA 750ML', 'EUROPEA 750 ML', 0, 100, 200, 'MILLILITER', 2, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('TAPON-0001', 'TAPON BEIGE 31*10*20.5', 'TAPON ENBLOCK BEIGE 31X10X20.5', 200, 100, 200, 'PIECE', 4, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CELOC-0001', 'CELOCIL 5x9cm', 'CELOCIL TRANSPARENTE 5x9cm', 0, 100, 200, 'PIECE', 3, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CODIG-0001', 'CODIGO DE BARRA EL750MX', 'CÓDIGO DE BARRAS PARA ELOTE DE 750 ML NACIONAL', 300, 100, 200, 'PIECE', 8, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('CARTO-0001', 'ESQUINEROS 1.82m', 'ESQUINEROS DE 1.82 METROS DE LARGO PARA TARIMA NACIONAL', 300, 100, 200, 'PIECE', 9, 'ACTIVE');
+INSERT INTO Input (code, name, specifications, stock, minimumStock, maximumStock, unit, idCategory, status) VALUES ('FILTR-0001', 'FILTRO POLYESPUM', 'FILTRO POLYESPUM', 300, 100, 200, 'PIECE', 7, 'ACTIVE');
 
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, '10 dias habiles', 100);
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, 'Maximo dos meses', 100);
-INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (3, 3, 'Si hay en existencia, entrega inmediata', 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (1, 1, '10 dias habiles', 0);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (2, 2, '10 dias habiles', 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (3, 3, 'Maximo dos meses', 100);
+INSERT INTO ProviderInput (idProvider, idInput, deliveryTime, unitPrice) VALUES (4, 4, 'Si hay en existencia, entrega inmediata', 100);
 
-INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (1, 1, 10, 1000);
-INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (2, 2, 5, 500);
+INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (2, 2, 10, 1000);
+INSERT INTO PurchaseInput (idProvider, idInput, amount, totalPrice) VALUES (3, 3, 5, 500);
 
-INSERT INTO adjustmentinput (status, dateofadjustment, amount, observations, reason, totalPrice, typeAdjustment, idInput, idProvider) VALUES ('ACTIVE', '2022-03-25', 8, 'El material se recibio en mal estado y no se reporto', 'Botellas rotas', 800, 'POSITIVE', 1, 1);
+INSERT INTO Adjustmentinput (status, dateofadjustment, amount, observations, reason, totalPrice, typeAdjustment, idInput, idProvider) VALUES ('ACTIVE', '2022-03-25', 8, 'El material se recibio en mal estado y no se reporto', 'Botellas rotas', 800, 'POSITIVE', 2, 2);
 
-INSERT INTO departureinput (status, amount, dateOfDeparture, note, totalPrice, observations, idInput, idProvider) VALUES ('ACTIVE', 1200, '2022-03-31', 'N-035', 1200000, 'Salida para envasar el lote A-03-EL-22', 1, 1);
+INSERT INTO Departureinput (status, amount, dateOfDeparture, note, totalPrice, observations, idInput, idProvider) VALUES ('ACTIVE', 1200, '2022-03-31', 'N-035', 1200000, 'Salida para envasar el lote A-03-EL-22', 2, 2);
 
-INSERT INTO calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 50.2, 1);
-INSERT INTO calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 49.32, 2);
+INSERT INTO Calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 50.2, 1);
+INSERT INTO Calculation (status, time, alcoholicGradeDesired, idProduction) VALUES ('ACTIVE', '2022-03-18 01:41:10.0', 49.32, 2);
 
-INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 53.24, 20, 2.44, 424, 146, 'J-01-TBCS-22 Cuerpo', NULL, 0, 1200, 1);
-INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 8.24, 12.32, 0.23, 173, 244, 'Agua + Colas', NULL, 0, 50, 1);
-INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 57.24, 13, 2, 320, 40, 'TR-01-SN-22 Cuerpo', NULL, 0, 1120, 2);
-INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 150, 2);
-INSERT INTO rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 50, 2);
+INSERT INTO Rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 53.24, 20, 2.44, 424, 146, 'J-01-TBCS-22 Cuerpo', NULL, 0, 1200, 1);
+INSERT INTO Rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES ('ACTIVE', 8.24, 12.32, 0.23, 173, 244, 'Agua + Colas', NULL, 0, 50, 1);
+INSERT INTO Rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 57.24, 13, 2, 320, 40, 'TR-01-SN-22 Cuerpo', NULL, 0, 1120, 2);
+INSERT INTO Rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 150, 2);
+INSERT INTO Rowcalculation (status, alcohol, aldehydes, furfurol, higherAlcohols, methanol, name, observations, plomo, volume, idCalculation) VALUES('ACTIVE', 12.24, 19, 5, 420, 7, 'Agua + Cola', NULL, 0, 50, 2);
 
-INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal proveniente de mas de un tipo de maguey', 'Ensamble Emigdio', 4);
-INSERT INTO productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal destilado con maiz tostado', 'Elote Aquilino', 1);
+INSERT INTO Productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal proveniente de mas de un tipo de maguey', 'Ensamble Emigdio', 4);
+INSERT INTO Productcategory (status, description, name, idProducer) VALUES ('ACTIVE', 'Mezcal destilado con maiz tostado', 'Elote Aquilino', 1);
 
-INSERT INTO product(status, capacity, description, mezcalCategory, mezcalClass, name, productionCost, salePrice, trademark, idCategory) VALUES ('ACTIVE', 750, 'Elote 750ml nacional', 'CRAFT', 'YOUNG', 'Elote 750ml MX', 350.56, 750.50, 'VAGO', 2);
+INSERT INTO Product(status, capacity, description, mezcalCategory, mezcalClass, name, productionCost, salePrice, trademark, idCategory) VALUES ('ACTIVE', 750, 'Elote 750ml nacional', 'CRAFT', 'YOUNG', 'Elote 750ml MX', 350.56, 750.50, 'VAGO', 2);
 
-INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 4, 1);
+INSERT INTO Productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 5, 1);
 --INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 5, 1);
-INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 6, 1);
+INSERT INTO Productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 7, 1);
 
-
+INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-02-28', 'Los recibió el area de recepcion', 4200, 'INPUT');
+INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-03-28', 'Los recibió el area de recepcion', 3250, 'INPUT');
+INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-04-28', 'Los recibió el area de recepcion', 1400, 'INPUT');
 
 
 

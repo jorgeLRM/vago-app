@@ -12,6 +12,9 @@ import com.dosvales.vagoapp.model.Provider;
 public interface ProviderDao extends GenericDao<Provider, Long>{
 	
 	Provider findByName(String name);
+
 	List<Provider> findAllByStatus(EntityStatus status);
-	
+
+	Provider findWithProviderInputs(Long id);
+
 }

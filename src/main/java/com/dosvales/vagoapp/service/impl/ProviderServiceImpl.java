@@ -43,4 +43,17 @@ public class ProviderServiceImpl extends GenericServiceImpl<Provider, Long> impl
 		return dao.findAllByStatus(EntityStatus.INACTIVE);
 	}
 
+	@Override
+	public Provider findWithProviderInputs(Long id) {
+		return dao.findWithProviderInputs(id);
+	}
+
+	@Transactional
+	@Override
+	public Provider blockUnblockProvider(Long id) {
+		Provider provider = dao.findById(id);
+		EntityStatus status = provider.getStatus() == EntityStatus.ACTIVE ? EntityStatus.INACTIVE : EntityStatus.ACTIVE;
+		provider.setStatus(status);
+		return dao.update(provider);
+	}
 }

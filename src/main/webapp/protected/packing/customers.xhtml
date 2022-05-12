@@ -18,7 +18,6 @@
 				<div class="p-col-12">
 					<div class="card">
 						<h:form id="form">
-
 							<p:growl id="messages" showDetail="true">
 								<p:effect event="load" type="fade" delay="2000" closable="true" />
 							</p:growl>
@@ -30,7 +29,6 @@
 										ADMINISTRAR CLIENTES</p:outputLabel>
 								</p:toolbarGroup>
 								<p:toolbarGroup align="right" class="w-full md:w-auto">
-								<!-- Se modifico el texto del boton -->
 									<p:commandButton value="Nuevo cliente" icon="pi pi-plus"
 										styleClass="ui-button-success ui-button-raised w-full md:w-auto" 
 										action="/protected/packing/new-customer.xhtml?faces-redirect=true"/>
@@ -84,6 +82,23 @@
 
 								<p:column headerText="Acciones" width="1"
 									style="text-align:center">
+									<p:commandButton id="disableButton" icon="fas fa-toggle-off"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-secondary"
+										oncomplete="PF('inactiveCustomerDialog').show()" process="@this"
+										rendered="#{customer.status == 'ACTIVE'}">
+										<f:setPropertyActionListener value="#{customer}" target="#{customerBean.customer}" />
+									</p:commandButton>
+									<p:tooltip for="disableButton" value="Deshabilitar registro" position="bottom" />
+
+									<p:commandButton id="enableButton" icon="fas fa-toggle-on"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-success"
+										oncomplete="PF('activeCustomerDialog').show()" process="@this"
+										rendered="#{customer.status == 'INACTIVE'}">
+										<f:setPropertyActionListener value="#{customer}" target="#{customerBean.customer}" />
+									</p:commandButton>
+									<p:tooltip for="enableButton" value="Habilitar registro"
+										position="bottom" />
+									
 									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
 										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
 										outcome="/protected/packing/edit-customer.xhtml?faces-redirect=true">
@@ -92,32 +107,58 @@
 									<p:tooltip for="editButton" value="Editar registro"
 										position="bottom" />
 
-									<p:commandButton id="deleteButton"
-										styleClass="ui-button-danger rounded-button ui-button-raised"
-										icon="pi pi-trash" process="@this">
+									<p:commandButton id="deleteButton" icon="pi pi-trash"
+										process="@this" rendered="#{customer.status == 'ACTIVE'}"
+										styleClass="ui-button-raised ui-button-danger rounded-button"
+										oncomplete="PF('deleteCustomerDialog').show()">
+										<f:setPropertyActionListener value="#{customer}"
+											target="#{customerBean.customer}" />
 									</p:commandButton>
 									<p:tooltip for="deleteButton" value="Eliminar registro"
 										position="bottom" />
 								</p:column>
 							</p:dataTable>
+							
+							<p:confirmDialog widgetVar="activeCustomerDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de habilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{customerBean.enabledDisabledCustomer()}"
+									process="@this" oncomplete="PF('activeCustomerDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('activeCustomerDialog').hide()" />
+							</p:confirmDialog>
 
-							<!-- <p:confirmDialog widgetVar="deleteAnalysisDialog" showEffect="fade"
+							<p:confirmDialog widgetVar="inactiveCustomerDialog" showEffect="fade" width="300"
+								message="¿Estás seguro de deshabilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{customerBean.enabledDisabledCustomer()}"
+									process="@this" oncomplete="PF('inactiveCustomerDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('inactiveCustomerDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="deleteCustomerDialog" showEffect="fade"
 								width="300" message="¿Estás seguro de eliminar este registro?"
 								header="Confirmar" severity="warn" hideEffect="fade">
 								<p:blockUI block="main-template" trigger="yesButton" />
 								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
-									actionListener="#{analysisBean.delete()}" process="@this"
-									oncomplete="PF('deleteAnalysisDialog').hide()"
+									actionListener="#{customerBean.delete()}" process="@this"
+									oncomplete="PF('deleteCustomerDialog').hide()"
 									styleClass="ui-butto-raised" />
 								<p:commandButton value="No"
 									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('deleteAnalysisDialog').hide()" />
-							</p:confirmDialog>-->
+									icon="pi pi-times" onclick="PF('deleteCustomerDialog').hide()" />
+							</p:confirmDialog>
 						</h:form>
 					</div>
 				</div>
 			</div>
 		</h:panelGroup>
 	</ui:define>
-
 </ui:composition>

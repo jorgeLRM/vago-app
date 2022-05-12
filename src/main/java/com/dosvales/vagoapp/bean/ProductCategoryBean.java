@@ -15,6 +15,7 @@ import org.primefaces.PrimeFaces;
 
 import com.dosvales.vagoapp.exception.AppException;
 import com.dosvales.vagoapp.exception.DataFoundException;
+import com.dosvales.vagoapp.exception.RelatedRecordException;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.Producer;
 import com.dosvales.vagoapp.model.ProductCategory;
@@ -82,6 +83,27 @@ public class ProductCategoryBean implements Serializable {
 		categoryService.save(pc);
 		addMessage("Operación exitosa", "Categoria guardada exitosamente", FacesMessage.SEVERITY_INFO);
 		return "/protected/packing/productcategories.xhtml?faces-redirect=true";
+	}
+
+	public void delete() {
+		try {
+			checkHasAssociations(category);
+			categoryService.delete(category);
+			categories.remove(category);
+			showMessage("Operación exitosa", "La categoría de productos ha sido eliminada correctamente", FacesMessage.SEVERITY_INFO);
+			PrimeFaces.current().ajax().update(":form:dt-categories");
+		} catch(RelatedRecordException ex) {
+			showMessage("Cuidado", ex.getMessage(), FacesMessage.SEVERITY_WARN);
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+		}
+	}
+
+	public ProductCategory checkHasAssociations(ProductCategory pc) throws RelatedRecordException {
+		ProductCategory found = categoryService.findWithProducts(category.getId());
+		if (found.getProducts().isEmpty())
+			return found;
+		throw new RelatedRecordException("La categoría no se puede eliminar porque ya ha sido utilizada anteriormente. Intente deshabilitarla si ya no la necesita.");
 	}
 
 	public String update() {

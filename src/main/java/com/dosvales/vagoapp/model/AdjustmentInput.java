@@ -17,7 +17,7 @@ public class AdjustmentInput extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull
-	private Integer amount;
+	private Integer amount = 0;
 	
 	@NotNull
 	private Double totalPrice;

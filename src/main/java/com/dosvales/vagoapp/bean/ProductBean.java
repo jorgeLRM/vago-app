@@ -86,6 +86,8 @@ public class ProductBean implements Serializable {
 			}
 		} else if (step.equals("cdQuantity")) {
 			productInputWrapper = new ArrayList<ProductInput>();
+			dualListInput.getTarget().add(inputService.findById(1L));
+			
 			for (Input in : dualListInput.getTarget()) {
 				ProductInput pi = new ProductInput();
 				pi.setProduct(product);
@@ -116,28 +118,29 @@ public class ProductBean implements Serializable {
 			} else {
 				List<Input> source = inputService.findWhitoutBottles();
 				List<Input> target = new ArrayList<Input>();
-				for(ProductInput pi: product.getProductInputs())
-					target.add(pi.getInput());
+				for(ProductInput pi: product.getProductInputs()) {
+					if(pi.getInput().getId() != 1L)
+						target.add(pi.getInput());
+				}
 				dualListInput = new DualListModel<Input>(source, target);
 			}
 		} else if (step.equals("cdQuantity")) {
 			productInputWrapper = new ArrayList<ProductInput>();
+			dualListInput.getTarget().add(inputService.findById(1L));
 			for (Input in : dualListInput.getTarget()) {
-				boolean flag = false;
+				ProductInput pInput = new ProductInput();
+				pInput.setProduct(product);
+				pInput.setInput(in);
+				pInput.setQuantity(1);
+				
 				for(ProductInput pi : product.getProductInputs()) {
 					if(in.equals(pi.getInput())) {
-						productInputWrapper.add(pi);
-						flag = true;
+						pInput.setInput(pi.getInput());
+						pInput.setQuantity(pi.getQuantity());
 						break;
 					}
 				}
-				if (!flag ) {
-					ProductInput pi = new ProductInput();
-					pi.setProduct(product);
-					pi.setInput(in);
-					pi.setQuantity(1);
-					productInputWrapper.add(pi);
-				}
+				productInputWrapper.add(pInput);
 			}
 		}
 		return step;
@@ -161,7 +164,6 @@ public class ProductBean implements Serializable {
 		try {
 			productService.update(product);
 
-			// Se decide cuales ProductInput guardar, cuales actualizar y cuales eliminar
 			List<ProductInput> aux = product.getProductInputs();
 			for (ProductInput pi : productInputWrapper) {
 				if (pi.getId() == null)

@@ -139,7 +139,7 @@
 														</p:column>
 
 														<p:column headerText="Cantidad">
-															<p:spinner value="#{pi.quantity}" min="1"/>
+															<p:spinner value="#{pi.quantity}" min="1" disabled="#{pi.input.id == 1}"/>
 														</p:column>
 													</p:dataTable>
 												</p:outputPanel>

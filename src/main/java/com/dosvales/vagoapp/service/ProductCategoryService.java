@@ -6,7 +6,9 @@ import com.dosvales.vagoapp.model.ProductCategory;
 import com.dosvales.vagoapp.service.generic.GenericService;
 
 public interface ProductCategoryService extends GenericService<ProductCategory, Long> {
-	
+
+	ProductCategory findWithProducts(Long id);
+
 	ProductCategory findByName(String name);
 
 	ProductCategory blockUnblockCategory(Long id);

@@ -108,8 +108,30 @@
 									</p:linkButton>
 									<p:tooltip for="editButton" value="Editar registro"
 										position="bottom" />
+									
+									<p:commandButton id="deleteButton" icon="pi pi-trash"
+										process="@this" rendered="#{category.status == 'ACTIVE'}"
+										styleClass="ui-button-raised ui-button-danger rounded-button"
+										oncomplete="PF('deleteCategoryDialog').show()">
+										<f:setPropertyActionListener value="#{category}"
+											target="#{productCategoryBean.category}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="Eliminar registro"
+										position="bottom" />
 								</p:column>
 							</p:dataTable>
+							
+							<p:confirmDialog widgetVar="deleteCategoryDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de eliminar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{productCategoryBean.delete()}" process="@this"
+									oncomplete="PF('deleteCategoryDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteCategoryDialog').hide()" />
+							</p:confirmDialog>
 
 							<p:confirmDialog widgetVar="activeCategoryDialog" showEffect="fade"
 								width="300" message="¿Estás seguro de habilitar este registro?"

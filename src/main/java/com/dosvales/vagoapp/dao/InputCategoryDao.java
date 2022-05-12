@@ -14,5 +14,7 @@ public interface InputCategoryDao extends GenericDao<InputCategory, Long>{
 	InputCategory findByNameAndNomenclature(String name, String nomenclature);
 	
 	List<InputCategory> findAllByStatus(EntityStatus status);
-	
+
+	InputCategory findWithInputs(Long id);
+
 }

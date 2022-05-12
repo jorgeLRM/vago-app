@@ -43,4 +43,17 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
 		return dao;
 	}
 
+	@Override
+	public Customer findWithProductionOrders(Long id) {
+		return dao.findWithProductionOrders(id);
+	}
+
+	@Transactional
+	@Override
+	public Customer blockUnblockCustomer(Long id) {
+		Customer customer = dao.findById(id);
+		EntityStatus status = customer.getStatus() == EntityStatus.ACTIVE ? EntityStatus.INACTIVE : EntityStatus.ACTIVE;
+		customer.setStatus(status);
+		return dao.update(customer);
+	}
 }

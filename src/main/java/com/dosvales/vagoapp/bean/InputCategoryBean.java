@@ -15,6 +15,7 @@ import org.primefaces.PrimeFaces;
 
 import com.dosvales.vagoapp.exception.AppException;
 import com.dosvales.vagoapp.exception.DataFoundException;
+import com.dosvales.vagoapp.exception.RelatedRecordException;
 import com.dosvales.vagoapp.model.EntityStatus;
 import com.dosvales.vagoapp.model.InputCategory;
 import com.dosvales.vagoapp.service.InputCategoryService;
@@ -61,7 +62,6 @@ public class InputCategoryBean implements Serializable {
 		InputCategory found = categoryService.findByNameAndNomenclature(ic.getName(), ic.getNomenclature());
 		if (found != null) {
 			if (found.getStatus() == EntityStatus.INACTIVE) {
-				// Se cambio el mensaje
 				throw new AppException("El nombre de la categoría que ingresaste ya se encuentra registrada pero está deshabilitada. Consulta las categorias deshabilitadas para volverla a habilitar.");
 			} else {
 				throw new DataFoundException("El nombre y/o nomenclatura de la categoría ya se encuentra registrada");
@@ -74,6 +74,27 @@ public class InputCategoryBean implements Serializable {
 		categoryService.save(ic);
 		addMessage("Operación exitosa", "Categoría guardada exitosamente", FacesMessage.SEVERITY_INFO);
 		return "/protected/packing/inputcategories.xhtml?faces-redirect=true";
+	}
+
+	public void delete() {
+		try {
+			checkHasAssociations(category);
+			categoryService.delete(category);
+			categories.remove(category);
+			showMessage("Operación exitosa", "La categoría de insumos ha sido eliminada correctamente", FacesMessage.SEVERITY_INFO);
+			PrimeFaces.current().ajax().update(":form:dt-categories");
+		} catch(RelatedRecordException ex) {
+			showMessage("Cuidado", ex.getMessage(), FacesMessage.SEVERITY_WARN);
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+		}
+	}
+
+	public InputCategory checkHasAssociations(InputCategory ic) throws RelatedRecordException {
+		InputCategory found = categoryService.findWithInputs(category.getId());
+		if (found.getInputs().isEmpty())
+			return found;
+		throw new RelatedRecordException("La categoría no se puede eliminar porque ya ha sido utilizada anteriormente. Intente deshabilitarla si ya no la necesita.");
 	}
 	
 	public String update() {

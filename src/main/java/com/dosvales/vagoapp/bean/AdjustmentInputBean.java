@@ -157,10 +157,11 @@ public class AdjustmentInputBean implements Serializable {
 
 	public Double getTotalCost() {
 		totalCost = 0d;
-		if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.POSITIVE)
-			totalCost = adjustmentInput.getAmount() * providerInput.getUnitPrice();
-		else if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.NEGATIVE)
-			totalCost = (-1) * (adjustmentInput.getAmount() * providerInput.getUnitPrice());
+		if (adjustmentInput.getAmount() != null && providerInput.getUnitPrice() != null)
+			if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.POSITIVE)
+				totalCost = adjustmentInput.getAmount() * providerInput.getUnitPrice();
+			else if (adjustmentInput.getTypeAdjustment() == TypeAdjustment.NEGATIVE)
+				totalCost = (-1) * (adjustmentInput.getAmount() * providerInput.getUnitPrice());
 		return totalCost;
 	}
 }

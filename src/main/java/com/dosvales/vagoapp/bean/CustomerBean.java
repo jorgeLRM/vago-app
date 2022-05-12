@@ -11,8 +11,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
+
 import com.dosvales.vagoapp.exception.AppException;
 import com.dosvales.vagoapp.exception.DataFoundException;
+import com.dosvales.vagoapp.exception.RelatedRecordException;
 import com.dosvales.vagoapp.model.Address;
 import com.dosvales.vagoapp.model.Customer;
 import com.dosvales.vagoapp.model.EntityStatus;
@@ -75,6 +78,27 @@ public class CustomerBean implements Serializable {
 		return "/protected/packing/customers.xhtml?faces-redirect=true";
 	}
 
+	public void delete() {
+		try {
+			checkHasAssociations(customer);
+			customerService.delete(customer);
+			customers.remove(customer);
+			showMessage("Operación exitosa", "El cliente ha sido eliminado correctamente", FacesMessage.SEVERITY_INFO);
+			PrimeFaces.current().ajax().update(":form:dt-customers");
+		} catch (RelatedRecordException ex) {
+			showMessage("¡Cuidado!", ex.getMessage(), FacesMessage.SEVERITY_WARN);
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
+		}
+	}
+
+	public Customer checkHasAssociations(Customer c) throws RelatedRecordException {
+		Customer found = customerService.findWithProductionOrders(c.getId());
+		if (found.getProductionOrders().isEmpty())
+			return found;
+		throw new RelatedRecordException("El cliente no se puede eliminar porque ha sido utilizado anteriormente. Intente deshabilitarlo si ya no lo necesita");
+	}
+
 	public String update() {
 		String page = "";
 		try {
@@ -85,6 +109,18 @@ public class CustomerBean implements Serializable {
 			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_ERROR);
 		}
 		return page;
+	}
+
+	public void enabledDisabledCustomer() {
+		try {
+			String operation = customer.getStatus() == EntityStatus.ACTIVE ? "deshabilitado" : "habilitado";
+			customer = customerService.blockUnblockCustomer(customer.getId());
+			showMessage("Operación exitosa", "El cliente ha sido " + operation + " exitosamente", FacesMessage.SEVERITY_INFO);
+			customers.remove(customer);
+			PrimeFaces.current().ajax().update(":form:dt-customers");
+		} catch (Exception ex) {
+			showMessage("Error", "Ha ocurrido un error. Intente mas tarde", FacesMessage.SEVERITY_INFO);
+		}
 	}
 	
 	public void refreshTable() {

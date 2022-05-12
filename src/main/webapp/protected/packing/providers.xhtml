@@ -81,8 +81,24 @@
 									<h:outputText value="#{provider.email}" />
 								</p:column>
 
-								<p:column headerText="Acciones" width="1"
-									style="text-align:center">
+								<p:column headerText="Acciones" width="1" style="text-align:center">
+									<p:commandButton id="disableButton" icon="fas fa-toggle-off"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-secondary"
+										oncomplete="PF('inactiveProviderDialog').show()" process="@this"
+										rendered="#{provider.status == 'ACTIVE'}">
+										<f:setPropertyActionListener value="#{provider}" target="#{providerBean.provider}" />
+									</p:commandButton>
+									<p:tooltip for="disableButton" value="Deshabilitar registro" position="bottom" />
+
+									<p:commandButton id="enableButton" icon="fas fa-toggle-on"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-success"
+										oncomplete="PF('activeProviderDialog').show()" process="@this"
+										rendered="#{provider.status == 'INACTIVE'}">
+										<f:setPropertyActionListener value="#{provider}" target="#{providerBean.provider}" />
+									</p:commandButton>
+									<p:tooltip for="enableButton" value="Habilitar registro"
+										position="bottom" />
+										
 									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
 										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
 										outcome="/protected/packing/edit-provider.xhtml?faces-redirect=true">
@@ -91,32 +107,57 @@
 									<p:tooltip for="editButton" value="Editar registro"
 										position="bottom" />
 
-									<p:commandButton id="deleteButton"
-										styleClass="ui-button-danger rounded-button ui-button-raised"
-										icon="pi pi-trash" process="@this">
+									<p:commandButton id="deleteButton" icon="pi pi-trash"
+										process="@this" rendered="#{provider.status == 'ACTIVE'}"
+										styleClass="ui-button-raised ui-button-danger rounded-button"
+										oncomplete="PF('deleteProviderDialog').show()">
+										<f:setPropertyActionListener value="#{provider}"
+											target="#{providerBean.provider}" />
 									</p:commandButton>
 									<p:tooltip for="deleteButton" value="Eliminar registro"
 										position="bottom" />
 								</p:column>
 							</p:dataTable>
 
-							<!-- <p:confirmDialog widgetVar="deleteAnalysisDialog" showEffect="fade"
+							<p:confirmDialog widgetVar="deleteProviderDialog" showEffect="fade"
 								width="300" message="¿Estás seguro de eliminar este registro?"
 								header="Confirmar" severity="warn" hideEffect="fade">
-								<p:blockUI block="main-template" trigger="yesButton" />
-								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
-									actionListener="#{analysisBean.delete()}" process="@this"
-									oncomplete="PF('deleteAnalysisDialog').hide()"
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{providerBean.delete()}" process="@this"
+									oncomplete="PF('deleteProviderDialog').hide()"
 									styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('deleteAnalysisDialog').hide()" />
-							</p:confirmDialog>-->
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteProviderDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="activeProviderDialog" showEffect="fade"
+								width="300" message="¿Estás seguro de habilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{providerBean.enabledDisabledProvider()}"
+									process="@this" oncomplete="PF('activeProviderDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('activeProviderDialog').hide()" />
+							</p:confirmDialog>
+
+							<p:confirmDialog widgetVar="inactiveProviderDialog" showEffect="fade" width="300"
+								message="¿Estás seguro de deshabilitar este registro?"
+								header="Confirmar" severity="warn" hideEffect="fade">
+								<p:blockUI block="main-template" trigger="@next" />
+								<p:commandButton value="Si" icon="pi pi-check"
+									actionListener="#{providerBean.enabledDisabledProvider()}"
+									process="@this" oncomplete="PF('inactiveProviderDialog').hide()"
+									styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('inactiveProviderDialog').hide()" />
+							</p:confirmDialog>
 						</h:form>
 					</div>
 				</div>
 			</div>
 		</h:panelGroup>
 	</ui:define>
-
 </ui:composition>

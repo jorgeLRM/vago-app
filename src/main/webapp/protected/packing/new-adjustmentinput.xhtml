@@ -32,7 +32,7 @@
 												<p:ajax event="change" update="description, provider, unitcost" listener="#{adjustmentInputBean.refreshProviders()}"/>
 												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
 												<f:selectItems value="#{adjustmentInputBean.inputs}" var="input" 
-													itemLabel="#{input.name}" itemValue="#{input}"/>
+													itemLabel="#{input.name.toUpperCase()}" itemValue="#{input}"/>
 											</p:selectOneMenu>
 										</div>
 										<div class="field col-12 md:col-6">
@@ -73,10 +73,20 @@
 											</p:selectOneMenu>
 										</div>
 										<div class="field col-12 md:col-6">
-											<p:outputLabel for="amount">Cantidad</p:outputLabel>
-											<p:spinner id="amount"
-												value="#{adjustmentInputBean.adjustmentInput.amount}"
-												required="true" min="0">
+											<p:outputLabel for="amount"
+												rendered="#{adjustmentInputBean.adjustmentInput.typeAdjustment != 'NEGATIVE'}">
+												Cantidad</p:outputLabel>
+											<p:spinner id="amount" value="#{adjustmentInputBean.adjustmentInput.amount}"
+												required="true" min="0"
+												rendered="#{adjustmentInputBean.adjustmentInput.typeAdjustment != 'NEGATIVE'}">
+												<p:ajax event="change" update=":form:new-adjustment-content"/>
+											</p:spinner>
+											<p:outputLabel for="amount2"
+												rendered="#{adjustmentInputBean.adjustmentInput.typeAdjustment == 'NEGATIVE'}">
+												Cantidad (Máximo #{adjustmentInputBean.adjustmentInput.input.stock} unidades)</p:outputLabel>
+											<p:spinner id="amount2" value="#{adjustmentInputBean.adjustmentInput.amount}"
+												required="true" min="0" max="#{adjustmentInputBean.adjustmentInput.input.stock}"
+												rendered="#{adjustmentInputBean.adjustmentInput.typeAdjustment == 'NEGATIVE'}">
 												<p:ajax event="change" update=":form:new-adjustment-content"/>
 											</p:spinner>
 										</div>

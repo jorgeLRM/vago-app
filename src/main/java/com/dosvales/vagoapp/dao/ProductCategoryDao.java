@@ -15,4 +15,6 @@ public interface ProductCategoryDao extends GenericDao<ProductCategory, Long> {
 
 	List<ProductCategory> findAllByStatus(EntityStatus status);
 
+	ProductCategory findWithProducts(Long id);
+
 }

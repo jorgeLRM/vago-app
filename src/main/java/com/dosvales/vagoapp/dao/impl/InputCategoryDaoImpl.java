@@ -1,9 +1,12 @@
 package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 
 import com.dosvales.vagoapp.dao.InputCategoryDao;
@@ -37,4 +40,11 @@ public class InputCategoryDaoImpl extends GenericDaoImpl<InputCategory, Long> im
 				.getResultList();
 	}
 
+	@Override
+	public InputCategory findWithInputs(Long id) {
+		EntityGraph<?> entityGraph = em.getEntityGraph("graph.InputCategory.inputs");
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		return em.find(InputCategory.class, id, properties);
+	}
 }

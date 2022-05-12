@@ -1,9 +1,12 @@
 package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityGraph;
 
 import com.dosvales.vagoapp.dao.ProviderDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
@@ -35,4 +38,11 @@ public class ProviderDaoImpl extends GenericDaoImpl<Provider, Long> implements P
 				.getResultList();
 	}
 
+	@Override
+	public Provider findWithProviderInputs(Long id) {
+		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Provider.providerInputs");
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		return em.find(Provider.class, id, properties);
+	}
 }

@@ -50,4 +50,9 @@ public class ProductCategoryServiceImpl extends GenericServiceImpl<ProductCatego
 	public GenericDao<ProductCategory, Long> getDao() {
 		return dao;
 	}
+
+	@Override
+	public ProductCategory findWithProducts(Long id) {
+		return dao.findWithProducts(id);
+	}
 }

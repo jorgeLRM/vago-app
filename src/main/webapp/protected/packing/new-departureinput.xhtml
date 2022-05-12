@@ -32,7 +32,7 @@
 												<p:ajax event="change" update="description, provider, unitcost, textAmount" listener="#{departureInputBean.refreshProviders()}"/>
 												<f:selectItem itemLabel="- Seleccionar -" itemValue="{null}" noSelectionOption="true"/>
 												<f:selectItems value="#{departureInputBean.inputs}" var="input" 
-													itemLabel="#{input.name}" itemValue="#{input}"/>
+													itemLabel="#{input.name.toUpperCase()}" itemValue="#{input}"/>
 											</p:selectOneMenu>
 										</div>
 										<div class="field col-12 md:col-6">

@@ -1,9 +1,12 @@
 package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 
 import com.dosvales.vagoapp.dao.ProductCategoryDao;
@@ -32,5 +35,13 @@ public class ProductCategoryDaoImpl extends GenericDaoImpl<ProductCategory, Long
 		return em.createQuery("FROM ProductCategory p WHERE p.status = :status", ProductCategory.class)
 				.setParameter("status", status)
 				.getResultList();
+	}
+
+	@Override
+	public ProductCategory findWithProducts(Long id) {
+		EntityGraph<?> entityGraph = em.getEntityGraph("graph.ProductCategory.products");
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		return em.find(ProductCategory.class, id, properties);
 	}
 }

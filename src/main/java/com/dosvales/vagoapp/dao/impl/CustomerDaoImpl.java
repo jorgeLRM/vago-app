@@ -1,9 +1,12 @@
 package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityGraph;
 
 import com.dosvales.vagoapp.dao.CustomerDao;
 import com.dosvales.vagoapp.dao.generic.GenericDaoImpl;
@@ -34,6 +37,12 @@ public class CustomerDaoImpl extends GenericDaoImpl<Customer, Long> implements C
 				.setParameter("status", status)
 				.getResultList();
 	}
-	
-	
+
+	@Override
+	public Customer findWithProductionOrders(Long id) {
+		EntityGraph<?> entityGraph = em.getEntityGraph("graph.Customer.productionOrders");
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		return em.find(Customer.class, id, properties);
+	}
 }

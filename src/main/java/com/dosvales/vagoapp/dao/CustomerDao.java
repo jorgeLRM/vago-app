@@ -12,6 +12,9 @@ import com.dosvales.vagoapp.model.EntityStatus;
 public interface CustomerDao extends GenericDao<Customer, Long>{
 	
 	Customer findByName(String name);
+
 	List<Customer> findAllByStatus(EntityStatus status);
-	
+
+	Customer findWithProductionOrders(Long id);
+
 }

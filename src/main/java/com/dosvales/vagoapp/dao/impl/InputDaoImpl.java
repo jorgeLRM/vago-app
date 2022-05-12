@@ -48,7 +48,7 @@ public class InputDaoImpl extends GenericDaoImpl<Input, Long> implements InputDa
 	@Override
 	public List<Input> findWhitoutBottles() {
 		String jpql = "SELECT * FROM input AS i INNER JOIN inputcategory AS ic ON i.idCategory = ic.id "
-				+ "WHERE UPPER(ic.name) NOT LIKE '%BOTELLA%' AND i.status = 'ACTIVE'";
+				+ "WHERE UPPER(ic.name) NOT LIKE '%BOTELLA%' AND i.status = 'ACTIVE' AND i.id != 1";
 		return em.createNativeQuery(jpql, Input.class)
 				.getResultList();
 	}
