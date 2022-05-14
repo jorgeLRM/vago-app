@@ -39,12 +39,12 @@ public class TagServiceImpl extends GenericServiceImpl<Tag, Long> implements Tag
 	}
 	
 	@Override
-	public Long findLastConsecutiveInputs() {
+	public Integer findLastConsecutiveInputs() {
 		return dao.findLastConsecutive(TypeMovement.INPUT);
 	}
 
 	@Override
-	public Long findLastConsecutiveOutputs() {
+	public Integer findLastConsecutiveOutputs() {
 		return dao.findLastConsecutive(TypeMovement.OUTPUT);
 	}	
 

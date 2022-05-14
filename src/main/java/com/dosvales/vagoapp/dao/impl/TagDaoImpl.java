@@ -2,6 +2,7 @@ package com.dosvales.vagoapp.dao.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -26,23 +27,24 @@ public class TagDaoImpl extends GenericDaoImpl<Tag, Long> implements TagDao, Ser
 
 	@Override
 	public Integer existenceOfTags() {
-		String jpqlInt = "SELECT SUM(t.quantity) FROM tag t WHERE t.typeMovement = 'INPUT'";
-		String jpqlOut = "SELECT SUM(t.quantity) FROM tag t WHERE t.typeMovement = 'OUTPUT'";
-		BigDecimal input = (BigDecimal) em.createNativeQuery(jpqlInt).getSingleResult();
-		BigDecimal output = (BigDecimal) em.createNativeQuery(jpqlOut).getSingleResult();
-		if (input != null && output != null)
-			return input.intValue() - output.intValue();
-		else if (input == null && output != null)
-			return output.intValue();
-		else if (input != null && output == null)
-			return input.intValue();
+		String jpql = "SELECT "
+				+ "(SELECT SUM(t.maxNumber - t.minNumber + 1) FROM tag t WHERE t.typeMovement = 'INPUT') - "
+				+ "(SELECT SUM(t.maxNumber - t.minNumber + 1) FROM tag t WHERE t.typeMovement = 'OUTPUT')";
+		BigDecimal existence = (BigDecimal) em.createNativeQuery(jpql).getSingleResult();
+		if (existence != null)
+			return existence.intValue();
 		else
 			return 0;
 	}
 
 	@Override
-	public Long findLastConsecutive(TypeMovement typeMovement) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer findLastConsecutive(TypeMovement typeMovement) {
+		String jpql = "SELECT MAX(t.maxNumber) FROM Tag t WHERE t.typeMovement = ";
+		jpql += (typeMovement == TypeMovement.INPUT) ? "'" + TypeMovement.INPUT + "'" : "'" + TypeMovement.OUTPUT + "'";
+		BigInteger lastNumber = (BigInteger) em.createNativeQuery(jpql).getSingleResult();
+		if (lastNumber != null)
+			return lastNumber.intValue();
+		else
+			return 0;
 	}
 }

@@ -156,11 +156,14 @@ INSERT INTO Productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE'
 --INSERT INTO productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 5, 1);
 INSERT INTO Productinput (status, quantity, idInput, idProduct) VALUES ('ACTIVE', 1, 7, 1);
 
-INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-02-28', 'Los recibió el area de recepcion', 4200, 'INPUT');
-INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-03-28', 'Los recibió el area de recepcion', 3250, 'INPUT');
-INSERT INTO Hologram (status, dateMovement, observations, quantity, typeMovement) VALUES ('ACTIVE', '2022-04-28', 'Los recibió el area de recepcion', 1400, 'INPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-03-10', 1, 1200, 'Prueba entrada 1', 'Ingeniero Quimico', 'INPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-03-31', 1201, 2200, 'Prueba entrada 2', 'Ingeniero Quimico', 'INPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-04-15', 2201, 5730, 'Prueba entrada 3', 'Ingeniero Quimico', 'INPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-03-26', 1, 350, 'Prueba salida 1', 'Ingeniero Quimico', 'OUTPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-04-19', 351, 726, 'Prueba salida 2', 'Ingeniero Quimico', 'OUTPUT');
+INSERT INTO Tag (status, dateMovement, minNumber, maxNumber, observations, responsible, typeMovement) VALUES ('ACTIVE', '2022-05-09', 727, 1102, 'Prueba salida 3', 'Ingeniero Quimico', 'OUTPUT');
 
-
+INSERT INTO Productionorder (status, aplicationDate, certificateStatus, deliveryDate, dictumStatus, invoiceStatus, market, numberOrder, observations, orderStatus, idCustomer) VALUES ('ACTIVE', '2022-05-12', 'REQUIRED', '2022-05-17', 'REQUIRED', 'REQUIRED', 'LOCAL', '0015 2022', 'ORDEN DE PRUEBA', 'PLANNING', 1);
 
 
 

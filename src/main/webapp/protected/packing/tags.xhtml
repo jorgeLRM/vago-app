@@ -6,11 +6,11 @@
 	template="/WEB-INF/template/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{hologramBean.refreshTable()}" />
+		<f:viewAction action="#{tagBean.refreshTable()}" />
 	</f:metadata>
 
 	<ui:define name="title">Envasado</ui:define>
-	<ui:param name="viewname" value="HOLOGRAMAS" />
+	<ui:param name="viewname" value="MARBETES"/>
 
 	<ui:define name="content">
 		<h:panelGroup layout="block">
@@ -24,81 +24,93 @@
 
 							<p:toolbar styleClass="p-mb-4 w-full">
 								<p:toolbarGroup class="w-full md:w-auto">
-									<p:outputLabel style="font-weight:bold"
-										styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
-										ADMINISTRAR HOLOGRAMAS</p:outputLabel>
+									<p:outputLabel style="font-weight:bold" styleClass="mb-2 md:mb-0 text-center w-full md:w-auto">
+										ADMINISTRAR MARBETES
+									</p:outputLabel>
 								</p:toolbarGroup>
 								<p:toolbarGroup align="right" class="w-full md:w-auto">
-									<p:commandButton value="Nuevo movimiento de hologramas" icon="pi pi-plus"
+									<p:commandButton value="Nuevo movimiento de marbetes" icon="pi pi-plus"
 										styleClass="ui-button-success ui-button-raised w-full md:w-auto" 
-										action="/protected/packing/new-hologram.xhtml?faces-redirect=true"/>
+										action="/protected/packing/new-tag.xhtml?faces-redirect=true"/>
 								</p:toolbarGroup>
 							</p:toolbar>
 
-							<p:dataTable id="dt-holograms" widgetVar="dtHolograms" var="hologram" 
-								value="#{hologramBean.holograms}" reflow="true" rowKey="#{hologram.id}" 
-								styleClass="products-table" paginator="true" rows="10" paginatorPosition="bottom"
-								showGridlines="true" size="small" style="text-align:center">
-
+							<p:dataTable id="dt-tags" widgetVar="dtTags" var="tag"  value="#{tagBean.tags}" reflow="true" 
+								rowKey="#{hologram.id}"  styleClass="products-table" paginator="true" rows="10" 
+								paginatorPosition="bottom" showGridlines="true" size="small" style="text-align:center">
 								<f:facet name="header">
 									<div class="products-table-header">
 										<span style="font-weight: bold"> 
-											<p:selectOneMenu id="changeFilter" value="#{hologramBean.typeMovement}"
+											<p:selectOneMenu id="changeFilter" value="#{tagBean.typeMovement}"
 												styleClass="w-full md:w-auto" converter="omnifaces.GenericEnumConverter">
-												<p:ajax listener="#{hologramBean.refreshTable()}" update="dt-holograms" />
-												<f:selectItem itemLabel="TODOS" itemValue="#{null}" />
-												<f:selectItems value="#{hologramBean.typesMovement}" var="typeMovement" 
+												<p:ajax listener="#{tagBean.refreshTable()}" update="dt-tags"/>
+												<f:selectItem itemLabel="TODOS" itemValue="#{null}"/>
+												<f:selectItems value="#{tagBean.typesMovement}" var="typeMovement" 
 													itemLabel="#{typeMovement.movement.toUpperCase()}" itemValue="#{typeMovement}"/>
 											</p:selectOneMenu> 
 											<p:blockUI block="main-template" trigger="changeFilter"/>
-											<h:outputText value="Hologramas en existencia: #{hologramBean.existence}" class="p-ml-3"/>
+											<h:outputText value="Marbetes en existencia: #{tagBean.existence}" class="p-ml-3"/>
 										</span> 
 										<span class="filter-container ui-input-icon-left"> 
 											<i class="pi pi-search"/> 
-											<p:inputText id="globalFilter" onkeyup="PF('dtHolograms').filter()" placeholder="Buscar" />
+											<p:inputText id="globalFilter" onkeyup="PF('dtTags').filter()" placeholder="Buscar"/>
 										</span>
 									</div>
 								</f:facet>
 
-								<p:column headerText="Código" filterBy="#{hologram.id}" style="text-align:center" width="1">
-									<h:outputText value="#{hologram.id}" />
+								<p:column headerText="Código" filterBy="#{tag.id}" style="text-align:center" width="1">
+									<h:outputText value="#{tag.id}" />
 								</p:column>
-								<p:column headerText="Fecha del movimiento" filterBy="#{hologram.dateMovement}"
-									style="text-align:center" width="1" sortBy="#{hologram.dateMovement}">
-									<h:outputText value="#{hologram.dateMovement}" />
+								<p:column headerText="Fecha del movimiento" filterBy="#{tag.dateMovement}"
+									style="text-align:center" width="1" sortBy="#{tag.dateMovement}">
+									<h:outputText value="#{tag.dateMovement}" />
 								</p:column>
 								<p:column headerText="Cantidad" style="text-align:center" width="2">
-									<p:chip label="#{hologram.quantity}"/>
+									<p:chip label="#{tag.maxNumber - tag.minNumber + 1}"/>
 								</p:column>
 								<p:column headerText="Tipo de movimiento" style="text-align:center" width="2">
-					                <h:outputText styleClass="product-badge status-#{hologram.typeMovement.badge}"
-					                              value="#{hologram.typeMovement.movement}"/>
+					                <h:outputText styleClass="product-badge status-#{tag.typeMovement.badge}"
+					                              value="#{tag.typeMovement.movement}"/>
 					            </p:column>
-								<p:column headerText="Observaciones" width="1" style="text-align:center">
-									<h:outputText  value="#{hologram.observations}" />
+					            <p:column headerText="Responsable" width="1" style="text-align:center">
+									<h:outputText  value="#{tag.responsible}" />
 								</p:column>
 
 								<p:column headerText="Acciones" width="1" style="text-align:center">
+									<p:linkButton icon="fas fa-pencil-alt" id="editButton"
+										styleClass="rounded-button ui-button-warning ui-button-raised mr-2"
+										outcome="/protected/packing/edit-tag.xhtml?faces-redirect=true"
+										rendered="#{tag.status == 'ACTIVE'}">
+										<f:param name="id" value="#{tag.id}" />
+									</p:linkButton>
+									<p:tooltip for="editButton" value="Editar registro" position="bottom" />
+									
+									<p:linkButton icon="pi pi-eye" id="viewButton"
+										outcome="/protected/packing/view-tag.xhtml?faces-redirect=true"
+										styleClass="edit-button rounded-button ui-button-raised ui-button-help">
+										<f:param name="id" value="#{tag.id}" />
+									</p:linkButton>
+									<p:tooltip for="viewButton" value="Ver registro" position="bottom" />
+									
 									<p:commandButton id="deleteButton" icon="pi pi-trash" process="@this" 
-										rendered="#{hologram.status == 'ACTIVE'}"
+										rendered="#{tag.status == 'ACTIVE'}"
 										styleClass="ui-button-raised ui-button-danger rounded-button"
-										oncomplete="PF('deleteHologramDialog').show()">
-										<f:setPropertyActionListener value="#{hologram}" target="#{hologramBean.hologram}" />
+										oncomplete="PF('deleteTagDialog').show()">
+										<f:setPropertyActionListener value="#{tag}" target="#{tagBean.tag}" />
 									</p:commandButton>
 									<p:tooltip for="deleteButton" value="Eliminar registro" position="bottom" />
 								</p:column>
 							</p:dataTable>
 
-							<p:confirmDialog widgetVar="deleteHologramDialog" showEffect="fade" width="300" 
+							<p:confirmDialog widgetVar="deleteTagDialog" showEffect="fade" width="300" 
 								message="¿Estás seguro de eliminar este registro?"
 								header="Confirmar" severity="warn" hideEffect="fade">
 								<p:blockUI block="main-template" trigger="yesButton" />
 								<p:commandButton value="Si" icon="pi pi-check" id="yesButton"
-									actionListener="#{hologramBean.delete()}" process="@this"
-									oncomplete="PF('deleteHologramDialog').hide()" styleClass="ui-butto-raised" />
-								<p:commandButton value="No"
-									styleClass="ui-button-secondary ui-button-raised"
-									icon="pi pi-times" onclick="PF('deleteHologramDialog').hide()" />
+									actionListener="#{tagBean.delete()}" process="@this"
+									oncomplete="PF('deleteTagDialog').hide()" styleClass="ui-butto-raised" />
+								<p:commandButton value="No" styleClass="ui-button-secondary ui-button-raised"
+									icon="pi pi-times" onclick="PF('deleteTagDialog').hide()" />
 							</p:confirmDialog>
 						</h:form>
 					</div>

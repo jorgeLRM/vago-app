@@ -15,6 +15,6 @@ public interface TagDao extends GenericDao<Tag, Long> {
 
 	Integer existenceOfTags();
 
-	Long findLastConsecutive(TypeMovement typeMovement);
+	Integer findLastConsecutive(TypeMovement typeMovement);
 
 }

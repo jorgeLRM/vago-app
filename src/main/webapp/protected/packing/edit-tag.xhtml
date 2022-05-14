@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id"/>
+		<f:viewAction action="#{tagBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="MARBETES" />
+
+	<ui:define name="content">
+		<h:panelGroup layout="block">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true">
+								<p:effect event="load" type="fade" delay="2000" closable="true" />
+							</p:growl>
+
+							<p:panel header="Edición de registro de marbetes">
+								<p:outputPanel id="new-tag-content" class="ui-fluid">
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="typeMovement">Tipo de movimiento:</p:outputLabel>
+											<p:selectOneMenu id="typeMovement" value="#{tagBean.tag.typeMovement}" required="true"
+												converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="contains" 
+												styleClass="w-full" disabled="true">
+												<f:selectItems value="#{tagBean.typesMovement}" var="tMovement" 
+													itemValue="#{tMovement}" itemLabel="#{tMovement.movement}" />
+												<p:ajax update=":form:new-tag-content" event="change" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="firstFolio">Folio inicial:</p:outputLabel>
+											<p:spinner id="firstFolio" value="#{tagBean.tag.minNumber}" required="true" disabled="true"/>
+										</div>
+										<div class="field col-12 md:col-3">
+											<p:outputLabel for="lastFolio">Folio final:</p:outputLabel>
+											<p:spinner id="lastFolio" value="#{tagBean.tag.maxNumber}" required="true" disabled="true"/>
+										</div>
+									</div>
+									
+									<div class="formgrid grid mt-2">
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="dateMovement">Fecha de ajuste:</p:outputLabel>
+											<p:datePicker id="dateMovement" value="#{tagBean.tag.dateMovement}" monthNavigator="true" 
+												yearNavigator="true" showWeek="true" yearRange="2020:2060" mask="true"
+												pattern="dd/MM/yyyy" required="true" disabled="true"/>
+										</div>
+										<div class="field col-12 md:col-6">
+											<p:outputLabel for="responsible">Responsable:</p:outputLabel>
+											<p:inputText id="responsible" required="true" value="#{tagBean.tag.responsible}"/>
+										</div>
+									</div>
+									<div class="formgrid grid mt-2">
+										<div class="field col-12">
+											<p:outputLabel for="observations">Observaciones</p:outputLabel>
+											<p:inputTextarea id="observations" value="#{tagBean.tag.observations}" maxlength="100" />
+										</div>
+									</div>
+									<div class="grid mt-2">
+										<p:outputLabel class="font-bold" value="* Valores obligatorios" />
+									</div>
+									<div class="mt-3">
+										<p:commandButton value="Guardar" icon="pi pi-check"
+											styleClass="ui-button-raised mr-3 w-full md:w-auto" action="#{tagBean.update()}"
+											process="new-tag-content @this" update="new-tag-content"/>
+										<p:commandButton value="Cancelar" icon="fas fa-arrow-circle-left"
+											action="/protected/packing/tags.xhtml?faces-redirect=true" immediate="true"
+											styleClass="ui-button-raised ui-button-secondary w-full md:w-auto mt-3 md:mt-0"/>
+									</div>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

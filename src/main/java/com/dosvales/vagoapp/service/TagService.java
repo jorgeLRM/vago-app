@@ -13,8 +13,8 @@ public interface TagService extends GenericService<Tag, Long> {
 
 	Integer existenceOfTags();
 
-	Long findLastConsecutiveInputs();
+	Integer findLastConsecutiveInputs();
 
-	Long findLastConsecutiveOutputs();
+	Integer findLastConsecutiveOutputs();
 
 }

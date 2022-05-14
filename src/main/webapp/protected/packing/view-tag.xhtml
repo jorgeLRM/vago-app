@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<f:metadata>
+		<f:viewParam name="id" />
+		<f:viewAction action="#{tagBean.load(id)}" />
+	</f:metadata>
+
+	<ui:define name="title">Envasado</ui:define>
+	<ui:param name="viewname" value="MOVIMIENTO DE MARBETES" />
+
+	<ui:define name="content">
+		<p:staticMessage severity="error" summary="ERROR"
+			detail="¡Oops! Algo ha ocurrido" style="width: 100%"
+			rendered="#{tagBean.tag == null}" />
+		<h:panelGroup layout="block" rendered="#{tagBean.tag != null}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:panel header="Detalles del movimiento de marbetes: #{tagBean.tag.typeMovement.movement.toUpperCase()}">
+							<p:outputPanel id="tag" class="ui-fluid">
+								<p:outputPanel rendered="#{not empty tagBean.tag}">
+									<p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
+										layout="grid" styleClass="ui-panelgrid-blank ui-fluid" style="border:0px none; background-color:transparent;">
+										<p:row styleClass="my-heading-row">
+											Información general
+										</p:row>
+
+										<p:outputLabel value="ID:"/>
+										<h:outputText value="#{tagBean.tag.id}" styleClass="outputLabel"/>
+
+										<p:outputLabel value="Fecha del movimiento:"/>
+										<h:outputText value="#{tagBean.tag.dateMovement}" styleClass="outputLabel"/>
+
+										<p:outputLabel value="Folio mínimo::"/>
+										<h:outputText value="#{tagBean.tag.minNumber}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Folio máximo:"/>
+										<h:outputText value="#{tagBean.tag.maxNumber}" styleClass="outputLabel"/>
+										
+										<p:outputLabel value="Cantidad de marbetes:"/>
+										<h:outputText value="#{tagBean.tag.maxNumber - tagBean.tag.minNumber + 1}" 
+											styleClass="outputLabel"/>
+
+										<p:outputLabel value="Responsable del movimiento:" />
+										<h:outputText value="#{tagBean.tag.responsible}" styleClass="outputLabel"/>
+
+										<p:outputLabel value="Observaciones:" />
+										<h:outputText value="#{tagBean.tag.observations}" styleClass="outputLabel"/>
+									</p:panelGrid>
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:panel>
+
+						<div class="mt-3">
+							<p:commandButton icon="fas fa-arrow-circle-left" value="Regresar"
+									styleClass="ui-button-secondary ui-button-raised"
+									action="/protected/packing/tags.xhtml?faces-redirect=true" process="@this" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
